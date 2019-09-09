@@ -8,26 +8,22 @@
 
 import React, { Fragment, PureComponent } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import NetworkState, { Settings } from 'react-native-network-state'
-import {
-  View,
-  Text,
-} from 'react-native';
+import DropdownAlert from 'react-native-dropdownalert';
+
+import RootNavigation from './src/navigation/index.navigation';
+import { setTopLevelNavigator } from './src/services/navigation.service';
+import NotifyService from './src/services/notify.service';
 
 class App extends PureComponent {
-  componentDidMount = () => {
-    SplashScreen.hide();
-  }
-
   render() {
     return (
       <Fragment>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-          <Text>App</Text>
-        </View>
-        <NetworkState
-          style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
+        <RootNavigation
+          ref={navigatorRef => {
+            setTopLevelNavigator(navigatorRef);
+          }}
         />
+        <DropdownAlert ref={ref => NotifyService.register(ref)} />
       </Fragment>
 
     )
