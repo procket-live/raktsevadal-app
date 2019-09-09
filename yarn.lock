@@ -929,6 +929,11 @@
     eslint-plugin-react-native "3.6.0"
     prettier "1.16.4"
 
+"@react-native-community/netinfo@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-4.2.1.tgz#b6309f078da500807ef8afa4d659e56ccd14dee4"
+  integrity sha512-kAnmYp8vXpZToPw8rgE7uO+MqmqHSR9VEDPkuZT0DnFMBJmIXCSD2NLAD28HGKVY/kujVWCknC/FuVWr5/A3uA==
+
 "@react-navigation/core@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.5.0.tgz#73d1a12448e2bd71855e0080b95a7f51ede0cd9e"
@@ -5232,6 +5237,11 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
+react-native-connection-info@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-connection-info/-/react-native-connection-info-1.1.0.tgz#570bd16f01ff26dc167c073d43434f98149dde7c"
+  integrity sha1-VwvRbwH/JtwWfAc9Q0NPmBSd3nw=
+
 react-native-gesture-handler@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.4.1.tgz#c38d9e57637b95e221722a79f2bafac62e3aeb21"
@@ -5241,6 +5251,11 @@ react-native-gesture-handler@^1.4.1:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-network-state@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-network-state/-/react-native-network-state-1.1.4.tgz#6582e1dcb1eded85d159afbc799c6d0264e90c57"
+  integrity sha512-NliY63vustUQwD27nwzVnNdcbtjVUVt9DJ7mlg29gP4c3bLptxcBhlogfDoRAdGbVceH6OK18U7NORmpXTydEw==
 
 react-native-reanimated@^1.2.0:
   version "1.2.0"
