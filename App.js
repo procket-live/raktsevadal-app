@@ -7,17 +7,38 @@
  */
 
 import React, { Fragment, PureComponent } from 'react';
-import SplashScreen from 'react-native-splash-screen';
 import DropdownAlert from 'react-native-dropdownalert';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import * as RNLocalize from "react-native-localize";
 
 import RootNavigation from './src/navigation/index.navigation';
 import { setTopLevelNavigator } from './src/services/navigation.service';
 import NotifyService from './src/services/notify.service';
 import store, { persistor } from './src/store/index.store';
+import { setI18nConfig } from './src/services/translation.service';
+
+
 
 class App extends PureComponent {
+  constructor(props) {
+    super(props);
+    setI18nConfig(); // set initial config
+  }
+
+  componentDidMount() {
+    RNLocalize.addEventListener('change', this.handleLocalizationChange);
+  }
+
+  componentWillUnmount() {
+    RNLocalize.removeEventListener('change', this.handleLocalizationChange);
+  }
+
+  handleLocalizationChange = () => {
+    setI18nConfig();
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <Fragment>

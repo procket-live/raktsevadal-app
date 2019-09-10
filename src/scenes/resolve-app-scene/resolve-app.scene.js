@@ -15,6 +15,7 @@ import {
     Text,
 } from 'react-native';
 import NotifyService from '../../services/notify.service.js';
+import { translate } from '../../services/translation.service.js';
 
 class ResolveApp extends PureComponent {
     componentDidMount = () => {
@@ -29,7 +30,7 @@ class ResolveApp extends PureComponent {
         return (
             <Fragment>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Text>Resolve App</Text>
+                    <Text>{translate('hello')}</Text>
                 </View>
                 <NetworkState
                     style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
