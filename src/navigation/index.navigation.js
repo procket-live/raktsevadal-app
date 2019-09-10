@@ -1,7 +1,9 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+
 import ResolveApp from '../scenes/resolve-app-scene/resolve-app.scene';
+import ResolveLocationScene from '../scenes/resolve-location-scene/resolve-location.scene';
 import LoginScene from '../scenes/login-scene/login.scene';
 
 const RootNavigator = createStackNavigator(
@@ -17,10 +19,16 @@ const RootNavigator = createStackNavigator(
             navigationOptions: {
                 header: null,
             }
+        },
+        ResolveLocation: {
+            screen: ResolveLocationScene,
+            navigationOptions: {
+                header: null,
+            }
         }
     },
     {
-        initialRouteName: 'ResolveApp'
+        initialRouteName: 'ResolveLocation'
     }
 )
 
