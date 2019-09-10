@@ -10,6 +10,7 @@ import React, { Fragment, PureComponent } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import NetworkState from 'react-native-network-state'
 import LottieView from 'lottie-react-native';
+import firebase from 'react-native-firebase';
 import {
     View,
     Text,
@@ -18,12 +19,15 @@ import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
 
 class ResolveApp extends PureComponent {
-    componentDidMount = () => {
+    componentDidMount = async () => {
         SplashScreen.hide();
 
         setTimeout(() => {
             NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
         }, 2000)
+
+        const fcmToken = await firebase.messaging().getToken();
+        console.log('fcmToken', fcmToken)
     }
 
     render() {

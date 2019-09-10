@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "207339447824",
+    "firebase_url": "https://rakt-sevadal-c29be.firebaseio.com",
+    "project_id": "rakt-sevadal-c29be",
+    "storage_bucket": "rakt-sevadal-c29be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207339447824:android:35eb56953f11e1611c0c95",
+        "android_client_info": {
+          "package_name": "com.raktsevadal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207339447824-hjjnngv26ihfujs2lvkhtvidfnc4ahqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF472Z-XkxbQTeTmbfnZkNIKp7mnA-2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207339447824-hjjnngv26ihfujs2lvkhtvidfnc4ahqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
