@@ -841,14 +841,14 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@mauron85/react-native-background-geolocation@^0.6.1":
+"@mauron85/react-native-background-geolocation@0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@mauron85/react-native-background-geolocation/-/react-native-background-geolocation-0.6.1.tgz#923ccf7405e3fee0b177e8999b7028e009c5b8f6"
   integrity sha512-LqdH9Sjb9J+ooVbnx2lZzHdW9k4GUiMDWH+RIpqIg/45A5qZI1tQW/O14lNWVXafVTrwzQWKuXFCGbMF8pDS4g==
   dependencies:
     plist "^3.0.1"
 
-"@react-native-community/async-storage@^1.6.1":
+"@react-native-community/async-storage@1.6.1":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.6.1.tgz#19be07fc1d65c77bdeb20f46108ba12076aad1c5"
   integrity sha512-1WA28xfdhG+unkTEk/lXnqI2izv6belo0CYw7UdvaeHm8TIYT6eTmIIdGR7oiCa2xSKEnaPQqRMH6h7gyLNbww==
@@ -941,7 +941,7 @@
     eslint-plugin-react-native "3.6.0"
     prettier "1.16.4"
 
-"@react-native-community/netinfo@^4.2.1":
+"@react-native-community/netinfo@4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-4.2.1.tgz#b6309f078da500807ef8afa4d659e56ccd14dee4"
   integrity sha512-kAnmYp8vXpZToPw8rgE7uO+MqmqHSR9VEDPkuZT0DnFMBJmIXCSD2NLAD28HGKVY/kujVWCknC/FuVWr5/A3uA==
@@ -4103,7 +4103,7 @@ lottie-ios@3.0.3, lottie-ios@^3.0.3:
   resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.0.3.tgz#8b1d6463a04fe59509a55ec8cc5feea7f40f4cf3"
   integrity sha512-p7dx7bq+1yUX3qA9Xof7Lpa2Gfopi6bPtMfFdv9Qi6iKVSkg0FwJXc7fD2AiiW8trHVFhHgjj2ELTZrZF6uu1A==
 
-lottie-react-native@^3.1.0:
+lottie-react-native@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-3.1.0.tgz#8be401ac7cc7d9e41aa4948a47ddc307887c09e1"
   integrity sha512-8AYKHT7+vyV/dt38Z7tRyMAnX4nvNRcRBXtDw0+IXAtvyoFk4ethDnI3AtDD9m3o/vNKqeHuO6YsojGAIVQMcg==
@@ -5326,7 +5326,7 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
-react-native-dropdownalert@^4.2.0:
+react-native-dropdownalert@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-native-dropdownalert/-/react-native-dropdownalert-4.2.0.tgz#b7f418b6954058b0c822d8b49e87fa86ccbb6f1a"
   integrity sha512-zz2W2t6UN6C/CM/z7VTEuvOTDQad8b5KBBL4YDpkdJKI9HOgLsTs0eIkZsXW2woEyp8Bj0SGpovSmf3SX756lg==
@@ -5381,6 +5381,11 @@ react-native-screens@2.0.0-alpha.3:
   dependencies:
     debounce "^1.2.0"
 
+react-native-share@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-2.0.0.tgz#4543a746013e0d8fa9f765fb8937007cfbcffcf7"
+  integrity sha512-J8Xl3mq0L9KDFtSYtKsQDAnZWw/niZIpAD1PRiNfZFHo44Rc+oS2bEIhskNnoQXKEgBNdPzCl/DenMXYAHXRYg==
+
 react-native-splash-screen@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
@@ -5420,7 +5425,7 @@ react-native@0.60.5:
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
 
-react-navigation-stack@^1.5.3:
+react-navigation-stack@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-1.5.3.tgz#cdc9f5a6dbdc55509a15f60d765722573dec1997"
   integrity sha512-MQcwDVbZUYsTtDJb5cFOSm+K+e7KpUCoROaGoUOR+JHWE3uuaJ3pd/Nu+32a57J98TNBf4qq0+2TPJWl6z6IBg==
@@ -5443,7 +5448,7 @@ react-proxy@^1.1.7:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
 
-react-redux@^7.1.1:
+react-redux@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.1.1.tgz#ce6eee1b734a7a76e0788b3309bf78ff6b34fa0a"
   integrity sha512-QsW0vcmVVdNQzEkrgzh2W3Ksvr8cqpAv5FhEk7tNEft+5pp7rXxAudTz3VOPawRkLIepItpkEIyLcN/VVXzjTg==
@@ -5542,26 +5547,26 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux-logger@^3.0.6:
+redux-logger@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
   integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
   dependencies:
     deep-diff "^0.3.5"
 
-redux-persist@^6.0.0:
+redux-persist@6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
   integrity sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==
 
-redux-saga@^1.0.5:
+redux-saga@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.0.5.tgz#03317261bc5fa7ee2ecb778f4e4848f573557bbb"
   integrity sha512-ytGFtaHyz6NQMQp7/LpQ/6CtOkbPRCcAeljUpc4c95hRm5U6dFvrRiZHeBPuQZ56L3oXfTX3hiYh8/3ZudsiNg==
   dependencies:
     "@redux-saga/core" "^1.0.3"
 
-"redux@>=0.10 <5", redux@^4.0.4:
+redux@4.0.4, "redux@>=0.10 <5":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
   integrity sha512-vKv4WdiJxOWKxK0yRoaK3Y4pxxB0ilzVx6dszU2W8wLxlb2yikRph4iV/ymtdJ6ZxpBLFbyrxklnT5yBbQSl3Q==
