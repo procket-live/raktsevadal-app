@@ -15,6 +15,8 @@ import {
     View,
     Text,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
 
@@ -28,6 +30,25 @@ class ResolveApp extends PureComponent {
 
         const fcmToken = await firebase.messaging().getToken();
         console.log('fcmToken', fcmToken)
+
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            includeBase64: true
+        }).then(image => {
+            console.log(image);
+            console.log('fsdfds', firebase.storage.Native.DOCUMENT_DIRECTORY_PATH)
+
+
+            firebase.storage().ref('/uploadOk.png')
+                .putFile(image.path)
+                .then((res) => {
+                    console.log('res', res);
+                })
+                .catch((err) => {
+                    console.log('err', err);
+                })
+        });
     }
 
     render() {
