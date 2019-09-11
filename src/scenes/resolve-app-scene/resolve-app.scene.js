@@ -16,9 +16,17 @@ import {
     Text,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import Geocoder from 'react-native-geocoder';
 
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
+
+var NY = {
+    lat: 12.995466299999999,
+    lng: 77.7009697
+};
+
+Geocoder.fallbackToGoogle('');
 
 class ResolveApp extends PureComponent {
     componentDidMount = async () => {
@@ -31,24 +39,44 @@ class ResolveApp extends PureComponent {
         const fcmToken = await firebase.messaging().getToken();
         console.log('fcmToken', fcmToken)
 
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            includeBase64: true
-        }).then(image => {
-            console.log(image);
-            console.log('fsdfds', firebase.storage.Native.DOCUMENT_DIRECTORY_PATH)
+        firebase.auth().signInWithPhoneNumber('+919731702355')
+            .then(confirmResult => {
+                console.log('confirmResult', confirmResult);
+
+                confirmResult.confirm('123456')
+                    .then(user => { console.log('user', user) })
+                    .catch(error => { })
+            })
+            .catch(error => { });
+
+        // ImagePicker.openPicker({
+        //     width: 300,
+        //     height: 400,
+        //     includeBase64: true
+        // }).then(image => {
+        //     firebase.storage().ref('/uploadOk.png')
+        //         .putFile(image.path)
+        //         .then((res) => {
+        //             console.log('res', res);
+        //         })
+        //         .catch((err) => {
+        //             console.log('err', err);
+        //         })
+        // });
 
 
-            firebase.storage().ref('/uploadOk.png')
-                .putFile(image.path)
-                .then((res) => {
-                    console.log('res', res);
-                })
-                .catch((err) => {
-                    console.log('err', err);
-                })
-        });
+        Geocoder.geocodePosition(NY).then(res => {
+            console.log('res', res);
+        })
+            .catch(err => console.log(err))
+
+
+        // Address Geocoding
+        Geocoder.geocodeAddress('jalore').then(res => {
+            console.log('fdfdsf', res)
+            // res is an Array of geocoding object (see below)
+        })
+            .catch(err => console.log(err))
     }
 
     render() {
