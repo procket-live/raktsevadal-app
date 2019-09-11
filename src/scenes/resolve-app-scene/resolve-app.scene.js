@@ -11,6 +11,7 @@ import SplashScreen from 'react-native-splash-screen';
 import NetworkState from 'react-native-network-state'
 import LottieView from 'lottie-react-native';
 import firebase from 'react-native-firebase';
+import MapView from 'react-native-maps';
 import {
     View,
     Text,
@@ -77,6 +78,8 @@ class ResolveApp extends PureComponent {
             // res is an Array of geocoding object (see below)
         })
             .catch(err => console.log(err))
+
+
     }
 
     render() {
@@ -89,6 +92,16 @@ class ResolveApp extends PureComponent {
                     style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
                 />
                 <LottieView source={require('../../assets/lottie/offline.json')} autoPlay />
+
+                <MapView
+                    style={{ width: 200, height: 200 }}
+                    initialRegion={{
+                        latitude: NY.lat,
+                        longitude: NY.lng,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
             </Fragment>
 
         )
