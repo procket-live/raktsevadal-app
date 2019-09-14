@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Geocoder from 'react-native-geocoder';
+import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
@@ -28,6 +29,8 @@ var NY = {
 };
 
 Geocoder.fallbackToGoogle('');
+
+let AlertView = RNBottomActionSheet.AlertView
 
 class ResolveApp extends PureComponent {
     componentDidMount = async () => {
@@ -64,6 +67,24 @@ class ResolveApp extends PureComponent {
         //             console.log('err', err);
         //         })
         // });
+
+        AlertView.Show({
+            title: "बहुत बढ़िया!",
+            message: "हम क्या सुधार कर सकते हैं? आपकी प्रतिपुष्टि का हमेशा स्वागत है।",
+            positiveText: "ठीक",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "बाहर जाएं",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: 'dark',
+            onPositive: () => {
+                console.log('positive clicked')
+            },
+            onNegative: () => {
+                console.log('negative clicked')
+            }
+        })
 
 
         Geocoder.geocodePosition(NY).then(res => {

@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist';
 
+import apiMiddleware from '../middlewares/api.middleware';
 import saga from '../saga/index.saga';
 import reducer from '../reducer/index.reducer';
 
@@ -16,7 +17,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware, __DEV__ ? logger : null];
+const middlewares = [sagaMiddleware, __DEV__ ? logger : null, apiMiddleware];
 
 const store = createStore(persistedReducer, applyMiddleware(...middlewares));
 const persistor = persistStore(store);

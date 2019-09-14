@@ -28,7 +28,7 @@ const RootNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: 'ResolveLocation'
+        initialRouteName: 'Login'
     }
 )
 
