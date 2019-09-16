@@ -14,20 +14,22 @@ class GenderPickerComponent extends PureComponent {
 
     render() {
         const isMale = this.props.value == 'male';
+        const isFemale = this.props.value == 'female';
+        const showBorder = !isMale && !isFemale;
 
         return (
             <View style={styles.container} >
                 <TouchableOpacity
                     onPress={this.selectMale}
-                    style={[styles.subContainer, isMale ? styles.slected : styles.unselected]}
+                    style={[styles.subContainer, showBorder ? styles.rightBorder : null, isMale ? styles.slected : styles.unselected]}
                 >
                     <Text style={[styles.text, isMale ? styles.selectedText : styles.unselectedText]} >Male</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={this.selectFemale}
-                    style={[styles.subContainer, !isMale ? styles.slected : styles.unselected]}
+                    style={[styles.subContainer, isFemale ? styles.slected : styles.unselected]}
                 >
-                    <Text style={[styles.text, !isMale ? styles.selectedText : styles.unselectedText]} >Famale</Text>
+                    <Text style={[styles.text, isFemale ? styles.selectedText : styles.unselectedText]} >Famale</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -57,7 +59,11 @@ const styles = StyleSheet.create({
         color: ON_PRIMARY
     },
     unselected: {
-        backgroundColor: ON_PRIMARY
+        backgroundColor: ON_PRIMARY,
+    },
+    rightBorder: {
+        borderRightWidth: 2,
+        borderRightColor: PRIMARY_COLOR
     },
     unselectedText: {
         color: TEXT_COLOR

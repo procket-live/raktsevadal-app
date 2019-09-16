@@ -23,7 +23,7 @@ class UpdateUserDetailScene extends PureComponent {
             step: 1,
             name: '',
             dob: '',
-            gender: 'male',
+            gender: '',
             bloodGroup: '',
             location: 'Bengaluru, Karnataka, In',
             showSuccessMessage: false,
@@ -45,27 +45,12 @@ class UpdateUserDetailScene extends PureComponent {
     }
 
     proceed1 = () => {
-        if (!this.verifyBasicDetail()) {
-            return;
-        }
-
         this.setState({ step: 2 })
     }
 
-    verifyBasicDetail = () => {
-        const { name, dob } = this.state;
-
-        if (name == '') {
-            NotifyService.notify({ title: 'Name missing', message: 'Please enter your full name.', type: 'warn' })
-            return false;
-        }
-
-        if (dob == '') {
-            NotifyService.notify({ title: 'Date of birth missing', message: 'Please select your date of birth.', type: 'warn' })
-            return false;
-        }
-
-        return true;
+    isValidBasicDetail = () => {
+        const { name, dob, gender } = this.state;
+        return (name == '' || dob == '' || gender == '');
     }
 
     proceed2 = () => {
@@ -136,6 +121,7 @@ class UpdateUserDetailScene extends PureComponent {
                         loading={this.state.loading}
                         text={translate('proceed')}
                         onPress={this.proceed1}
+                        disabled={this.isValidBasicDetail()}
                     />
                 </View>
             </React.Fragment>
