@@ -13,16 +13,19 @@ import { navigate } from '../../services/navigation.service';
 import DateTimePickerComponent from '../../components/date-time-picker-component/date-time-picker.component';
 import TextInputComponent from '../../components/text-input-component/text-input-component';
 import { DISPLAY_DATE_FORMAT, API_DATE_FORMAT, BLOOD_DONATION_MINIMUM_AGE, BLOOD_DONATION_MAXIMUM_AGE } from '../../constants/app.constant';
+import GenderPickerComponent from '../../components/gender-picker-component/gender-picker.component';
+import BloodGroupSelectComponent from '../../components/blood-group-select-component/blood-group-select.component';
 
 class UpdateUserDetailScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            step: 1,
+            step: 2,
             name: '',
             dob: '',
-            gender: '',
-            showSuccessMessage: false
+            gender: 'male',
+            bloodGroup: '',
+            showSuccessMessage: false,
         }
     }
 
@@ -37,18 +40,21 @@ class UpdateUserDetailScene extends PureComponent {
     }
 
     successAnimationEnd = () => {
-        console.log('dfsdf')
         navigate('ResolveApp');
+    }
+
+    proceed1 = () => {
+        this.setState({ step: 2 })
     }
 
     RenderBasicDetail = () => {
         return (
             <React.Fragment>
                 <View style={{ marginTop: 10, marginBottom: 5 }} >
-                    <Text style={styles.lightSmall} >{translate('help-us-know-you')}</Text>
+                    <Text style={styles.lightSmall} >{translate('enter-your')}</Text>
                 </View>
                 <View style={{ marginTop: 2, marginBottom: 5 }} >
-                    <Text style={styles.bigBold} >{translate('better')}</Text>
+                    <Text style={styles.bigBold} >{translate('basic-details')}</Text>
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
                     <TextInputComponent
@@ -73,11 +79,9 @@ class UpdateUserDetailScene extends PureComponent {
                     />
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
-                    <TextInput
+                    <GenderPickerComponent
                         value={this.state.gender}
-                        style={styles.input}
-                        placeholder="Gender"
-                        onChangeText={(gender) => {
+                        onChange={(gender) => {
                             this.setState({ gender });
                         }}
                     />
@@ -86,7 +90,31 @@ class UpdateUserDetailScene extends PureComponent {
                     <Button
                         loading={this.state.loading}
                         text={translate('proceed')}
-                        onPress={this.proceed}
+                        onPress={this.proceed1}
+                    />
+                </View>
+            </React.Fragment>
+        )
+    }
+
+    RenderBloodGroupSelect = () => {
+        return (
+            <React.Fragment>
+                <View style={{ marginTop: 10, marginBottom: 5 }} >
+                    <Text style={styles.lightSmall} >{translate('select-your')}</Text>
+                </View>
+                <View style={{ marginTop: 2, marginBottom: 5 }} >
+                    <Text style={styles.bigBold} >{translate('blood-group')}</Text>
+                </View>
+                <BloodGroupSelectComponent
+                    value={this.state.bloodGroup}
+                    onSelect={(bloodGroup) => this.setState({ bloodGroup })}
+                />
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30, marginBottom: 10 }} >
+                    <Button
+                        loading={this.state.loading}
+                        text={translate('proceed')}
+                        onPress={this.proceed2}
                     />
                 </View>
             </React.Fragment>
@@ -130,6 +158,7 @@ class UpdateUserDetailScene extends PureComponent {
                         currentStep={this.state.step}
                     />
                     {this.state.step == 1 ? this.RenderBasicDetail() : null}
+                    {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
                 </ScrollView>
             </View>
         )
@@ -143,7 +172,7 @@ const styles = StyleSheet.create({
     },
     lightSmall: {
         fontSize: 20,
-        color: '#34495e',
+        color: '#34495e'
     },
     lightSmaller: {
         fontSize: 18,
