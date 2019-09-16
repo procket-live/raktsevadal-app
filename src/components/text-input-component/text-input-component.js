@@ -7,7 +7,7 @@ class TextInputComponent extends PureComponent {
     render() {
         return (
             <TextInput
-                style={[styles.common]}
+                style={styles.common}
                 placeholderTextColor={GREY_1}
                 {...this.props}
             />

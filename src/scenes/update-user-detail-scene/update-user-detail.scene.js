@@ -20,11 +20,12 @@ class UpdateUserDetailScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            step: 2,
+            step: 1,
             name: '',
             dob: '',
             gender: 'male',
             bloodGroup: '',
+            location: 'Bengaluru, Karnataka, In',
             showSuccessMessage: false,
         }
     }
@@ -44,7 +45,51 @@ class UpdateUserDetailScene extends PureComponent {
     }
 
     proceed1 = () => {
+        if (!this.verifyBasicDetail()) {
+            return;
+        }
+
         this.setState({ step: 2 })
+    }
+
+    verifyBasicDetail = () => {
+        const { name, dob } = this.state;
+
+        if (name == '') {
+            NotifyService.notify({ title: 'Name missing', message: 'Please enter your full name.', type: 'warn' })
+            return false;
+        }
+
+        if (dob == '') {
+            NotifyService.notify({ title: 'Date of birth missing', message: 'Please select your date of birth.', type: 'warn' })
+            return false;
+        }
+
+        return true;
+    }
+
+    proceed2 = () => {
+        const { bloodGroup } = this.state;
+
+        if (bloodGroup == '') {
+            NotifyService.notify({ title: 'Blood group missing', message: 'Please select your blood group.', type: 'warn' })
+            return false;
+        }
+
+        this.setState({ step: 3 })
+    }
+
+    proceed3 = () => {
+        const { location } = this.state;
+
+        if (location == '') {
+            NotifyService.notify({ title: 'Location missing', message: '', type: 'warn' })
+            return false;
+        }
+
+        this.setState({ showSuccessMessage: true }, () => {
+            this.animation.play();
+        })
     }
 
     RenderBasicDetail = () => {
@@ -121,6 +166,35 @@ class UpdateUserDetailScene extends PureComponent {
         )
     }
 
+    RenderLocationSelect = () => {
+        return (
+            <React.Fragment>
+                <View style={{ marginTop: 10, marginBottom: 5 }} >
+                    <Text style={styles.lightSmall} >{translate('let-us-locate-your')}</Text>
+                </View>
+                <View style={{ marginTop: 2, marginBottom: 5 }} >
+                    <Text style={styles.bigBold} >{translate('location')}</Text>
+                </View>
+                <View style={{ marginTop: 35, marginBottom: 5 }} >
+                    <TextInputComponent
+                        value={this.state.location}
+                        placeholder="Current location"
+                        editable={false}
+                        actionName="Locate"
+                        action={() => { }}
+                    />
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30, marginBottom: 10 }} >
+                    <Button
+                        loading={this.state.loading}
+                        text={translate('proceed')}
+                        onPress={this.proceed3}
+                    />
+                </View>
+            </React.Fragment>
+        )
+    }
+
     RenderSuccessMessage = () => {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
@@ -135,7 +209,7 @@ class UpdateUserDetailScene extends PureComponent {
                     />
                 </View>
                 <View style={{ marginTop: 5, marginBottom: 5 }} >
-                    <Text style={styles.bigBold} >{translate('mobile-number-verified')}</Text>
+                    <Text style={styles.bigBold} >{translate('user-details-updated')}</Text>
                 </View>
             </View>
         );
@@ -159,6 +233,7 @@ class UpdateUserDetailScene extends PureComponent {
                     />
                     {this.state.step == 1 ? this.RenderBasicDetail() : null}
                     {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
+                    {this.state.step == 3 ? this.RenderLocationSelect() : null}
                 </ScrollView>
             </View>
         )
