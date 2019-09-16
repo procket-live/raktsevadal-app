@@ -21,7 +21,7 @@ function Button({ text, onPress = () => { }, disabled, loading }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 180,
+        width: 140,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -33,9 +33,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#e74c3c'
     },
     text: {
-        fontWeight: 'normal',
         color: '#fff',
-        fontSize: 18
+        fontSize: 18,
     }
 })
 

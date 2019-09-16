@@ -9,6 +9,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import DropdownAlert from 'react-native-dropdownalert';
 import { Provider as ReduxProvider } from 'react-redux';
+import GlobalFont from 'react-native-global-font'
 import { PersistGate } from 'redux-persist/integration/react';
 import * as RNLocalize from "react-native-localize";
 
@@ -28,6 +29,7 @@ class App extends PureComponent {
 
   componentDidMount() {
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
+    GlobalFont.applyGlobal('Noway')
   }
 
   componentWillUnmount() {

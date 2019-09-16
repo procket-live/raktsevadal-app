@@ -1,4 +1,12 @@
 {
     "hey-whats-your": "Hey, what's your",
-    "mobile-number": "Mobile Number?"
+    "mobile-number": "Mobile Number?",
+    "share-your": "Share your",
+    "verification-code": "Verification code",
+    "code-sent-to-this-number": "Code sent to this number",
+    "edit": "Edit",
+    "didnt-get-the-otp": "Didn't get the otp?",
+    "resend": "Resend",
+    "proceed": "PROCEED",
+    "mobile-number-verified": "Mobile number verified"
 }
