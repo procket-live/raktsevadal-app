@@ -37,7 +37,7 @@ class ResolveAppScene extends PureComponent {
     componentDidMount = async () => {
         setTimeout(() => {
             SplashScreen.hide();
-            navigate('Login')
+            // navigate('Login')
         }, 1000)
         // setTimeout(() => {
         //     NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
