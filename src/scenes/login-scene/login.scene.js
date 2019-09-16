@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import LottieView from 'lottie-react-native';
 
@@ -9,6 +9,8 @@ import Button from '../../components/button-component/button.component';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NotifyService from '../../services/notify.service';
 import { navigate } from '../../services/navigation.service';
+import TextInputComponent from '../../components/text-input-component/text-input-component';
+import { TEXT_COLOR } from '../../constants/color.constant';
 
 class LoginScene extends PureComponent {
     constructor(props) {
@@ -73,9 +75,8 @@ class LoginScene extends PureComponent {
                     <Text style={styles.bigBold} >{translate('mobile-number')}</Text>
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
-                    <TextInput
+                    <TextInputComponent
                         value={this.state.mobile}
-                        style={styles.input}
                         maxLength={14}
                         keyboardType="phone-pad"
                         onChangeText={(mobile) => {
@@ -126,10 +127,9 @@ class LoginScene extends PureComponent {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
-                    <TextInput
+                    <TextInputComponent
                         value={this.state.otp}
-                        style={styles.input}
-                        maxLength={14}
+                        maxLength={6}
                         keyboardType="phone-pad"
                         placeholder="Enter One Time Password"
                         onChangeText={(otp) => {
@@ -198,11 +198,11 @@ const styles = StyleSheet.create({
     },
     lightSmall: {
         fontSize: 20,
-        color: '#34495e',
+        color: TEXT_COLOR,
     },
     lightSmaller: {
         fontSize: 18,
-        color: '#34495e',
+        color: TEXT_COLOR,
     },
     primarySmall: {
         color: '#2ecc71',
@@ -214,15 +214,7 @@ const styles = StyleSheet.create({
     },
     bigBold: {
         fontSize: 28,
-        color: '#34495e'
-    },
-    input: {
-        width: 385,
-        height: 50,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e74c3c',
-        fontSize: 28,
-        fontFamily: 'Noway'
+        color: TEXT_COLOR
     }
 })
 

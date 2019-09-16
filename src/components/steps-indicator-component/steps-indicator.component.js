@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { GREY_1, PRIMARY_COLOR } from '../../constants/color.constant';
 
 const StepsIndicator = ({ steps, currentStep }) => (
     < View style={styles.container} >
@@ -22,11 +23,11 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     activeStep: {
-        backgroundColor: '#e74c3c',
+        backgroundColor: PRIMARY_COLOR,
         width: 40,
     },
     inactiveStep: {
-        backgroundColor: '#bdc3c7',
+        backgroundColor: GREY_1,
         width: 20,
     }
 })

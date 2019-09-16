@@ -22,6 +22,7 @@ import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
+import { navigate } from '../../services/navigation.service.js';
 
 var NY = {
     lat: 12.995466299999999,
@@ -32,73 +33,75 @@ Geocoder.fallbackToGoogle('');
 
 let AlertView = RNBottomActionSheet.AlertView
 
-class ResolveApp extends PureComponent {
+class ResolveAppScene extends PureComponent {
     componentDidMount = async () => {
-        SplashScreen.hide();
-
         setTimeout(() => {
-            NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
-        }, 2000)
+            SplashScreen.hide();
+            navigate('Login')
+        }, 1000)
+        // setTimeout(() => {
+        //     NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
+        // }, 2000)
 
-        const fcmToken = await firebase.messaging().getToken();
-        console.log('fcmToken', fcmToken)
+        // const fcmToken = await firebase.messaging().getToken();
+        // console.log('fcmToken', fcmToken)
 
-        firebase.auth().signInWithPhoneNumber('+919731702355')
-            .then(confirmResult => {
-                console.log('confirmResult', confirmResult);
+        // firebase.auth().signInWithPhoneNumber('+919731702355')
+        //     .then(confirmResult => {
+        //         console.log('confirmResult', confirmResult);
 
-                confirmResult.confirm('123456')
-                    .then(user => { console.log('user', user) })
-                    .catch(error => { })
-            })
-            .catch(error => { });
+        //         confirmResult.confirm('123456')
+        //             .then(user => { console.log('user', user) })
+        //             .catch(error => { })
+        //     })
+        //     .catch(error => { });
 
-        // ImagePicker.openPicker({
-        //     width: 300,
-        //     height: 400,
-        //     includeBase64: true
-        // }).then(image => {
-        //     firebase.storage().ref('/uploadOk.png')
-        //         .putFile(image.path)
-        //         .then((res) => {
-        //             console.log('res', res);
-        //         })
-        //         .catch((err) => {
-        //             console.log('err', err);
-        //         })
-        // });
+        // // ImagePicker.openPicker({
+        // //     width: 300,
+        // //     height: 400,
+        // //     includeBase64: true
+        // // }).then(image => {
+        // //     firebase.storage().ref('/uploadOk.png')
+        // //         .putFile(image.path)
+        // //         .then((res) => {
+        // //             console.log('res', res);
+        // //         })
+        // //         .catch((err) => {
+        // //             console.log('err', err);
+        // //         })
+        // // });
 
-        AlertView.Show({
-            title: "बहुत बढ़िया!",
-            message: "हम क्या सुधार कर सकते हैं? आपकी प्रतिपुष्टि का हमेशा स्वागत है।",
-            positiveText: "ठीक",
-            positiveBackgroundColor: "#27ae60",
-            positiveTextColor: "#ffffff",
-            negativeText: "बाहर जाएं",
-            negativeBackgroundColor: "#e74c3c",
-            negativeTextColor: "#f1c40f",
-            theme: 'dark',
-            onPositive: () => {
-                console.log('positive clicked')
-            },
-            onNegative: () => {
-                console.log('negative clicked')
-            }
-        })
-
-
-        Geocoder.geocodePosition(NY).then(res => {
-            console.log('res', res);
-        })
-            .catch(err => console.log(err))
+        // AlertView.Show({
+        //     title: "बहुत बढ़िया!",
+        //     message: "हम क्या सुधार कर सकते हैं? आपकी प्रतिपुष्टि का हमेशा स्वागत है।",
+        //     positiveText: "ठीक",
+        //     positiveBackgroundColor: "#27ae60",
+        //     positiveTextColor: "#ffffff",
+        //     negativeText: "बाहर जाएं",
+        //     negativeBackgroundColor: "#e74c3c",
+        //     negativeTextColor: "#f1c40f",
+        //     theme: 'dark',
+        //     onPositive: () => {
+        //         console.log('positive clicked')
+        //     },
+        //     onNegative: () => {
+        //         console.log('negative clicked')
+        //     }
+        // })
 
 
-        // Address Geocoding
-        Geocoder.geocodeAddress('jalore').then(res => {
-            console.log('fdfdsf', res)
-            // res is an Array of geocoding object (see below)
-        })
-            .catch(err => console.log(err))
+        // Geocoder.geocodePosition(NY).then(res => {
+        //     console.log('res', res);
+        // })
+        //     .catch(err => console.log(err))
+
+
+        // // Address Geocoding
+        // Geocoder.geocodeAddress('jalore').then(res => {
+        //     console.log('fdfdsf', res)
+        //     // res is an Array of geocoding object (see below)
+        // })
+        //     .catch(err => console.log(err))
 
 
     }
@@ -129,4 +132,4 @@ class ResolveApp extends PureComponent {
     }
 }
 
-export default ResolveApp;
+export default ResolveAppScene;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { GREY_1, PRIMARY_COLOR, ON_PRIMARY } from '../../constants/color.constant';
 
 function Button({ text, onPress = () => { }, disabled, loading }) {
     return (
@@ -10,7 +11,11 @@ function Button({ text, onPress = () => { }, disabled, loading }) {
         >
             {
                 loading ?
-                    <ActivityIndicator animating size="large" color="#fff" /> :
+                    <ActivityIndicator
+                        animating
+                        size="small"
+                        color={ON_PRIMARY}
+                    /> :
                     <Text style={styles.text} >
                         {text}
                     </Text>
@@ -21,20 +26,20 @@ function Button({ text, onPress = () => { }, disabled, loading }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 140,
-        height: 50,
+        width: 120,
+        height: 40,
         alignItems: 'center',
         justifyContent: 'center',
     },
     disabled: {
-        backgroundColor: '#bdc3c7'
+        backgroundColor: GREY_1
     },
     active: {
-        backgroundColor: '#e74c3c'
+        backgroundColor: PRIMARY_COLOR
     },
     text: {
-        color: '#fff',
-        fontSize: 18,
+        color: ON_PRIMARY,
+        fontSize: 16,
     }
 })
 
