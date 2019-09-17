@@ -37,7 +37,7 @@ async function getToken() {
     return APP.TOKEN;
 }
 
-function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject = defaultReject, params, callback }) {
+function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject = defaultReject, params, callback, hideMessage }) {
     const postDict = {
         headers, method
     };
@@ -60,7 +60,7 @@ function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject 
     })
         .then((response) => {
             console.log('ddd response', response);
-            return resolve(response.data, { callback });
+            return resolve(response.data, { callback, hideMessage });
         })
         .catch((error) => {
             return reject(error);
@@ -106,12 +106,12 @@ async function createHeader(obj) {
     return { ...headers, ...obj.headers };
 }
 
-function defaultResolve(result, { callback }) {
+function defaultResolve(result, { callback, hideMessage }) {
     if (typeof callback == 'function') {
         callback(result);
     }
 
-    if (result && result.response && typeof result.response == 'string') {
+    if (result && result.response && typeof result.response == 'string' && !hideMessage) {
         NotifyService.notify({
             title: '',
             message: result.response,

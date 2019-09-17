@@ -3,7 +3,7 @@ import { USER } from "../constants/api.constant"
 
 class PrivateApi {
     static updateUser = (body) => {
-        return Put({ url: USER, body });
+        return Put({ url: USER, body, hideMessage: true });
     }
 
     static getUser = () => {
