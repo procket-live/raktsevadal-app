@@ -1,0 +1,135 @@
+import axios from 'axios';
+import NotifyService from '../services/notify.service';
+import AsyncStorage from '@react-native-community/async-storage';
+import APP, { BASE_URL, BASE_URL_TEST } from '../constants/app.constant';
+
+export const defautlHeaders = {
+    'Content-Type': 'application/json;charset=UTF-8',
+};
+
+export async function Get(obj) {
+    if (!(obj && obj.url)) {
+        return false;
+    }
+
+    const params = await getNecessaryParams(obj);
+    return ApiCall(params);
+}
+
+export async function Post(obj) {
+    obj.method = 'POST';
+    const params = await getNecessaryParams(obj);
+    return ApiCall(params);
+}
+
+export async function Put(obj) {
+    obj.method = 'PUT';
+    const params = await getNecessaryParams(obj);
+    return ApiCall(params);
+}
+
+export async function Delete(obj) {
+    const params = await getNecessaryParams(obj);
+    return ApiCall(params);
+}
+
+async function getToken() {
+    return APP.TOKEN;
+}
+
+function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject = defaultReject, params, callback }) {
+    const postDict = {
+        headers, method
+    };
+
+    if (body) { // if body is attached
+        postDict.body = body;
+    }
+
+    console.log('url', url,
+        headers,
+        body,
+        method,
+        params);
+    return axios({
+        url,
+        headers,
+        data: body,
+        method,
+        params
+    })
+        .then((response) => {
+            console.log('ddd response', response);
+            return resolve(response.data, { callback });
+        })
+        .catch((error) => {
+            return reject(error);
+        });
+}
+
+async function getNecessaryParams(obj) {
+    const url = createFinalUrl(obj);
+    const method = obj.method || 'GET';
+    const headers = await createHeader(obj);
+
+    const resolve = obj.hasOwnProperty('resolve') ? obj.resolve : resolve;
+    const reject = obj.hasOwnProperty('reject') ? obj.reject : reject;
+
+    const responseObj = {
+        url, method, headers, resolve, reject, hideMessage: obj.hideMessage || false
+    };
+
+    if (obj.body) {
+        responseObj.body = obj.body;
+        console.log('obj.body', obj.body)
+    }
+
+    return responseObj;
+}
+
+function createFinalUrl(obj) {
+    const baseUrl = !__DEV__ ? BASE_URL_TEST : BASE_URL;
+    return `${baseUrl}/${obj.url}`;
+}
+
+async function createHeader(obj) {
+    const headers = defautlHeaders;
+    const token = await getToken();
+    headers['Authorization'] = `Bearer ${token}`;
+
+    // if headers are not passed
+    if (!obj.headers) {
+        return headers;
+    }
+
+    // extend default header options with one, passed with obj
+    return { ...headers, ...obj.headers };
+}
+
+function defaultResolve(result, { callback }) {
+    if (typeof callback == 'function') {
+        callback(result);
+    }
+
+    if (result && result.response && typeof result.response == 'string') {
+        NotifyService.notify({
+            title: '',
+            message: result.response,
+            type: result.success ? 'success' : 'error',
+            duration: 1200
+        })
+    }
+
+    return result;
+}
+
+function defaultReject(response) {
+    console.log('response', response);
+    NotifyService.notify({
+        title: 'Server issue',
+        message: '',
+        type: 'error',
+        duration: 1200
+    })
+    return response;
+}

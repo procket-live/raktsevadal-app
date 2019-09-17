@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import LottieView from 'lottie-react-native';
+import { connect } from 'react-redux';
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -11,7 +11,9 @@ import NotifyService from '../../services/notify.service';
 import { navigate } from '../../services/navigation.service';
 import TextInputComponent from '../../components/text-input-component/text-input-component';
 import { TEXT_COLOR } from '../../constants/color.constant';
-
+import PublicApi from '../../api/api.public';
+import APP from '../../constants/app.constant';
+import { setAuthTokenAction } from '../../action/user.action';
 class LoginScene extends PureComponent {
     constructor(props) {
         super(props);
@@ -25,11 +27,10 @@ class LoginScene extends PureComponent {
         }
     }
 
-    componentDidMount = () => {
-        SplashScreen.hide();
-    }
+    proceed = async () => {
+        const { mobile, otp } = this.state;
+        const apiMobileNumber = mobile.substr(4, 14);
 
-    proceed = () => {
         if (!this.state.otpSent) {
             if (!this.isCorrectMobileNumber()) {
                 NotifyService.notify({ title: 'Incorrect mobile number', message: 'Please check and re-enter mobile number', type: 'warn' })
@@ -37,11 +38,27 @@ class LoginScene extends PureComponent {
             }
 
             this.setState({ loading: true });
-            setTimeout(() => {
-                this.setState({ loading: false, otpSent: true, step: this.state.step + 1 })
-            }, 100);
+
+            const result = await PublicApi.generateOTP(apiMobileNumber);
+            this.setState({ loading: false });
+            if (result.success) {
+                this.setState({ otpSent: true, step: this.state.step + 1 })
+            }
         } else {
-            this.showSuccessMessage();
+            if (!this.isCorrectOTP()) {
+                NotifyService.notify({ title: 'Incorrect OTP', message: 'Please enter correct OTP', type: 'warn' })
+                return;
+            }
+
+            this.setState({ loading: true });
+            const result2 = await PublicApi.verifyOTP(apiMobileNumber, otp);
+            this.setState({ loading: false });
+            if (result2.success) {
+                const token = result2.token;
+                this.props.setAuthTokenAction(token);
+                APP.TOKEN = token;
+                this.showSuccessMessage();
+            }
         }
     }
 
@@ -54,6 +71,11 @@ class LoginScene extends PureComponent {
         return /^((\+){1}91){1}[1-9]{1}[0-9]{9}$/.test(mobile.replace(' ', ''));
     }
 
+    isCorrectOTP = () => {
+        const { otp } = this.state;
+        return /^\d{6}$/.test(otp);
+    }
+
     showSuccessMessage = () => {
         this.setState({ showSuccessMessage: true }, () => {
             this.animation.play();
@@ -61,8 +83,7 @@ class LoginScene extends PureComponent {
     }
 
     successAnimationEnd = () => {
-        console.log('dfsdf')
-        navigate('ResolveApp');
+        navigate('UpdateUserDetail');
     }
 
     RenderMobileNumberForm = () => {
@@ -218,4 +239,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LoginScene;
+export default connect(null, { setAuthTokenAction })(LoginScene);

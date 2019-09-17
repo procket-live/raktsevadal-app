@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -15,6 +15,8 @@ import TextInputComponent from '../../components/text-input-component/text-input
 import { DISPLAY_DATE_FORMAT, API_DATE_FORMAT, BLOOD_DONATION_MINIMUM_AGE, BLOOD_DONATION_MAXIMUM_AGE } from '../../constants/app.constant';
 import GenderPickerComponent from '../../components/gender-picker-component/gender-picker.component';
 import BloodGroupSelectComponent from '../../components/blood-group-select-component/blood-group-select.component';
+import PrivateApi from '../../api/api.private';
+import { setUserAction } from '../../action/user.action';
 
 class UpdateUserDetailScene extends PureComponent {
     constructor(props) {
@@ -27,11 +29,12 @@ class UpdateUserDetailScene extends PureComponent {
             bloodGroup: '',
             location: 'Bengaluru, Karnataka, In',
             showSuccessMessage: false,
+            loading: false
         }
     }
 
     componentDidMount = () => {
-        SplashScreen.hide();
+        console.log('fdsf')
     }
 
     showSuccessMessage = () => {
@@ -41,7 +44,7 @@ class UpdateUserDetailScene extends PureComponent {
     }
 
     successAnimationEnd = () => {
-        navigate('ResolveApp');
+        navigate('ResolveLocation');
     }
 
     proceed1 = () => {
@@ -64,17 +67,34 @@ class UpdateUserDetailScene extends PureComponent {
         this.setState({ step: 3 })
     }
 
-    proceed3 = () => {
-        const { location } = this.state;
+    proceed3 = async () => {
+        const { name, dob, location, bloodGroup, gender } = this.state;
 
         if (location == '') {
             NotifyService.notify({ title: 'Location missing', message: '', type: 'warn' })
             return false;
         }
 
-        this.setState({ showSuccessMessage: true }, () => {
-            this.animation.play();
-        })
+        const body = {
+            name,
+            blood_group: bloodGroup,
+            dob,
+            gender
+        };
+
+        this.setState({ loading: true })
+        const result = await PrivateApi.updateUser(body);
+        if (result.success) {
+            const result1 = await PrivateApi.getUser();
+            if (result1.success) {
+                const user = result1.response;
+                this.props.setUserAction(user);
+                this.setState({ showSuccessMessage: true }, () => {
+                    this.animation.play();
+                })
+            }
+        }
+        this.setState({ loading: false })
     }
 
     RenderBasicDetail = () => {
@@ -261,4 +281,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default UpdateUserDetailScene;
+export default connect(null, { setUserAction })(UpdateUserDetailScene);

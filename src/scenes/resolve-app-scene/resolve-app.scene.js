@@ -6,7 +6,8 @@
  * @flow
  */
 
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, Component } from 'react';
+import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import NetworkState from 'react-native-network-state'
 import LottieView from 'lottie-react-native';
@@ -22,7 +23,8 @@ import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
-import { navigate } from '../../services/navigation.service.js';
+import { resetToScreen } from '../../services/navigation.service.js';
+import APP from '../../constants/app.constant';
 
 var NY = {
     lat: 12.995466299999999,
@@ -33,12 +35,28 @@ Geocoder.fallbackToGoogle('');
 
 let AlertView = RNBottomActionSheet.AlertView
 
-class ResolveAppScene extends PureComponent {
+class ResolveAppScene extends Component {
+    init = () => {
+        const { user } = this.props;
+
+        if (user == null) {
+            resetToScreen('Login')
+        } else {
+            APP.TOKEN = user.token;
+            if (user.name == null) {
+                resetToScreen('UpdateUserDetail')
+            } else {
+                resetToScreen('ResolveLocation');
+            }
+        }
+
+        SplashScreen.hide();
+    }
+
     componentDidMount = async () => {
         setTimeout(() => {
-            SplashScreen.hide();
-            // navigate('Login')
-        }, 1000)
+            this.init()
+        }, 100);
         // setTimeout(() => {
         //     NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
         // }, 2000)
@@ -108,28 +126,13 @@ class ResolveAppScene extends PureComponent {
 
     render() {
         return (
-            <Fragment>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Text>{translate('hello')}</Text>
-                </View>
-                <NetworkState
-                    style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
-                />
-                <LottieView source={require('../../assets/lottie/offline.json')} autoPlay />
-
-                <MapView
-                    style={{ width: 200, height: 200 }}
-                    initialRegion={{
-                        latitude: NY.lat,
-                        longitude: NY.lng,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                />
-            </Fragment>
-
+            <View style={{ flex: 1 }} />
         )
     }
 }
 
-export default ResolveAppScene;
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps)(ResolveAppScene);

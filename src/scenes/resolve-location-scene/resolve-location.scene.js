@@ -4,6 +4,8 @@ import LottieView from 'lottie-react-native';
 import { connect } from 'react-redux';
 import LocationService from '../../services/location.service';
 import { resetToScreen } from '../../services/navigation.service';
+import PrivateApi from '../../api/api.private';
+import { setUserAction } from '../../action/user.action';
 
 class ResolveLocaitonScreen extends Component {
     constructor(props) {
@@ -50,8 +52,9 @@ class ResolveLocaitonScreen extends Component {
             const geolocation = await this.locationService.getCurrentLocation();
             if (geolocation.success) {
                 const { latitude, longitude } = geolocation.location;
-                resetToScreen('ResolveApp');
+                this.setLocation(latitude, longitude);
             }
+
             return;
         }
 
@@ -60,6 +63,27 @@ class ResolveLocaitonScreen extends Component {
             serviceStatus: result,
             layout: this.locationService.getActionFromStatusCode(result)
         });
+    }
+
+    setLocation = async (lat, lng) => {
+        const body = {
+            latest_location: {
+                latitude: lat,
+                longitude: lng
+            }
+        }
+        const result = await PrivateApi.updateUser(body);
+        if (result.success) {
+            this.getUser();
+        }
+    }
+
+    getUser = async () => {
+        const result = await PrivateApi.getUser();
+        if (result.success) {
+            this.props.setUserAction(result.response);
+            resetToScreen('Root');
+        }
     }
 
 
@@ -140,4 +164,4 @@ const styles = {
     }
 };
 
-export default connect(null, { })(ResolveLocaitonScreen);
+export default connect(null, { setUserAction })(ResolveLocaitonScreen);
