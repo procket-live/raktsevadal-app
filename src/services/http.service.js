@@ -88,7 +88,7 @@ async function getNecessaryParams(obj) {
 }
 
 function createFinalUrl(obj) {
-    const baseUrl = !__DEV__ ? BASE_URL_TEST : BASE_URL;
+    const baseUrl = __DEV__ ? BASE_URL_TEST : BASE_URL;
     return `${baseUrl}/${obj.url}`;
 }
 
