@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     step: {
-        height: 10,
+        height: 15,
         paddingRight: 4,
         marginRight: 4,
         borderRadius: 5

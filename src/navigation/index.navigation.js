@@ -11,18 +11,21 @@ import OnBoardingScene from '../scenes/onboarding-scene/onboarding.scene';
 import UpdateUserDetailScene from '../scenes/update-user-detail-scene/update-user-detail.scene';
 import { PRIMARY_COLOR, GREY_1, ON_PRIMARY } from '../constants/color.constant';
 import { HomeIcon, DropIcon, BloodDonationIcon, NotificationIcon, ManUserIcon } from '../config/image.config';
+
+import HomeScene from '../scenes/home-scene/home.scene';
+import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
+import ChooseLocationScene from '../scenes/choose-location-scene/choose-location.scene';
+
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
     {
-        Feed: { screen: OnBoardingScene },
-        'My donation': { screen: OnBoardingScene },
-        Request: { screen: OnBoardingScene },
+        Home: { screen: HomeScene },
         Notification: { screen: OnBoardingScene },
         Profile: { screen: OnBoardingScene },
     },
     {
-        initialRouteName: 'Feed',
-        order: ['Feed', 'My donation', 'Request', 'Notification', 'Profile'],
+        initialRouteName: 'Home',
+        order: ['Home', 'Notification', 'Profile'],
         backBehavior: 'initialRoute',
         lazy: true,
         defaultNavigationOptions: ({ navigation }) => ({
@@ -30,17 +33,12 @@ const RootTabs = createBottomTabNavigator(
                 const { routeName } = navigation.state;
                 let icon;
                 switch (routeName) {
-                    case 'Feed':
+                    case 'Home':
                         icon = HomeIcon;
-                        break;
-                    case 'My donation':
-                        icon = DropIcon;
-                        break;
-                    case 'Request':
-                        icon = BloodDonationIcon;
                         break;
                     case 'Notification':
                         icon = NotificationIcon;
+                        break;
                     case 'Profile':
                         icon = ManUserIcon;
                         break;
@@ -110,10 +108,32 @@ const RootNavigator = createStackNavigator(
             navigationOptions: {
                 header: null,
             }
+        },
+        AddBloodRequirement: {
+            screen: AddBloodRequirementScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Add blood requirement"
+            }
+        },
+        ChooseLocationScene: {
+            screen: ChooseLocationScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Select location"
+            }
         }
     },
     {
-        initialRouteName: 'ResolveApp'
+        initialRouteName: 'ResolveApp',
     }
 )
 

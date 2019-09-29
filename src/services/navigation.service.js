@@ -15,6 +15,12 @@ export function navigate(routeName, params = {}) {
     );
 }
 
+export function navigatePop() {
+    _navigator.dispatch(
+        NavigationActions.back()
+    );
+}
+
 export function resetToScreen(screen) {
     const resetAction = StackActions.reset({
         index: 0,

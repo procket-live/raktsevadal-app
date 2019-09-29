@@ -21,3 +21,7 @@ export const BloodDonationIcon = () => {
 export const NotificationIcon = () => {
     return require('../assets/image/notification.png')
 }
+
+export const MapMarkerIcon = () => {
+    return require('../assets/image/map-marker.png')
+}
