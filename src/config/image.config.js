@@ -1,5 +1,9 @@
 export const HomeIcon = () => {
-    return require('../assets/image/house.png')
+    return require('../assets/image/home.png')
+}
+
+export const InfoIcon = () => {
+    return require('../assets/image/info.png')
 }
 
 export const ManUserIcon = () => {
@@ -24,4 +28,8 @@ export const NotificationIcon = () => {
 
 export const MapMarkerIcon = () => {
     return require('../assets/image/map-marker.png')
+}
+
+export const UserIcon = () => {
+    return require('../assets/image/user.png')
 }

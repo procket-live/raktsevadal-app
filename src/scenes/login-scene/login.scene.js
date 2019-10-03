@@ -13,7 +13,9 @@ import TextInputComponent from '../../components/text-input-component/text-input
 import { TEXT_COLOR } from '../../constants/color.constant';
 import PublicApi from '../../api/api.public';
 import APP from '../../constants/app.constant';
-import { setAuthTokenAction } from '../../action/user.action';
+import { setAuthTokenAction, setUserAction } from '../../action/user.action';
+import { IsCorrectMobileNumber, AccessNestedObject } from '../../utils/common.util';
+import PrivateApi from '../../api/api.private';
 class LoginScene extends PureComponent {
     constructor(props) {
         super(props);
@@ -32,7 +34,7 @@ class LoginScene extends PureComponent {
         const apiMobileNumber = mobile.substr(4, 14);
 
         if (!this.state.otpSent) {
-            if (!this.isCorrectMobileNumber()) {
+            if (!IsCorrectMobileNumber(mobile)) {
                 NotifyService.notify({ title: 'Incorrect mobile number', message: 'Please check and re-enter mobile number', type: 'warn' })
                 return;
             }
@@ -52,23 +54,27 @@ class LoginScene extends PureComponent {
 
             this.setState({ loading: true });
             const result2 = await PublicApi.verifyOTP(apiMobileNumber, otp);
-            this.setState({ loading: false });
             if (result2.success) {
                 const token = result2.token;
                 this.props.setAuthTokenAction(token);
                 APP.TOKEN = token;
-                this.showSuccessMessage();
+                this.fetchUserObject();
             }
         }
     }
 
-    edit = () => {
-        this.setState({ otpSent: false, mobile: '+91 ', step: this.state.step - 1, otp: '' });
+    fetchUserObject = async () => {
+        const result = await PrivateApi.getUser();
+        if (result.success) {
+            this.props.setUserAction(AccessNestedObject(result, 'response', {}))
+        }
+        
+        this.setState({ loading: false });
+        setTimeout(this.showSuccessMessage, 100);
     }
 
-    isCorrectMobileNumber = () => {
-        const { mobile } = this.state;
-        return /^((\+){1}91){1}[1-9]{1}[0-9]{9}$/.test(mobile.replace(' ', ''));
+    edit = () => {
+        this.setState({ otpSent: false, mobile: '+91 ', step: this.state.step - 1, otp: '' });
     }
 
     isCorrectOTP = () => {
@@ -239,4 +245,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, { setAuthTokenAction })(LoginScene);
+export default connect(null, { setAuthTokenAction, setUserAction })(LoginScene);

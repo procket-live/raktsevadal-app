@@ -1,45 +1,98 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
+import { View, StyleSheet, Text, Image, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
+import LottieView from 'lottie-react-native';
 import WideButton from '../../components/wide-button-component/wide-button.component';
 import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY } from '../../constants/color.constant';
 import moment from 'moment';
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, JSONToQuery } from '../../utils/common.util';
 import { navigate } from '../../services/navigation.service';
+import PrivateApi from '../../api/api.private';
+import BloodDonationCard from '../../components/blood-donation-card-component/blood-donation-card.component';
+import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
+import DONATION_MAP from '../../constants/donation.constant';
+import { UserIcon } from '../../config/image.config';
+import { HeartEmptyFullLottie } from '../../config/lottie.config';
 
 class HomeScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-
+            loading: true,
+            isRefreshing: false,
+            requests: [1, 2, 3, 4, 5]
         }
+    }
+
+    componentDidMount = () => {
+        this.fetchBloodDonationRequest();
+    }
+
+    fetchBloodDonationRequest = async (callback) => {
+        const myBloodGroup = AccessNestedObject(this.props, 'user.blood_group');
+        const iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`);
+        const latitude = AccessNestedObject(this.props, 'user.latest_location.latitude');
+        const longitude = AccessNestedObject(this.props, 'user.latest_location.longitude');
+
+        const params = {
+            blood_group: iCanDonate,
+            latitude,
+            longitude
+        }
+
+        const query = JSONToQuery(params);
+        const result = await PrivateApi.fetchBloodRequirements(query);
+        this.setState({ loading: false });
+        if (result.success) {
+            let list = AccessNestedObject(result, 'response', []);
+            list = list.length ? [1, ...list] : [];
+            this.setState({ requests: list });
+        }
+
+        if (callback && typeof callback == 'function') {
+            callback();
+        }
+    }
+
+    onRefresh = () => {
+        this.setState({ isRefreshing: true });
+        this.fetchBloodDonationRequest(() => {
+            this.setState({ isRefreshing: false });
+        })
+    }
+
+    RenderEmptyList = () => {
+        return (
+            <View style={styles.emptyListContainer} >
+                <View style={{ width: widthPercentageToDP(90), height: widthPercentageToDP(50) }} >
+                    <LottieView
+                        autoPlay
+                        loop={false}
+                        source={HeartEmptyFullLottie()}
+                    />
+                </View>
+                <Text style={styles.h2} >
+                    No blood donation request in your area!
+                </Text>
+            </View>
+        )
     }
 
     RenderListHeader = () => {
         const user = AccessNestedObject(this.props, 'user', {});
+
         return (
             <React.Fragment>
                 <View style={styles.topContainer} >
                     <View style={styles.profileImageContainer} >
-                        <View
-                            source={{
-                                uri: 'https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiFj5e_pNjkAhWm8HMBHRSMAOoQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.malindomiles.com%2Finspirenetz%2Fapp%2F&psig=AOvVaw0DXnpe8Bi3rzoAlP7TWi1A&ust=1568824407023827'
-                            }}
+                        <Image
+                            source={UserIcon()}
                             style={styles.profileImage}
                         />
                     </View>
-                    <View style={{ flex: 2, paddingTop: 20, paddingBottom: 15 }} >
+                    <View style={{ flex: 2, alignItems: 'flex-end' }} >
                         <Text style={styles.h2} >
                             {AccessNestedObject(user, 'name')}
-                        </Text>
-                        <Text style={styles.h3} >
-                            Blood Group: {AccessNestedObject(user, 'blood_group')}
-                        </Text>
-                        <Text style={styles.h3} >
-                            Age: {Math.abs(moment(AccessNestedObject(user, 'dob')).diff(moment(), 'years'))}
-                        </Text>
-                        <Text style={styles.h3} >
-                            +91 {AccessNestedObject(user, 'mobile')}
                         </Text>
                     </View>
                 </View>
@@ -60,9 +113,11 @@ class HomeScene extends PureComponent {
     }
 
     RenderItem = ({ item, index }) => {
+        const { loading } = this.state;
+
         if (index + 1 == 1) {
             return (
-                <View style={{ justifyContent: 'center', alignItems: 'flex-start', backgroundColor: ON_PRIMARY, padding: 10 }}>
+                <View style={styles.nearbyTextContainer}>
                     <Text style={styles.h2} >
                         Nearby Requestes
                     </Text>
@@ -71,23 +126,32 @@ class HomeScene extends PureComponent {
         }
 
         return (
-            <View style={{ height: 100, width: 200, borderWidth: 1 }} >
-
-            </View>
-        )
+            <BloodDonationCard
+                bloodDonationRequest={item}
+                loading={loading}
+            />
+        );
     }
 
     openBloodRequirement = () => {
-        navigate('AddBloodRequirement');
+        navigate('AddBloodRequirement', { callback: this.fetchBloodDonationRequest });
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <FlatList
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    contentContainerStyle={{ alignItems: 'center' }}
                     ListHeaderComponent={this.RenderListHeader}
                     renderItem={this.RenderItem}
-                    data={[1, 2, 3, 4, 5, 6, 6, 7, 7, 77, 7, 2]}
+                    data={this.state.requests}
+                    ListEmptyComponent={this.RenderEmptyList}
                     stickyHeaderIndices={[1]}
                 />
             </View>
@@ -100,22 +164,21 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     topContainer: {
-        height: 150,
         flexDirection: 'row',
-        backgroundColor: ON_PRIMARY
+        backgroundColor: ON_PRIMARY,
+        padding: 10,
+        paddingLeft: 20,
+        paddingRight: 20 
     },
     profileImageContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
     profileImage: {
-        width: 120,
-        height: 120,
+        width: widthPercentageToDP('7'),
+        height: widthPercentageToDP('7'),
         resizeMode: 'contain',
-        borderWidth: 1,
-        borderColor: 'red',
-        borderRadius: 60
     },
     h2: {
         fontSize: 22,
@@ -124,6 +187,21 @@ const styles = StyleSheet.create({
     h3: {
         fontSize: 18,
         color: GREY_2
+    },
+    nearbyTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        backgroundColor: ON_PRIMARY,
+        padding: 15,
+        width: widthPercentageToDP('100'),
+        borderBottomWidth: 1,
+        borderBottomColor: GREY_1
+    },
+    emptyListContainer: {
+        width: widthPercentageToDP(100),
+        height: heightPercentageToDP(50),
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 });
 

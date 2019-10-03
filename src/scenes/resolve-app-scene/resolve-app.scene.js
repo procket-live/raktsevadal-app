@@ -44,9 +44,9 @@ class ResolveAppScene extends Component {
         } else {
             APP.TOKEN = user.token;
             if (user.name == null) {
-                resetToScreen('AddBloodRequirement')
+                resetToScreen('UpdateUserDetail')
             } else {
-                resetToScreen('AddBloodRequirement');
+                resetToScreen('ResolveLocation');
             }
         }
 

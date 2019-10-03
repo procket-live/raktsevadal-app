@@ -18,3 +18,17 @@ export function AccessNestedObject(obj, path, valueNotFound = undefined) {
 
     return path.reduce((xs, x) => (xs && xs[x] != undefined) ? xs[x] : valueNotFound, obj)
 }
+
+export function IsCorrectMobileNumber(mobile) {
+    return /^((\+){1}91){1}[1-9]{1}[0-9]{9}$/.test(mobile.replace(' ', ''));
+}
+
+export function JSONToQuery(params) {
+    let query = '';
+
+    Object.keys(params).forEach((key) => {
+        query += `${query == '' ? '' : '&'}${key}=${params[key]}`;
+    })
+
+    return query;
+}

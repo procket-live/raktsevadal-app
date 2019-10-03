@@ -9,8 +9,8 @@ import ResolveLocationScene from '../scenes/resolve-location-scene/resolve-locat
 import LoginScene from '../scenes/login-scene/login.scene';
 import OnBoardingScene from '../scenes/onboarding-scene/onboarding.scene';
 import UpdateUserDetailScene from '../scenes/update-user-detail-scene/update-user-detail.scene';
-import { PRIMARY_COLOR, GREY_1, ON_PRIMARY } from '../constants/color.constant';
-import { HomeIcon, DropIcon, BloodDonationIcon, NotificationIcon, ManUserIcon } from '../config/image.config';
+import { PRIMARY_COLOR, GREY_1, ON_PRIMARY, GREY_2 } from '../constants/color.constant';
+import { HomeIcon, DropIcon, BloodDonationIcon, NotificationIcon, ManUserIcon, InfoIcon } from '../config/image.config';
 
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
@@ -21,11 +21,11 @@ const RootTabs = createBottomTabNavigator(
     {
         Home: { screen: HomeScene },
         Notification: { screen: OnBoardingScene },
-        Profile: { screen: OnBoardingScene },
+        Info: { screen: OnBoardingScene },
     },
     {
         initialRouteName: 'Home',
-        order: ['Home', 'Notification', 'Profile'],
+        order: ['Home', 'Notification', 'Info'],
         backBehavior: 'initialRoute',
         lazy: true,
         defaultNavigationOptions: ({ navigation }) => ({
@@ -39,8 +39,8 @@ const RootTabs = createBottomTabNavigator(
                     case 'Notification':
                         icon = NotificationIcon;
                         break;
-                    case 'Profile':
-                        icon = ManUserIcon;
+                    case 'Info':
+                        icon = InfoIcon;
                         break;
                 }
 
@@ -48,6 +48,7 @@ const RootTabs = createBottomTabNavigator(
                     <Image
                         style={{ width: 25, height: 25, resizeMode: 'contain' }}
                         source={icon()}
+                        tintColor={focused ? PRIMARY_COLOR : GREY_2}
                     />
                 );
             },

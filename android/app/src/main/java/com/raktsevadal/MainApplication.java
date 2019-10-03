@@ -37,16 +37,6 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       // Packages that cannot be autolinked yet can be added manually here, for example:
       packages.add(new RNFirebaseMessagingPackage());
-      if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-        // TODO: Consider calling
-        //    Activity#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for Activity#requestPermissions for more details.
-//        return;
-      }
       packages.add(new RNFirebaseStoragePackage());
       packages.add(new RNFirebaseAuthPackage());
       return packages;

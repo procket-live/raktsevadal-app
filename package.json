@@ -48,7 +48,8 @@
     "redux": "4.0.4",
     "redux-logger": "3.0.6",
     "redux-persist": "6.0.0",
-    "redux-saga": "1.0.5"
+    "redux-saga": "1.0.5",
+    "rn-placeholder": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

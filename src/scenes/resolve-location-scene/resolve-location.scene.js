@@ -66,24 +66,18 @@ class ResolveLocaitonScreen extends Component {
     }
 
     setLocation = async (lat, lng) => {
-        const body = {
-            latest_location: {
-                latitude: lat,
-                longitude: lng
-            }
-        }
-        const result = await PrivateApi.updateUser(body);
-        if (result.success) {
-            this.getUser();
-        }
+        const latestLocation = {
+            latitude: lat,
+            longitude: lng
+        };
+
+        PrivateApi.updateUser({ latest_location: latestLocation });
+        this.setCurrentLocation(latestLocation)
     }
 
-    getUser = async () => {
-        const result = await PrivateApi.getUser();
-        if (result.success) {
-            this.props.setUserAction(result.response);
-            resetToScreen('Root');
-        }
+    setCurrentLocation = async (latestLocation) => {
+        this.props.setUserAction(latestLocation);
+        resetToScreen('Root');
     }
 
 

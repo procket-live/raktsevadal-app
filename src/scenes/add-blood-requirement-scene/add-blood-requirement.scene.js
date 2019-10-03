@@ -9,7 +9,7 @@ import { translate } from '../../services/translation.service';
 import Button from '../../components/button-component/button.component';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NotifyService from '../../services/notify.service';
-import { navigate } from '../../services/navigation.service';
+import { navigate, navigatePop } from '../../services/navigation.service';
 import DateTimePickerComponent from '../../components/date-time-picker-component/date-time-picker.component';
 import TextInputComponent from '../../components/text-input-component/text-input-component';
 import GenderPickerComponent from '../../components/gender-picker-component/gender-picker.component';
@@ -17,24 +17,24 @@ import BloodGroupSelectComponent from '../../components/blood-group-select-compo
 import PrivateApi from '../../api/api.private';
 import { DISPLAY_DATE_FORMAT, BLOOD_DONATION_MINIMUM_AGE, BLOOD_DONATION_MAXIMUM_AGE } from '../../constants/app.constant';
 import SelectAddressComponent from '../../components/select-address-component/select-address.component';
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, IsCorrectMobileNumber } from '../../utils/common.util';
 
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             step: 1,
-            patientName: 'Himanshu',
-            patientAge: '24',
-            patientGender: 'male',
-            bloodGroup: 'O+',
-            bloodUnit: '2',
-            requiredTill: '29 Sep 2019',
-            hospitalName: 'Govt Hospital Jalore',
-            hospitalAddress: 'adddresss',
-            hospitalLocation: {latitude: 'sda', longitude: 'sdas'},
-            contactPersonName: 'Himanshu',
-            contactPersonMobile: '9732123323',
+            patientName: '',
+            patientAge: '',
+            patientGender: '',
+            bloodGroup: '',
+            bloodUnit: '',
+            requiredTill: '',
+            hospitalName: '',
+            hospitalAddress: '',
+            hospitalLocation: { latitude: '', longitude: '' },
+            contactPersonName: '',
+            contactPersonMobile: '',
             contactPersonAltMobile: '',
             documents: [],
             showSuccessMessage: false,
@@ -83,6 +83,17 @@ class AddBloodRequirementScene extends PureComponent {
     }
 
     proceed2 = () => {
+        const { bloodUnit } = this.state;
+
+        if (isNaN(bloodUnit)) {
+            NotifyService.notify({
+                title: '',
+                message: 'Please enter correct blood unit',
+                type: 'warning'
+            })
+            return;
+        }
+
         this.setState({ step: 3 })
     }
 
@@ -91,40 +102,74 @@ class AddBloodRequirementScene extends PureComponent {
     }
 
     proceed4 = async () => {
-        // const { name, dob, location, bloodGroup, gender } = this.state;
+        const { contactPersonMobile } = this.state;
 
-        // if (location == '') {
-        //     NotifyService.notify({ title: 'Location missing', message: '', type: 'warn' })
-        //     return false;
+        // if (!IsCorrectMobileNumber(contactPersonMobile)) {
+        //     NotifyService.notify({
+        //         title: '',
+        //         message: 'Please enter correct mobile number',
+        //         type: 'warning'
+        //     })
+        //     return;
         // }
 
-        // const body = {
-        //     name,
-        //     blood_group: bloodGroup,
-        //     dob,
-        //     gender
-        // };
+        this.final();
+    }
 
-        // this.setState({ loading: true })
-        // const result = await PrivateApi.updateUser(body);
-        // if (result.success) {
-        //     const result1 = await PrivateApi.getUser();
-        //     if (result1.success) {
-        //         const user = result1.response;
-        //         this.props.setUserAction(user);
-        //         this.setState({ showSuccessMessage: true }, () => {
-        //             this.animation.play();
-        //         })
-        //     }
-        // }
-        // this.setState({ loading: false })
+    final = async () => {
+        const {
+            patientName,
+            patientAge,
+            patientGender,
+            hospitalName,
+            hospitalAddress,
+            hospitalLocation,
+            contactPersonName,
+            contactPersonMobile,
+            bloodGroup,
+            bloodUnit,
+            requiredTill
+        } = this.state;
+
+        const body = {
+            blood_group: bloodGroup,
+            blood_unit: bloodUnit,
+            patient_name: patientName,
+            patient_age: patientAge,
+            patient_gender: patientGender,
+            hospital_name: hospitalName,
+            hospital_address: hospitalAddress,
+            hospital_location_latitude: hospitalLocation.latitude,
+            hospital_location_longitude: hospitalLocation.longitude,
+            required_till: moment(requiredTill, DISPLAY_DATE_FORMAT).toDate(),
+            documents: [],
+            contact_person_name: contactPersonName,
+            contact_person_mobile: contactPersonMobile
+        };
+
+        this.setState({ loading: true })
+        const result = await PrivateApi.addBloodRequirement(body);
+        if (result.success) {
+            navigatePop();
+            NotifyService.notify({
+                title: 'Succeess',
+                message: `Blood Rquirement of ${bloodGroup} of ${bloodUnit} Unit(s) added`,
+                type: 'success',
+                duration: 40000
+            });
+
+            const callback = this.props.navigation.getParam('callback');
+            if (callback && typeof callback == 'function') {
+                callback();
+            }
+        }
+        this.setState({ loading: false })
     }
 
     gotHospitalAddress = (location) => {
         const latitude = AccessNestedObject(location, 'latitude');
         const longitude = AccessNestedObject(location, 'longitude');
         const address = AccessNestedObject(location, 'address');
-        console.log('address', location);
         this.setState({
             hospitalAddress: address,
             hospitalLocation: {
@@ -203,7 +248,7 @@ class AddBloodRequirementScene extends PureComponent {
                     <TextInputComponent
                         value={this.state.contactPersonMobile}
                         placeholder="Contact person mobile number"
-                        onChange={(contactPersonMobile) => {
+                        onChangeText={(contactPersonMobile) => {
                             this.setState({ contactPersonMobile });
                         }}
                     />

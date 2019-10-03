@@ -17,17 +17,19 @@ import GenderPickerComponent from '../../components/gender-picker-component/gend
 import BloodGroupSelectComponent from '../../components/blood-group-select-component/blood-group-select.component';
 import PrivateApi from '../../api/api.private';
 import { setUserAction } from '../../action/user.action';
+import { AccessNestedObject } from '../../utils/common.util';
 
 class UpdateUserDetailScene extends PureComponent {
     constructor(props) {
         super(props);
+        const user = AccessNestedObject(this.props, 'user', {});
         this.state = {
             step: 1,
-            name: '',
-            dob: '',
-            gender: '',
-            bloodGroup: '',
-            location: 'Bengaluru, Karnataka, In',
+            name: user.name,
+            dob: user.dob,
+            gender: user.gender,
+            bloodGroup: user.blood_group,
+            location: user.location,
             showSuccessMessage: false,
             loading: false
         }
@@ -281,4 +283,8 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, { setUserAction })(UpdateUserDetailScene);
+const mapStateToProps = (state) => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, { setUserAction })(UpdateUserDetailScene);

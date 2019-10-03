@@ -1,5 +1,6 @@
 module.exports = {
-    BASE_URL: 'https://raktsevadal-backend.herokuapp.com',
+    // BASE_URL: 'https://raktsevadal-backend.herokuapp.com',
+    BASE_URL: 'http://192.168.43.195:3000',
     BASE_URL_TEST: 'http://172.16.1.87:3000',
     TOKEN: '',
     DISPLAY_DATE_FORMAT: 'DD MMM YYYY',
