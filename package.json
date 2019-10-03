@@ -23,6 +23,7 @@
     "moment": "^2.24.0",
     "react": "16.8.6",
     "react-native": "0.60.5",
+    "react-native-android-location-enabler": "^1.2.0",
     "react-native-bottom-action-sheet": "^0.0.23",
     "react-native-camera": "3.4.0",
     "react-native-dropdownalert": "4.2.0",
