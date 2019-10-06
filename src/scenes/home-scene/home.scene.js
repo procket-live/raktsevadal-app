@@ -102,7 +102,7 @@ class HomeScene extends PureComponent {
         const user = AccessNestedObject(this.props, 'user', {});
 
         return (
-            <View style={{ width: widthPercentageToDP(100), paddingBottom: heightPercentageToDP(5) }}>
+            <View style={{ width: widthPercentageToDP(100) }}>
                 <View style={styles.arc} />
                 <View style={styles.topContainer} >
                     <View style={styles.profileImageContainer} >
@@ -118,10 +118,10 @@ class HomeScene extends PureComponent {
                         </Text>
                     </View>
                 </View>
-                <View style={{ zIndex: 3 }} >
+                <View style={{ zIndex: 3, height: 100 }} >
                     <TouchableOpacity
                         onPress={this.openBloodRequirement}
-                        style={{ width: widthPercentageToDP(67), height: 50, borderRadius: 25, backgroundColor: ON_PRIMARY, elevation: 5, left: widthPercentageToDP(16), top: heightPercentageToDP(4), position: 'relative', alignItems: 'center', justifyContent: 'center' }} >
+                        style={{ zIndex: 10, width: widthPercentageToDP(67), height: 50, borderRadius: 25, backgroundColor: ON_PRIMARY, elevation: 5, left: widthPercentageToDP(16), top: heightPercentageToDP(4), position: 'relative', alignItems: 'center', justifyContent: 'center' }} >
                         <View style={{ flexDirection: 'row' }} >
                             <Image
                                 source={BloodDropIcon()}
@@ -133,24 +133,41 @@ class HomeScene extends PureComponent {
                         </View>
                     </TouchableOpacity>
                 </View>
+                <this.RenderMyBloodRequirements />
             </View>
         )
     }
 
-    RenderMyBloodDrquirements = () => {
+    RenderMyBloodRequirements = () => {
+        const { myRequests } = this.state;
+
+        const length = myRequests.length;
+        if (!length) {
+            return <View style={{ marginBottom: 10 }} />;
+        }
+
         return (
-            <View style={styles.nearbyTextContainer}>
+            <View style={styles.mybloodReqContainer}>
                 <Text style={styles.h2} >
-                    My Blood Requirements
+                    My Blood Requirements ({length})
                 </Text>
+                <FlatList
+                    contentContainerStyle={{ alignItems: 'center' }}
+                    renderItem={(props) => {
+                        props.hideHeader = true;
+                        return this.RenderItem(props);
+                    }}
+                    data={myRequests}
+                    horizontal
+                />
             </View>
         )
     }
 
-    RenderItem = ({ item, index }) => {
+    RenderItem = ({ item, index, hideHeader }) => {
         const { loading } = this.state;
 
-        if (index + 1 == 1) {
+        if (index + 1 == 1 && !hideHeader) {
             return (
                 <View style={styles.nearbyTextContainer}>
                     <Text style={styles.h2} >
@@ -236,9 +253,14 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         backgroundColor: ON_PRIMARY,
         padding: 15,
+        paddingTop: 0,
         width: widthPercentageToDP('100'),
         borderBottomWidth: 1,
-        borderBottomColor: GREY_1
+        borderBottomColor: GREY_1,
+    },
+    mybloodReqContainer: {
+        padding: 5,
+        width: widthPercentageToDP('100'),
     },
     emptyListContainer: {
         width: widthPercentageToDP(100),

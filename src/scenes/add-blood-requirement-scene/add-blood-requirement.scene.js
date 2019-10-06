@@ -22,6 +22,10 @@ import { AccessNestedObject, IsCorrectMobileNumber } from '../../utils/common.ut
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
         super(props);
+
+        const contactPersonName = AccessNestedObject(props, 'user.name');
+        const contactPersonMobile = AccessNestedObject(props, 'user.mobile');
+
         this.state = {
             step: 1,
             patientName: '',
@@ -33,8 +37,8 @@ class AddBloodRequirementScene extends PureComponent {
             hospitalName: '',
             hospitalAddress: '',
             hospitalLocation: { latitude: '', longitude: '' },
-            contactPersonName: '',
-            contactPersonMobile: '',
+            contactPersonName,
+            contactPersonMobile,
             contactPersonAltMobile: '',
             documents: [],
             showSuccessMessage: false,

@@ -89,6 +89,26 @@ class BloodRequestScene extends PureComponent {
         )
     }
 
+    amICreator = () => {
+        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const userId = AccessNestedObject(this.props, 'user._id')
+        const createdBy = AccessNestedObject(bloodRequest, 'created_by');
+
+        return createdBy == userId;
+    }
+
+    viewAllDoners = () => {
+
+    }
+
+    iGotBlood = () => {
+
+    }
+
+    removeRequest = () => {
+
+    }
+
     render() {
         const bloodRequest = this.props.navigation.getParam('bloodRequest');
         const latitude = AccessNestedObject(bloodRequest, 'hospital_location.coordinates.0');
@@ -99,7 +119,6 @@ class BloodRequestScene extends PureComponent {
         const doners = AccessNestedObject(bloodRequest, 'doners', []);
         const userId = AccessNestedObject(this.props, 'user._id')
 
-        console.log('bloodRequest', bloodRequest)
         return (
             <View style={styles.container} >
                 <ScrollView style={{ flex: 1 }} >
@@ -142,6 +161,38 @@ class BloodRequestScene extends PureComponent {
                             </Text>
                         </View>
                     </View>
+                    {
+                        this.amICreator() ?
+                            <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
+                                <View style={{ height: 30, alignItems: 'flex-start', justifyContent: 'center', marginBottom: 10 }} >
+                                    <Text style={{ fontSize: 18, color: GREY_2 }} >Accepted doners</Text>
+                                </View>
+                                <WideButton
+                                    mode="outline"
+                                    text={'View All Doners'}
+                                    onPress={this.viewAllDoners}
+                                />
+                            </View> : null
+                    }
+
+                    {
+                        this.amICreator() ?
+                            <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
+                                <View style={{ height: 30, alignItems: 'flex-start', justifyContent: 'center', marginBottom: 10 }} >
+                                    <Text style={{ fontSize: 18, color: GREY_2 }} >Operation</Text>
+                                </View>
+                                <WideButton
+                                    text={'I GOT BLOOD'}
+                                    onPress={this.iGotBlood}
+                                />
+                                <View style={{ margin: 5 }} />
+                                <WideButton
+                                    mode="outline"
+                                    text={'REMOVE BLOOD DONATION REQUEST'}
+                                    onPress={this.removeRequest}
+                                />
+                            </View> : null
+                    }
                     <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
                         <View style={{ height: 30, alignItems: 'flex-start', justifyContent: 'center' }} >
                             <Text style={{ fontSize: 18, color: PRIMARY_COLOR }} >Contact Person</Text>
