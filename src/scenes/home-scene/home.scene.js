@@ -3,16 +3,17 @@ import { View, StyleSheet, Text, Image, FlatList, RefreshControl } from 'react-n
 import { connect } from 'react-redux';
 import LottieView from 'lottie-react-native';
 import WideButton from '../../components/wide-button-component/wide-button.component';
-import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY } from '../../constants/color.constant';
+import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY, PRIMARY_COLOR } from '../../constants/color.constant';
 import moment from 'moment';
-import { AccessNestedObject, JSONToQuery } from '../../utils/common.util';
+import { AccessNestedObject, JSONToQuery, replaceAll } from '../../utils/common.util';
 import { navigate } from '../../services/navigation.service';
 import PrivateApi from '../../api/api.private';
 import BloodDonationCard from '../../components/blood-donation-card-component/blood-donation-card.component';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
 import DONATION_MAP from '../../constants/donation.constant';
-import { UserIcon } from '../../config/image.config';
+import { UserIcon, BloodDropIcon } from '../../config/image.config';
 import { HeartEmptyFullLottie } from '../../config/lottie.config';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class HomeScene extends PureComponent {
     constructor(props) {
@@ -20,24 +21,29 @@ class HomeScene extends PureComponent {
         this.state = {
             loading: true,
             isRefreshing: false,
-            requests: [1, 2, 3, 4, 5]
-        }
+            requests: [1, 2, 3, 4, 5],
+            myRequests: []
+        };
+
+        this.userLat = AccessNestedObject(props, 'user.latest_location.latitude', 0.0);
+        this.userLng = AccessNestedObject(props, 'user.latest_location.longitude', 0.0);
     }
 
     componentDidMount = () => {
         this.fetchBloodDonationRequest();
+        this.fetchMyRequests();
     }
 
     fetchBloodDonationRequest = async (callback) => {
         const myBloodGroup = AccessNestedObject(this.props, 'user.blood_group');
-        const iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`);
+        const iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`, '').map((bg) => bg.replace('+', 'p').replace('-', 'n')).join(',');
         const latitude = AccessNestedObject(this.props, 'user.latest_location.latitude');
         const longitude = AccessNestedObject(this.props, 'user.latest_location.longitude');
 
         const params = {
-            blood_group: iCanDonate,
+            blood_group: iCanDonate + ',Bn',
             latitude,
-            longitude
+            longitude,
         }
 
         const query = JSONToQuery(params);
@@ -51,6 +57,20 @@ class HomeScene extends PureComponent {
 
         if (callback && typeof callback == 'function') {
             callback();
+        }
+    }
+
+    fetchMyRequests = async () => {
+        const params = {
+            created_by: AccessNestedObject(this.props, 'user._id'),
+        }
+
+        const query = JSONToQuery(params);
+        const result = await PrivateApi.fetchBloodRequirements(query);
+        this.setState({ loading: false });
+        if (result.success) {
+            let list = AccessNestedObject(result, 'response', []);
+            this.setState({ myRequests: list });
         }
     }
 
@@ -82,33 +102,48 @@ class HomeScene extends PureComponent {
         const user = AccessNestedObject(this.props, 'user', {});
 
         return (
-            <React.Fragment>
+            <View style={{ width: widthPercentageToDP(100), paddingBottom: heightPercentageToDP(5) }}>
+                <View style={styles.arc} />
                 <View style={styles.topContainer} >
                     <View style={styles.profileImageContainer} >
                         <Image
                             source={UserIcon()}
                             style={styles.profileImage}
+                            tintColor={ON_PRIMARY}
                         />
                     </View>
                     <View style={{ flex: 2, alignItems: 'flex-end' }} >
-                        <Text style={styles.h2} >
+                        <Text style={[styles.h2, { color: ON_PRIMARY }]} >
                             {AccessNestedObject(user, 'name')}
                         </Text>
                     </View>
                 </View>
-                <View style={{ alignItems: 'center', padding: 10 }} >
-                    <WideButton
+                <View style={{ zIndex: 3 }} >
+                    <TouchableOpacity
                         onPress={this.openBloodRequirement}
-                        text="Rquest Blood Donation"
-                    />
+                        style={{ width: widthPercentageToDP(67), height: 50, borderRadius: 25, backgroundColor: ON_PRIMARY, elevation: 5, left: widthPercentageToDP(16), top: heightPercentageToDP(4), position: 'relative', alignItems: 'center', justifyContent: 'center' }} >
+                        <View style={{ flexDirection: 'row' }} >
+                            <Image
+                                source={BloodDropIcon()}
+                                style={styles.icon}
+                            />
+                            <Text style={[styles.h3, { color: PRIMARY_COLOR, marginLeft: 7 }]} >
+                                Need Blood
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
-                <View style={{ alignItems: 'center', padding: 10 }} >
-                    <WideButton
-                        mode="outline"
-                        text="My Blood Donation Requests"
-                    />
-                </View>
-            </React.Fragment>
+            </View>
+        )
+    }
+
+    RenderMyBloodDrquirements = () => {
+        return (
+            <View style={styles.nearbyTextContainer}>
+                <Text style={styles.h2} >
+                    My Blood Requirements
+                </Text>
+            </View>
         )
     }
 
@@ -127,6 +162,9 @@ class HomeScene extends PureComponent {
 
         return (
             <BloodDonationCard
+                userId={AccessNestedObject(this.props, 'user._id')}
+                latitude={this.userLat}
+                longitude={this.userLng}
                 bloodDonationRequest={item}
                 loading={loading}
             />
@@ -165,10 +203,10 @@ const styles = StyleSheet.create({
     },
     topContainer: {
         flexDirection: 'row',
-        backgroundColor: ON_PRIMARY,
         padding: 10,
         paddingLeft: 20,
-        paddingRight: 20 
+        paddingRight: 20,
+        zIndex: 3,
     },
     profileImageContainer: {
         flex: 1,
@@ -179,6 +217,11 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP('7'),
         height: widthPercentageToDP('7'),
         resizeMode: 'contain',
+    },
+    icon: {
+        width: 25,
+        height: 25,
+        resizeMode: 'contain'
     },
     h2: {
         fontSize: 22,
@@ -203,6 +246,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    arc: {
+        position: 'absolute',
+        backgroundColor: PRIMARY_COLOR,
+        width: widthPercentageToDP(110),
+        height: heightPercentageToDP(30),
+        borderRadius: widthPercentageToDP(100) / 2,
+        top: -heightPercentageToDP(30) / 2,
+        left: -widthPercentageToDP(5),
+        right: widthPercentageToDP(5),
+        zIndex: 2
+    }
 });
 
 const mapStateToProps = state => ({

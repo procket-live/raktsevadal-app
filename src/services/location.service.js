@@ -4,7 +4,7 @@
 
 import { PermissionsAndroid } from 'react-native';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation'
-// import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 const DEFAULT_OPTIONS = {
     timeout: 4000,
@@ -40,7 +40,7 @@ class LocationService {
             {
                 id: 0,
                 status: this.LocationServiceStatus.LOCATION_PERMISSION_NOT_AVAILABLE,
-                title: 'Location permission requred',
+                title: 'Location permission required',
                 actionName: 'ALLOW',
                 action: 'resolveLocationServiceState'
 
@@ -48,7 +48,7 @@ class LocationService {
             {
                 id: 1,
                 status: this.LocationServiceStatus.LOCATION_PERMISSION_DENIED_FOR_ALWAYS,
-                title: 'Location permission requred',
+                title: 'Location permission required',
                 description: 'To enable, go to Settings and turn on Location.',
                 actionName: 'OPEN SETTINGS',
                 action: 'showAppSettings'
@@ -219,24 +219,24 @@ class LocationService {
     }
 
     askToEnableGPS = () => new Promise((resolve) => {
-        // RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({ interval: 10000, fastInterval: 5000 })
-        //     .then(() => {
-        //         resolve({ success: true, gpsStatus: this.GPSRequestStates.GPS_ON });
-        //     })
-        //     .catch(err => {
-        //         switch (err.code) {
-        //             case 'ERR00':
-        //                 resolve({ success: false, gpsStatus: this.GPSRequestStates.GPS_REQUEST_DENIED });
-        //                 break;
-        //             case 'ERR01':
-        //                 resolve({ success: false, gpsStatus: this.GPSRequestStates.SETTINGS_UNAVAILABLE });
-        //                 break;
-        //             case 'ERR02':
-        //                 resolve({ success: false, gpsStatus: this.GPSRequestStates.UNABLE_TO_OPEN_POPUP });
-        //                 break;
-        //             default:
-        //         }
-        //     });
+        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({ interval: 10000, fastInterval: 5000 })
+            .then(() => {
+                resolve({ success: true, gpsStatus: this.GPSRequestStates.GPS_ON });
+            })
+            .catch(err => {
+                switch (err.code) {
+                    case 'ERR00':
+                        resolve({ success: false, gpsStatus: this.GPSRequestStates.GPS_REQUEST_DENIED });
+                        break;
+                    case 'ERR01':
+                        resolve({ success: false, gpsStatus: this.GPSRequestStates.SETTINGS_UNAVAILABLE });
+                        break;
+                    case 'ERR02':
+                        resolve({ success: false, gpsStatus: this.GPSRequestStates.UNABLE_TO_OPEN_POPUP });
+                        break;
+                    default:
+                }
+            });
     });
 
     /**

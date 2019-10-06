@@ -10,7 +10,11 @@ import { navigate } from '../../services/navigation.service';
 
 class SelectAddressComponent extends PureComponent {
     showMap = () => {
-        navigate('ChooseLocationScene', { callback: this.gotAddress })
+        navigate('ChooseLocationScene', {
+            callback: this.gotAddress,
+            latitude: this.props.latitude,
+            longitude: this.props.longitude
+        })
     }
 
     gotAddress = (location) => {

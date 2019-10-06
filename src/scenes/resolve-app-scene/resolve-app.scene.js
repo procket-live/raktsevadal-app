@@ -37,7 +37,13 @@ let AlertView = RNBottomActionSheet.AlertView
 
 class ResolveAppScene extends Component {
     init = () => {
-        const { user } = this.props;
+        const { user, isFirstTime } = this.props;
+
+        if (isFirstTime) {
+            resetToScreen('OnBoarding')
+            SplashScreen.hide();
+            return;
+        }
 
         if (user == null) {
             resetToScreen('Login')
@@ -133,6 +139,7 @@ class ResolveAppScene extends Component {
 
 const mapStateToProps = state => ({
     user: state.user,
+    isFirstTime: state.isFirstTime
 });
 
 export default connect(mapStateToProps)(ResolveAppScene);

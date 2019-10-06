@@ -266,6 +266,8 @@ class AddBloodRequirementScene extends PureComponent {
     }
 
     RenderHospitalDetails = () => {
+        const { user } = this.state;
+
         return (
             <React.Fragment>
                 <View style={{ marginTop: 10, marginBottom: 5 }} >
@@ -285,6 +287,8 @@ class AddBloodRequirementScene extends PureComponent {
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
                     <SelectAddressComponent
+                        latitude={AccessNestedObject(user, 'latest_location.latitude')}
+                        longitude={AccessNestedObject(user, 'latest_location.longitude')}
                         value={this.state.hospitalAddress}
                         onChange={this.gotHospitalAddress}
                     />
@@ -427,4 +431,8 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, {})(AddBloodRequirementScene);
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, {})(AddBloodRequirementScene);

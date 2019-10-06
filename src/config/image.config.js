@@ -33,3 +33,15 @@ export const MapMarkerIcon = () => {
 export const UserIcon = () => {
     return require('../assets/image/user.png')
 }
+
+export const BloodDropIcon = () => {
+    return require('../assets/image/blood-drop.png')
+}
+
+export const ArrowRightIcon = () => {
+    return require('../assets/image/right-arrow.png');
+}
+
+export const WhatsAppIcon = () => {
+    return require('../assets/image/whatsapp.png');
+}

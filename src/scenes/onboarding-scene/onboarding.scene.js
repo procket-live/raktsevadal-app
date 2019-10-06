@@ -2,45 +2,46 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
-import { navigate } from '../../services/navigation.service.js';
+import { navigate, resetToScreen } from '../../services/navigation.service.js';
+import { connect } from 'react-redux';
+import { setIsFirstTime } from '../../action/isFirstTime.action';
+import { BloodBottleLottie, BloodDropLottie, AmazingTickLottie } from '../../config/lottie.config.js';
 
 class OnBoardingScene extends PureComponent {
     steps = () => {
         return [
             {
                 backgroundColor: '#fff',
-                image: this.renderLottie(),
-                title: 'Onboarding',
-                subtitle: 'Done with React Native Onboarding Swiper',
+                image: this.renderLottie(BloodBottleLottie()),
+                title: 'Donate Blood',
             },
             {
                 backgroundColor: '#fff',
-                image: this.renderLottie(),
-                title: 'Onboarding',
-                subtitle: 'Done with React Native Onboarding Swiper',
+                image: this.renderLottie(AmazingTickLottie()),
+                title: 'Explore updates around you',
             },
             {
                 backgroundColor: '#fff',
-                image: this.renderLottie(),
-                title: 'Onboarding',
-                subtitle: 'Done with React Native Onboarding Swiper',
+                image: this.renderLottie(BloodDropLottie()),
+                title: 'Search blood doner',
             }
         ]
     }
 
-    renderLottie = () => {
+    renderLottie = (asset) => {
         return (
             <View style={{ width: 150, height: 150 }} >
                 <LottieView
                     autoPlay
-                    source={require('../../assets/lottie/blood-bottle.json')}
+                    source={asset}
                 />
             </View>
         )
     }
 
     onEnd = () => {
-        navigate('Login')
+        this.props.setIsFirstTime(false);
+        resetToScreen('Login');
     }
 
     render() {
@@ -54,4 +55,4 @@ class OnBoardingScene extends PureComponent {
     }
 }
 
-export default OnBoardingScene;
+export default connect(null, { setIsFirstTime })(OnBoardingScene);

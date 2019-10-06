@@ -15,13 +15,15 @@ import { HomeIcon, DropIcon, BloodDonationIcon, NotificationIcon, ManUserIcon, I
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
 import ChooseLocationScene from '../scenes/choose-location-scene/choose-location.scene';
+import InfoScene from '../scenes/info-scene/info.scene';
+import BloodRequestScene from '../scenes/blood-request-scene/blood-request.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
     {
         Home: { screen: HomeScene },
         Notification: { screen: OnBoardingScene },
-        Info: { screen: OnBoardingScene },
+        Info: { screen: InfoScene },
     },
     {
         initialRouteName: 'Home',
@@ -130,6 +132,17 @@ const RootNavigator = createStackNavigator(
                     borderBottomWidth: 0,
                 },
                 title: "Select location"
+            }
+        },
+        BloodRequest: {
+            screen: BloodRequestScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Blood Request"
             }
         }
     },

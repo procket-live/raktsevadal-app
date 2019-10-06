@@ -66,16 +66,11 @@ class UpdateUserDetailScene extends PureComponent {
             return false;
         }
 
-        this.setState({ step: 3 })
+        this.finish();
     }
 
-    proceed3 = async () => {
-        const { name, dob, location, bloodGroup, gender } = this.state;
-
-        if (location == '') {
-            NotifyService.notify({ title: 'Location missing', message: '', type: 'warn' })
-            return false;
-        }
+    finish = async () => {
+        const { name, dob, bloodGroup, gender } = this.state;
 
         const body = {
             name,
@@ -236,12 +231,12 @@ class UpdateUserDetailScene extends PureComponent {
                 >
 
                     <StepsIndicator
-                        steps={3}
+                        steps={2}
                         currentStep={this.state.step}
                     />
                     {this.state.step == 1 ? this.RenderBasicDetail() : null}
                     {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
-                    {this.state.step == 3 ? this.RenderLocationSelect() : null}
+                    {/* {this.state.step == 3 ? this.RenderLocationSelect() : null} */}
                 </ScrollView>
             </View>
         )

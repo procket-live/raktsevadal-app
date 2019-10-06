@@ -6,6 +6,8 @@ import LocationService from '../../services/location.service';
 import { resetToScreen } from '../../services/navigation.service';
 import PrivateApi from '../../api/api.private';
 import { setUserAction } from '../../action/user.action';
+import WideButton from '../../components/wide-button-component/wide-button.component';
+import { AccessNestedObject } from '../../utils/common.util';
 
 class ResolveLocaitonScreen extends Component {
     constructor(props) {
@@ -76,14 +78,14 @@ class ResolveLocaitonScreen extends Component {
     }
 
     setCurrentLocation = async (latestLocation) => {
-        this.props.setUserAction(latestLocation);
+        this.props.setUserAction({ latest_location: latestLocation });
         resetToScreen('Root');
     }
 
 
     render() {
         const { resolving, layout } = this.state;
-
+        console.log('this.locationService', this.locationService)
         return (
             <View style={styles.container}>
                 <View style={styles.lottieContainer} >
@@ -116,11 +118,15 @@ class ResolveLocaitonScreen extends Component {
                             <View style={{ marginTop: 30, textAlign: 'center' }} >
                                 <Text style={styles.message} >{layout.description}</Text>
                             </View>
-                            <BottomStickButton
-                                onPress={() => this.geolocation[layout.action]()}
-                            >
-                                {layout.actionName}
-                            </BottomStickButton>
+                            <WideButton
+                                text={layout.actionName}
+                                onPress={() => {
+                                    const action = AccessNestedObject(this.locationService, layout.action);
+                                    if (action && typeof action == 'function') {
+                                        action();
+                                    }
+                                }}
+                            />
                         </React.Fragment> : null
                 }
             </View>

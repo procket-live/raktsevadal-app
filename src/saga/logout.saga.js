@@ -1,9 +1,10 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import { LOGOUT_USER } from "../constants/redux.constant";
-import { setUserAction } from "../action/user.action";
+import { LOGOUT_USER, CLEAR_USER } from "../constants/redux.constant";
+import { resetToScreen } from '../services/navigation.service';
 
 function* logoutUser() {
-    yield put(setUserAction(null));
+    yield put({ type: CLEAR_USER });
+    resetToScreen('ResolveApp');
 }
 
 export default function* () {

@@ -146,18 +146,25 @@ class ChooseLocationScene extends PureComponent {
         navigatePop();
     }
 
+    getInitialLocation = () => {
+        const latitude = this.props.navigation.getParam('latitude');
+        const longitude = this.props.navigation.getParam('longitude');
+        
+        return {
+            latitude: latitude || 37.78825,
+            longitude: longitude || -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Map
                     ref={(ref) => this.map = ref}
                     style={styles.map}
-                    initialRegion={{
-                        latitude: this.props.latitude || 37.78825,
-                        longitude: this.props.longitude || -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
+                    initialRegion={this.getInitialLocation()}
                     onRegionChangeComplete={this.onRegionChange}
                     onMapReady={this.renderMap}
                 />
