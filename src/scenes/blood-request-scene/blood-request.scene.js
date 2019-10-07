@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import getDirections from 'react-native-google-maps-directions'
-import { View, StyleSheet, Linking, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
 import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { GREY_3, GREY_2, PRIMARY_COLOR, ON_PRIMARY, GREY_1, GREEN } from '../../constants/color.constant';
-import { AccessNestedObject, AmIDoner } from '../../utils/common.util';
+import { AccessNestedObject, AmIDoner, Call, ShareOnWhatsapp } from '../../utils/common.util';
 import { DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import WideButton from '../../components/wide-button-component/wide-button.component';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PrivateApi from '../../api/api.private';
-import { navigatePop } from '../../services/navigation.service';
+import { navigatePop, navigate } from '../../services/navigation.service';
+import { WhatsAppIcon } from '../../config/image.config';
 
 let AlertView = RNBottomActionSheet.AlertView
 
@@ -31,10 +32,6 @@ class BloodRequestScene extends PureComponent {
                 longitude
             }
         })
-    }
-
-    call = (mobile) => {
-        Linking.openURL(`tel:${mobile}`)
     }
 
     accept = () => {
@@ -61,7 +58,7 @@ class BloodRequestScene extends PureComponent {
 
         const result = PrivateApi.acceptBloodDonationRequest(id);
         if (result.success) {
-            navigatePop();
+            this.goBackAndRefresh();
         }
     }
 
@@ -98,15 +95,69 @@ class BloodRequestScene extends PureComponent {
     }
 
     viewAllDoners = () => {
-
+        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        navigate('DonersTabs', { bloodRequest });
     }
 
     iGotBlood = () => {
+        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const id = AccessNestedObject(bloodRequest, '_id');
 
+        AlertView.Show({
+            title: "Got your blood requirement?",
+            message: "After proceeding your blood donation request will be marked as fulfiled. Do you want to proceed?",
+            positiveText: "YES",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "No, go back!",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: "dark",
+            onPositive: async () => {
+                const result = await PrivateApi.gotBlood(id);
+                if (result.success) {
+                    this.goBackAndRefresh();
+                }
+            },
+            onNegative: () => {
+                console.log('negative clicked')
+            }
+        })
     }
 
     removeRequest = () => {
+        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const id = AccessNestedObject(bloodRequest, '_id');
 
+        AlertView.Show({
+            title: "Want to remove blood request?",
+            message: "Are you sure you want to remove blood donation request?",
+            positiveText: "YES",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "No, go back!",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: "dark",
+            onPositive: async () => {
+                const result = await PrivateApi.removeBloodDonationReqest(id);
+                if (result.success) {
+                    this.goBackAndRefresh();
+                }
+            },
+            onNegative: () => {
+                console.log('negative clicked')
+            }
+        })
+    }
+
+    goBackAndRefresh = () => {
+        alert('refresh')
+        const callback = this.props.navigation.getParam('callback');
+        navigatePop();
+        if (callback && typeof callback == 'function') {
+            callback();
+        }
     }
 
     render() {
@@ -161,6 +212,18 @@ class BloodRequestScene extends PureComponent {
                             </Text>
                         </View>
                     </View>
+                    <View style={{ flexDirection: 'row', height: 50, padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 18, color: GREY_2 }} >Share Now</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
+                            <TouchableOpacity
+                                onPress={() => ShareOnWhatsapp(bloodRequest)}
+                            >
+                                <Image source={WhatsAppIcon()} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     {
                         this.amICreator() ?
                             <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
@@ -206,7 +269,7 @@ class BloodRequestScene extends PureComponent {
                         <WideButton
                             mode="outline"
                             text={'Call'}
-                            onPress={() => this.call(contactNumber)}
+                            onPress={() => Call(contactNumber)}
                         />
                     </View>
                     <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >

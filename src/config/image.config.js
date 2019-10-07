@@ -45,3 +45,7 @@ export const ArrowRightIcon = () => {
 export const WhatsAppIcon = () => {
     return require('../assets/image/whatsapp.png');
 }
+
+export const LogoIcon = () => {
+    return require('../assets/image/logo.png');
+}

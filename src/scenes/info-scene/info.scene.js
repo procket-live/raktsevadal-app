@@ -3,10 +3,11 @@ import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import { GREY_1, GREY_2, GREY_3 } from '../../constants/color.constant';
 import { ArrowRightIcon, UserIcon } from '../../config/image.config';
 import { connect } from 'react-redux';
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, ShareApp } from '../../utils/common.util';
 import moment from 'moment';
 import { API_DATE_FORMAT, DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
 import { logoutUserAction } from '../../action/user.action';
+import { navigate, navigatePop } from '../../services/navigation.service';
 
 const InfoScene = ({ user, logout }) => {
     return (
@@ -33,7 +34,16 @@ const InfoScene = ({ user, logout }) => {
                     </Text>
                 </View>
             </View>
-            <TouchableOpacity style={styles.menuItem} >
+            <TouchableOpacity
+                onPress={() => {
+                    navigate('UpdateUserDetail', {
+                        callback: () => {
+                            navigatePop();
+                        }
+                    })
+                }}
+                style={styles.menuItem}
+            >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <Image source={ArrowRightIcon()} style={styles.icon} />
                 </View>
@@ -43,7 +53,7 @@ const InfoScene = ({ user, logout }) => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} >
+            {/* <TouchableOpacity style={styles.menuItem} >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <Image source={ArrowRightIcon()} style={styles.icon} />
                 </View>
@@ -52,8 +62,13 @@ const InfoScene = ({ user, logout }) => {
                         Language / भाषा
                     </Text>
                 </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} >
+            </TouchableOpacity> */}
+            <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                    navigate('AboutUs')
+                }}
+            >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <Image source={ArrowRightIcon()} style={styles.icon} />
                 </View>
@@ -63,13 +78,31 @@ const InfoScene = ({ user, logout }) => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} >
+            <TouchableOpacity
+                onPress={() => {
+                    navigate('TermsAndCondition')
+                }}
+                style={styles.menuItem}
+            >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <Image source={ArrowRightIcon()} style={styles.icon} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
                         Terms and conditions
+                    </Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={ShareApp}
+                style={styles.menuItem}
+            >
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                </View>
+                <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
+                    <Text style={styles.text} >
+                        Share App
                     </Text>
                 </View>
             </TouchableOpacity>

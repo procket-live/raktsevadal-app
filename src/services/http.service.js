@@ -29,6 +29,7 @@ export async function Put(obj) {
 }
 
 export async function Delete(obj) {
+    obj.method = 'DELETE';
     const params = await getNecessaryParams(obj);
     return ApiCall(params);
 }
@@ -46,7 +47,7 @@ function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject 
         postDict.body = body;
     }
 
-    console.log('url', url,
+    console.log('urll', url,
         headers,
         body,
         method,

@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import NetworkState from 'react-native-network-state'
 import LottieView from 'lottie-react-native';
-import firebase from 'react-native-firebase';
 import MapView from 'react-native-maps';
 import {
     View,
@@ -66,9 +65,6 @@ class ResolveAppScene extends Component {
         // setTimeout(() => {
         //     NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
         // }, 2000)
-
-        // const fcmToken = await firebase.messaging().getToken();
-        // console.log('fcmToken', fcmToken)
 
         // firebase.auth().signInWithPhoneNumber('+919731702355')
         //     .then(confirmResult => {

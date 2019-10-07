@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { BackHandler, AppState, View, Text } from 'react-native';
 import LottieView from 'lottie-react-native';
+import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
+
 import LocationService from '../../services/location.service';
 import { resetToScreen } from '../../services/navigation.service';
 import PrivateApi from '../../api/api.private';
@@ -69,16 +71,17 @@ class ResolveLocaitonScreen extends Component {
 
     setLocation = async (lat, lng) => {
         const latestLocation = {
-            latitude: lat,
-            longitude: lng
+            type: "Point",
+            coordinates: [lat, lng]
         };
+        const firebaseToken = await firebase.messaging().getToken();
 
-        PrivateApi.updateUser({ latest_location: latestLocation });
-        this.setCurrentLocation(latestLocation)
+        PrivateApi.updateUser({ latest_location: latestLocation, firebase_token: firebaseToken });
+        this.setCurrentLocation(latestLocation, firebaseToken)
     }
 
-    setCurrentLocation = async (latestLocation) => {
-        this.props.setUserAction({ latest_location: latestLocation });
+    setCurrentLocation = async (latestLocation, firebaseToken) => {
+        this.props.setUserAction({ latest_location: latestLocation, firebase_token: firebaseToken });
         resetToScreen('Root');
     }
 

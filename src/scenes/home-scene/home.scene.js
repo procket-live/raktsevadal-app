@@ -5,7 +5,7 @@ import LottieView from 'lottie-react-native';
 import WideButton from '../../components/wide-button-component/wide-button.component';
 import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY, PRIMARY_COLOR } from '../../constants/color.constant';
 import moment from 'moment';
-import { AccessNestedObject, JSONToQuery, replaceAll } from '../../utils/common.util';
+import { AccessNestedObject, JSONToQuery, replaceAll, DistanceBetweenLatLng } from '../../utils/common.util';
 import { navigate } from '../../services/navigation.service';
 import PrivateApi from '../../api/api.private';
 import BloodDonationCard from '../../components/blood-donation-card-component/blood-donation-card.component';
@@ -25,8 +25,8 @@ class HomeScene extends PureComponent {
             myRequests: []
         };
 
-        this.userLat = AccessNestedObject(props, 'user.latest_location.latitude', 0.0);
-        this.userLng = AccessNestedObject(props, 'user.latest_location.longitude', 0.0);
+        this.userLat = AccessNestedObject(props, 'user.latest_location.coordinates.0', 0.0);
+        this.userLng = AccessNestedObject(props, 'user.latest_location.coordinates.1', 0.0);
     }
 
     componentDidMount = () => {
@@ -35,15 +35,17 @@ class HomeScene extends PureComponent {
     }
 
     fetchBloodDonationRequest = async (callback) => {
+        const userId = AccessNestedObject(this.props, 'user._id');
         const myBloodGroup = AccessNestedObject(this.props, 'user.blood_group');
         const iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`, '').map((bg) => bg.replace('+', 'p').replace('-', 'n')).join(',');
-        const latitude = AccessNestedObject(this.props, 'user.latest_location.latitude');
-        const longitude = AccessNestedObject(this.props, 'user.latest_location.longitude');
+        const latitude = this.userLat;
+        const longitude = this.userLng;
 
         const params = {
-            blood_group: iCanDonate + ',Bn',
+            blood_group: iCanDonate,
             latitude,
             longitude,
+            not_created_by: userId
         }
 
         const query = JSONToQuery(params);
@@ -51,6 +53,17 @@ class HomeScene extends PureComponent {
         this.setState({ loading: false });
         if (result.success) {
             let list = AccessNestedObject(result, 'response', []);
+
+            list = list
+                .map((item) => {
+                    const reqLatitude = AccessNestedObject(item, 'hospital_location.coordinates.0');
+                    const reqLongitude = AccessNestedObject(item, 'hospital_location.coordinates.1');
+
+                    item.distance = DistanceBetweenLatLng(this.userLat, this.userLng, reqLatitude, reqLongitude);
+                    return item;
+                })
+                .sort((a, b) => (a.distance > b.distance) ? 1 : -1)
+
             list = list.length ? [1, ...list] : [];
             this.setState({ requests: list });
         }
@@ -69,7 +82,16 @@ class HomeScene extends PureComponent {
         const result = await PrivateApi.fetchBloodRequirements(query);
         this.setState({ loading: false });
         if (result.success) {
-            let list = AccessNestedObject(result, 'response', []);
+            let list = AccessNestedObject(result, 'response', [])
+                .reverse()
+                .map((item) => {
+                    const reqLatitude = AccessNestedObject(item, 'hospital_location.coordinates.0');
+                    const reqLongitude = AccessNestedObject(item, 'hospital_location.coordinates.1');
+
+                    item.distance = DistanceBetweenLatLng(this.userLat, this.userLng, reqLatitude, reqLongitude);
+                    return item;
+                });
+
             this.setState({ myRequests: list });
         }
     }
@@ -184,6 +206,7 @@ class HomeScene extends PureComponent {
                 longitude={this.userLng}
                 bloodDonationRequest={item}
                 loading={loading}
+                callback={this.componentDidMount}
             />
         );
     }

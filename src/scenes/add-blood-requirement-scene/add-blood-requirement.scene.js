@@ -271,6 +271,8 @@ class AddBloodRequirementScene extends PureComponent {
 
     RenderHospitalDetails = () => {
         const { user } = this.state;
+        const latitude = AccessNestedObject(user, 'latest_location.coordinates.0', 0.0);
+        const longitude = AccessNestedObject(user, 'latest_location.coordinates.1', 0.0);
 
         return (
             <React.Fragment>
@@ -291,8 +293,8 @@ class AddBloodRequirementScene extends PureComponent {
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
                     <SelectAddressComponent
-                        latitude={AccessNestedObject(user, 'latest_location.latitude')}
-                        longitude={AccessNestedObject(user, 'latest_location.longitude')}
+                        latitude={latitude}
+                        longitude={longitude}
                         value={this.state.hospitalAddress}
                         onChange={this.gotHospitalAddress}
                     />

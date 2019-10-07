@@ -17,12 +17,16 @@ import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-
 import ChooseLocationScene from '../scenes/choose-location-scene/choose-location.scene';
 import InfoScene from '../scenes/info-scene/info.scene';
 import BloodRequestScene from '../scenes/blood-request-scene/blood-request.scene';
+import DonersTabsScene from '../scenes/doners-tabs-scene/donersTabs.scene';
+import TermsAndConditionScene from '../scenes/terms-and-condition-scene/terms-and-condition.scene';
+import AboutUsScene from '../scenes/about-us-scene/about-us.scene';
+import NotificationScene from '../scenes/notification-scene/notification.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
     {
         Home: { screen: HomeScene },
-        Notification: { screen: OnBoardingScene },
+        Notification: { screen: NotificationScene },
         Info: { screen: InfoScene },
     },
     {
@@ -143,6 +147,39 @@ const RootNavigator = createStackNavigator(
                     borderBottomWidth: 0,
                 },
                 title: "Blood Request"
+            }
+        },
+        DonersTabs: {
+            screen: DonersTabsScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Doners"
+            }
+        },
+        TermsAndCondition: {
+            screen: TermsAndConditionScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Terms and Conditions"
+            }
+        },
+        AboutUs: {
+            screen: AboutUsScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "About us"
             }
         }
     },

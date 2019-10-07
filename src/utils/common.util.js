@@ -1,6 +1,8 @@
 import Share from 'react-native-share';
+import { Linking } from 'react-native';
 import DONATION_MAP from '../constants/donation.constant';
 import NotifyService from '../services/notify.service';
+import { PLAYSTORE } from '../constants/app.constant';
 
 /*
  * find a nested object property inside of an object.
@@ -38,7 +40,6 @@ export function JSONToQuery(params) {
 }
 
 export function DistanceBetweenLatLng(lat1, lon1, lat2, lon2, unit) {
-    console.log(lat1, lon1, lat2, lon2);
     var R = 6371; // km
     var dLat = toRad(lat2 - lat1);
     var dLon = toRad(lon2 - lon1);
@@ -72,25 +73,31 @@ export function ShareOnWhatsapp(bloodDonationRequirement) {
         message: `${patientName}, age ${age} requires ${units} unit(s) of ${bloodGroup} in ${hospitalName}. Hospital address is ${hospitalAddress}. \n \n Doners from blood group ${canDonate} \n \n \n to contact click below. \n \n Contact Person Name: ${contactPersonName} \n Contact Number: ${contactNumber}`
     }
 
-    Share
-        .shareSingle({
-            ...options,
-            social: 'whatsapp',
-        })
-        .then(() => { })
-        .catch(() => {
-            Share.open(options)
-        })
+    Share.open(options)
+}
+
+export function ShareApp() {
+    const options = {
+        title: "Rakt Sevadal",
+        url: PLAYSTORE,
+        message: 'Download rakt sevadal to find blood doners in your locality and donate blood to needy.'
+    }
+
+    Share.open(options)
 }
 
 export function AmIDoner(userId, doners = []) {
     let found = false;
 
     doners.forEach((doner) => {
-        if (doner.user_id == userId) {
+        if (doner.user == userId) {
             found = true;
         }
     })
 
     return found;
+}
+
+export function Call(mobile) {
+    Linking.openURL(`tel:${mobile}`)
 }

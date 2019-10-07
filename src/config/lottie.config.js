@@ -18,10 +18,15 @@ function AmazingTickLottie() {
     return require('../assets/lottie/amazing-tick.json')
 }
 
+function NoNotificationLottie() {
+    return require('../assets/lottie/no-notifications.json');
+}
+
 export {
     ProgressBarLottie,
     HeartEmptyFullLottie,
     BloodDropLottie,
     BloodBottleLottie,
-    AmazingTickLottie
+    AmazingTickLottie,
+    NoNotificationLottie
 }

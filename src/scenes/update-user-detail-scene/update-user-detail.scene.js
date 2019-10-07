@@ -35,10 +35,6 @@ class UpdateUserDetailScene extends PureComponent {
         }
     }
 
-    componentDidMount = () => {
-        console.log('fdsf')
-    }
-
     showSuccessMessage = () => {
         this.setState({ showSuccessMessage: true }, () => {
             this.animation.play();
@@ -46,6 +42,13 @@ class UpdateUserDetailScene extends PureComponent {
     }
 
     successAnimationEnd = () => {
+        const callback = this.props.navigation.getParam('callback');
+
+        if (callback && typeof callback == 'function') {
+            callback();
+            return;
+        }
+        
         navigate('ResolveLocation');
     }
 

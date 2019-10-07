@@ -1,7 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
-import { ON_PRIMARY, PRIMARY_COLOR, GREY_1, TEXT_COLOR, GREEN, GREY_3 } from '../../constants/color.constant';
+import { ON_PRIMARY, PRIMARY_COLOR, GREY_1, TEXT_COLOR, GREY_3, GREY_2 } from '../../constants/color.constant';
 import Button from '../button-component/button.component';
 import {
     Placeholder,
@@ -9,14 +10,14 @@ import {
     PlaceholderLine,
     Fade,
 } from "rn-placeholder";
-import { AccessNestedObject, DistanceBetweenLatLng, ShareOnWhatsapp, AmIDoner } from '../../utils/common.util';
+import { AccessNestedObject, Call } from '../../utils/common.util';
+import { DISPLAY_DATE_TIME_FORMAT } from '../../constants/app.constant';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MapMarkerIcon, WhatsAppIcon } from '../../config/image.config';
-import { navigate } from '../../services/navigation.service';
+import { navigatePop, navigate } from '../../services/navigation.service';
 
-const WIDTH_20 = widthPercentageToDP('17');
+const WIDTH = widthPercentageToDP('12');
 
-const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude, userId, callback }) => {
+const NotificatonCard = ({ notification, loading }) => {
     if (loading) {
         return (
             <View style={styles.container} >
@@ -26,18 +27,20 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude,
                 >
                     <PlaceholderLine width={80} />
                     <PlaceholderLine />
-                    <PlaceholderLine width={30} />
-                    <PlaceholderLine />
                 </Placeholder>
             </View>
         )
     }
 
-    const doners = AccessNestedObject(bloodDonationRequest, 'doners', []);
+    const bloodDonationRequest = AccessNestedObject(notification, 'blood_requirement');
+    const bloodGroup = AccessNestedObject(notification, 'blood_requirement.blood_group');
+    const message = AccessNestedObject(notification, 'message');
+    const createdAt = AccessNestedObject(notification, 'created_at');
+
     return (
         <TouchableOpacity
             onPress={() => {
-                navigate('BloodRequest', { bloodRequest: bloodDonationRequest, callback })
+                navigate('BloodRequest', { bloodRequest: bloodDonationRequest, callback: () => { navigatePop() } })
             }}
             style={styles.container}
         >
@@ -45,33 +48,23 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude,
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <View style={styles.bloodGroupContainer} >
                         <Text style={styles.bloodGroupText} >
-                            {AccessNestedObject(bloodDonationRequest, 'blood_group')}
+                            {bloodGroup}
                         </Text>
                     </View>
-
-                    <Text style={styles.kmsText} >{AccessNestedObject(bloodDonationRequest, 'blood_unit')} Units</Text>
                 </View>
                 <View style={{ flex: 3, paddingLeft: 10 }} >
                     <Text style={styles.patientNameText} >
-                        {`${AccessNestedObject(bloodDonationRequest, 'patient_name')} - ${AccessNestedObject(bloodDonationRequest, 'patient_age')} Age`}
-                    </Text>
-                    <Text style={styles.hospitalNameText} >
-                        {AccessNestedObject(bloodDonationRequest, 'hospital_name')} - {AccessNestedObject(bloodDonationRequest, 'distance')} kms away
-                </Text>
-                    <Text style={styles.locationText} >
-                        {AccessNestedObject(bloodDonationRequest, 'hospital_address')}
+                        {message}
                     </Text>
                 </View>
             </View>
 
             <View style={{ flexDirection: 'row', padding: 2, paddingRight: 5, alignItems: 'center', justifyContent: 'flex-end' }} >
                 <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    {
-                        (AmIDoner(userId, doners)) ?
-                            <View style={{ height: 20, padding: 5, backgroundColor: GREEN, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
-                                <Text style={{ fontSize: 16, color: ON_PRIMARY }} >Accepted</Text>
-                            </View> : null
-                    }
+                    <Text style={{ fontSize: 16, color: GREY_1 }} >When</Text>
+                </View>
+                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
+                    <Text style={{ fontSize: 16, color: GREY_2 }} >{moment(createdAt).fromNow()}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -88,15 +81,15 @@ const styles = StyleSheet.create({
         borderColor: GREY_1
     },
     bloodGroupContainer: {
-        width: WIDTH_20,
-        height: WIDTH_20,
-        borderRadius: WIDTH_20 / 2,
+        width: WIDTH,
+        height: WIDTH,
+        borderRadius: WIDTH / 2,
         backgroundColor: PRIMARY_COLOR,
         alignItems: 'center',
         justifyContent: 'center'
     },
     bloodGroupText: {
-        fontSize: 26,
+        fontSize: 22,
         color: ON_PRIMARY
     },
     kmsText: {
@@ -119,11 +112,11 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        minHeight: WIDTH_20 / 2,
+        minHeight: widthPercentageToDP(17) / 2,
         alignItems: 'center',
         paddingTop: 15,
         paddingBottom: 5
     }
 });
 
-export default BloodDonationCard;
+export default NotificatonCard;
