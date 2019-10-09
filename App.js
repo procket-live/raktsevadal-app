@@ -19,8 +19,6 @@ import NotifyService from './src/services/notify.service';
 import store, { persistor } from './src/store/index.store';
 import { setI18nConfig } from './src/services/translation.service';
 
-
-
 class App extends PureComponent {
   constructor(props) {
     super(props);

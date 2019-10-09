@@ -46,10 +46,6 @@ class AddBloodRequirementScene extends PureComponent {
         }
     }
 
-    componentDidMount = () => {
-        console.log('fdsf')
-    }
-
     showSuccessMessage = () => {
         this.setState({ showSuccessMessage: true }, () => {
             this.animation.play();

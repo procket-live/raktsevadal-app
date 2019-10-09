@@ -47,11 +47,6 @@ function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject 
         postDict.body = body;
     }
 
-    console.log('urll', url,
-        headers,
-        body,
-        method,
-        params);
     return axios({
         url,
         headers,
@@ -60,7 +55,6 @@ function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject 
         params
     })
         .then((response) => {
-            console.log('ddd response', response);
             return resolve(response.data, { callback, hideMessage });
         })
         .catch((error) => {
@@ -82,7 +76,6 @@ async function getNecessaryParams(obj) {
 
     if (obj.body) {
         responseObj.body = obj.body;
-        console.log('obj.body', obj.body)
     }
 
     return responseObj;
@@ -125,7 +118,6 @@ function defaultResolve(result, { callback, hideMessage }) {
 }
 
 function defaultReject(response) {
-    console.log('response', response);
     NotifyService.notify({
         title: 'Server issue',
         message: '',

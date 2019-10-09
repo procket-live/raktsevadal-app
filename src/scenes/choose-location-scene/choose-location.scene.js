@@ -57,7 +57,6 @@ class ChooseLocationScene extends PureComponent {
     fetchAddressFromLocation = () => {
         const { location } = this.state;
         const { latitude, longitude } = location;
-        console.log('latuuuuu', location)
         Geocoder.geocodePosition({ lat: latitude, lng: longitude }).then((addresses) => {
             if (!addresses.length) {
                 NotifyService.notify({
@@ -88,9 +87,8 @@ class ChooseLocationScene extends PureComponent {
         const { address } = this.state;
 
         Geocoder.geocodeAddress(String(address)).then((results) => {
-            console.log('addressssss', results);
         })
-            .catch(err => console.log(err))
+            .catch(err => { })
     }
 
     getInitialRegion = () => {
@@ -149,7 +147,7 @@ class ChooseLocationScene extends PureComponent {
     getInitialLocation = () => {
         const latitude = this.props.navigation.getParam('latitude');
         const longitude = this.props.navigation.getParam('longitude');
-        
+
         return {
             latitude: latitude || 37.78825,
             longitude: longitude || -122.4324,

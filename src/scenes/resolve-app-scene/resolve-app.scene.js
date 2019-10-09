@@ -62,68 +62,6 @@ class ResolveAppScene extends Component {
         setTimeout(() => {
             this.init()
         }, 100);
-        // setTimeout(() => {
-        //     NotifyService.notify({ title: 'Yoooo', message: 'Yo BOOOOY!!!!', type: 'success' })
-        // }, 2000)
-
-        // firebase.auth().signInWithPhoneNumber('+919731702355')
-        //     .then(confirmResult => {
-        //         console.log('confirmResult', confirmResult);
-
-        //         confirmResult.confirm('123456')
-        //             .then(user => { console.log('user', user) })
-        //             .catch(error => { })
-        //     })
-        //     .catch(error => { });
-
-        // // ImagePicker.openPicker({
-        // //     width: 300,
-        // //     height: 400,
-        // //     includeBase64: true
-        // // }).then(image => {
-        // //     firebase.storage().ref('/uploadOk.png')
-        // //         .putFile(image.path)
-        // //         .then((res) => {
-        // //             console.log('res', res);
-        // //         })
-        // //         .catch((err) => {
-        // //             console.log('err', err);
-        // //         })
-        // // });
-
-        // AlertView.Show({
-        //     title: "बहुत बढ़िया!",
-        //     message: "हम क्या सुधार कर सकते हैं? आपकी प्रतिपुष्टि का हमेशा स्वागत है।",
-        //     positiveText: "ठीक",
-        //     positiveBackgroundColor: "#27ae60",
-        //     positiveTextColor: "#ffffff",
-        //     negativeText: "बाहर जाएं",
-        //     negativeBackgroundColor: "#e74c3c",
-        //     negativeTextColor: "#f1c40f",
-        //     theme: 'dark',
-        //     onPositive: () => {
-        //         console.log('positive clicked')
-        //     },
-        //     onNegative: () => {
-        //         console.log('negative clicked')
-        //     }
-        // })
-
-
-        // Geocoder.geocodePosition(NY).then(res => {
-        //     console.log('res', res);
-        // })
-        //     .catch(err => console.log(err))
-
-
-        // // Address Geocoding
-        // Geocoder.geocodeAddress('jalore').then(res => {
-        //     console.log('fdfdsf', res)
-        //     // res is an Array of geocoding object (see below)
-        // })
-        //     .catch(err => console.log(err))
-
-
     }
 
     render() {

@@ -88,7 +88,7 @@ class ResolveLocaitonScreen extends Component {
 
     render() {
         const { resolving, layout } = this.state;
-        console.log('this.locationService', this.locationService)
+
         return (
             <View style={styles.container}>
                 <View style={styles.lottieContainer} >

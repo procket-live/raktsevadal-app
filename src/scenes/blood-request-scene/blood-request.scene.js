@@ -47,7 +47,6 @@ class BloodRequestScene extends PureComponent {
             theme: "dark",
             onPositive: this.acceptBloodDonationRequest,
             onNegative: () => {
-                console.log('negative clicked')
             }
         })
     }
@@ -120,7 +119,6 @@ class BloodRequestScene extends PureComponent {
                 }
             },
             onNegative: () => {
-                console.log('negative clicked')
             }
         })
     }
@@ -146,7 +144,6 @@ class BloodRequestScene extends PureComponent {
                 }
             },
             onNegative: () => {
-                console.log('negative clicked')
             }
         })
     }
