@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Geocoder from 'react-native-geocoder';
-import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 
 import NotifyService from '../../services/notify.service.js';
 import { translate } from '../../services/translation.service.js';
@@ -31,8 +30,6 @@ var NY = {
 };
 
 Geocoder.fallbackToGoogle('');
-
-let AlertView = RNBottomActionSheet.AlertView
 
 class ResolveAppScene extends Component {
     init = () => {
