@@ -21,6 +21,7 @@ import DonersTabsScene from '../scenes/doners-tabs-scene/donersTabs.scene';
 import TermsAndConditionScene from '../scenes/terms-and-condition-scene/terms-and-condition.scene';
 import AboutUsScene from '../scenes/about-us-scene/about-us.scene';
 import NotificationScene from '../scenes/notification-scene/notification.scene';
+import NotificationIconComponent from '../components/notification-icon-component/notification-icon.component';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
@@ -43,8 +44,9 @@ const RootTabs = createBottomTabNavigator(
                         icon = HomeIcon;
                         break;
                     case 'Notification':
-                        icon = NotificationIcon;
-                        break;
+                        return (
+                            <NotificationIconComponent focused={focused} />
+                        )
                     case 'Info':
                         icon = InfoIcon;
                         break;

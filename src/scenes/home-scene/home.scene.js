@@ -14,6 +14,7 @@ import DONATION_MAP from '../../constants/donation.constant';
 import { UserIcon, BloodDropIcon } from '../../config/image.config';
 import { HeartEmptyFullLottie } from '../../config/lottie.config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { fetchNotifications } from '../../action/notification.action';
 
 class HomeScene extends PureComponent {
     constructor(props) {
@@ -32,6 +33,7 @@ class HomeScene extends PureComponent {
     componentDidMount = () => {
         this.fetchBloodDonationRequest();
         this.fetchMyRequests();
+        this.props.fetchNotifications();
     }
 
     fetchBloodDonationRequest = async (callback) => {
@@ -308,4 +310,4 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(HomeScene);
+export default connect(mapStateToProps, { fetchNotifications })(HomeScene);

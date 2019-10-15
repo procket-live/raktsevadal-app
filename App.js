@@ -12,6 +12,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import GlobalFont from 'react-native-global-font'
 import { PersistGate } from 'redux-persist/integration/react';
 import * as RNLocalize from "react-native-localize";
+import { useScreens } from 'react-native-screens';
 
 import RootNavigation from './src/navigation/index.navigation';
 import { setTopLevelNavigator } from './src/services/navigation.service';
@@ -19,6 +20,7 @@ import NotifyService from './src/services/notify.service';
 import store, { persistor } from './src/store/index.store';
 import { setI18nConfig } from './src/services/translation.service';
 
+useScreens();
 class App extends PureComponent {
   constructor(props) {
     super(props);
