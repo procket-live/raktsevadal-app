@@ -13,6 +13,7 @@ import GlobalFont from 'react-native-global-font'
 import { PersistGate } from 'redux-persist/integration/react';
 import * as RNLocalize from "react-native-localize";
 import { useScreens } from 'react-native-screens';
+import codePush from "react-native-code-push";
 
 import RootNavigation from './src/navigation/index.navigation';
 import { setTopLevelNavigator } from './src/services/navigation.service';
@@ -65,5 +66,9 @@ class App extends PureComponent {
     )
   }
 }
-
-export default App;
+console.log('codePush', codePush);
+export default codePush({
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  installMode: codePush.InstallMode.IMMEDIATE,
+  mandatoryInstallMode: codePush.InstallMode.IMMEDIATE,
+})(App);
