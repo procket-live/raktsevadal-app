@@ -26,6 +26,7 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
+    console.log('global.HermesInternal', global.HermesInternal);
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
     GlobalFont.applyGlobal('Noway')
   }

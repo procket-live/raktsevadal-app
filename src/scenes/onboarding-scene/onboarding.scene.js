@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
-import { navigate, resetToScreen } from '../../services/navigation.service.js';
+import { navigate, resetToScreen } from '../../services/navigation.service';
 import { connect } from 'react-redux';
 import { setIsFirstTime } from '../../action/isFirstTime.action';
-import { BloodBottleLottie, BloodDropLottie, AmazingTickLottie } from '../../config/lottie.config.js';
+import { BloodBottleLottie, BloodDropLottie, AmazingTickLottie } from '../../config/lottie.config';
 
 class OnBoardingScene extends PureComponent {
     steps = () => {

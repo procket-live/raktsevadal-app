@@ -29,6 +29,8 @@ build/
 local.properties
 *.iml
 app/src/main/assets/index.android.bundle
+android/app/release/app-release.apk
+android/app/src/main/assets/index.android.bundle
 
 # node.js
 #

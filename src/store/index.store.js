@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from 'redux-saga';
-import logger from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist';
 
 import apiMiddleware from '../middlewares/api.middleware';
@@ -17,7 +16,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware, __DEV__ ? logger : null, apiMiddleware];
+const middlewares = [sagaMiddleware, apiMiddleware];
 
 const store = createStore(persistedReducer, applyMiddleware(...middlewares));
 const persistor = persistStore(store);

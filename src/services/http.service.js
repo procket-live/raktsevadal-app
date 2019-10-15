@@ -1,5 +1,5 @@
 import axios from 'axios';
-import NotifyService from '../services/notify.service';
+import NotifyService from './notify.service';
 import AsyncStorage from '@react-native-community/async-storage';
 import APP, { BASE_URL, BASE_URL_TEST } from '../constants/app.constant';
 
@@ -82,7 +82,7 @@ async function getNecessaryParams(obj) {
 }
 
 function createFinalUrl(obj) {
-    const baseUrl = !__DEV__ ? BASE_URL_TEST : BASE_URL;
+    const baseUrl = BASE_URL;
     return `${baseUrl}/${obj.url}`;
 }
 

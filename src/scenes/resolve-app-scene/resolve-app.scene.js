@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import NetworkState from 'react-native-network-state'
 import LottieView from 'lottie-react-native';
-import MapView from 'react-native-maps';
 import {
     View,
     Text,
@@ -19,9 +18,7 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import Geocoder from 'react-native-geocoder';
 
-import NotifyService from '../../services/notify.service.js';
-import { translate } from '../../services/translation.service.js';
-import { resetToScreen } from '../../services/navigation.service.js';
+import { resetToScreen } from '../../services/navigation.service';
 import APP from '../../constants/app.constant';
 
 var NY = {

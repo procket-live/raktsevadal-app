@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import getDirections from 'react-native-google-maps-directions'
 import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
+import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { GREY_3, GREY_2, PRIMARY_COLOR, ON_PRIMARY, GREY_1, GREEN } from '../../constants/color.constant';
@@ -14,6 +15,7 @@ import PrivateApi from '../../api/api.private';
 import { navigatePop, navigate } from '../../services/navigation.service';
 import { WhatsAppIcon } from '../../config/image.config';
 
+let AlertView = RNBottomActionSheet.AlertView;
 class BloodRequestScene extends PureComponent {
     constructor(props) {
         super(props);
@@ -32,20 +34,20 @@ class BloodRequestScene extends PureComponent {
     }
 
     accept = () => {
-        // AlertView.Show({
-        //     title: "Accept blood donation request?",
-        //     message: "Once your accept your, contact details like name and mobile number will be shared with blood donation requester. Are you sure you want to proceed.",
-        //     positiveText: "YES",
-        //     positiveBackgroundColor: "#27ae60",
-        //     positiveTextColor: "#ffffff",
-        //     negativeText: "No, go back!",
-        //     negativeBackgroundColor: "#e74c3c",
-        //     negativeTextColor: "#f1c40f",
-        //     theme: "dark",
-        //     onPositive: this.acceptBloodDonationRequest,
-        //     onNegative: () => {
-        //     }
-        // })
+        AlertView.Show({
+            title: "Accept blood donation request?",
+            message: "Once your accept your, contact details like name and mobile number will be shared with blood donation requester. Are you sure you want to proceed.",
+            positiveText: "YES",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "No, go back!",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: "dark",
+            onPositive: this.acceptBloodDonationRequest,
+            onNegative: () => {
+            }
+        })
     }
 
     acceptBloodDonationRequest = () => {
@@ -99,50 +101,50 @@ class BloodRequestScene extends PureComponent {
         const bloodRequest = this.props.navigation.getParam('bloodRequest');
         const id = AccessNestedObject(bloodRequest, '_id');
 
-        // AlertView.Show({
-        //     title: "Got your blood requirement?",
-        //     message: "After proceeding your blood donation request will be marked as fulfiled. Do you want to proceed?",
-        //     positiveText: "YES",
-        //     positiveBackgroundColor: "#27ae60",
-        //     positiveTextColor: "#ffffff",
-        //     negativeText: "No, go back!",
-        //     negativeBackgroundColor: "#e74c3c",
-        //     negativeTextColor: "#f1c40f",
-        //     theme: "dark",
-        //     onPositive: async () => {
-        //         const result = await PrivateApi.gotBlood(id);
-        //         if (result.success) {
-        //             this.goBackAndRefresh();
-        //         }
-        //     },
-        //     onNegative: () => {
-        //     }
-        // })
+        AlertView.Show({
+            title: "Got your blood requirement?",
+            message: "After proceeding your blood donation request will be marked as fulfiled. Do you want to proceed?",
+            positiveText: "YES",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "No, go back!",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: "dark",
+            onPositive: async () => {
+                const result = await PrivateApi.gotBlood(id);
+                if (result.success) {
+                    this.goBackAndRefresh();
+                }
+            },
+            onNegative: () => {
+            }
+        })
     }
 
     removeRequest = () => {
         const bloodRequest = this.props.navigation.getParam('bloodRequest');
         const id = AccessNestedObject(bloodRequest, '_id');
 
-        // AlertView.Show({
-        //     title: "Want to remove blood request?",
-        //     message: "Are you sure you want to remove blood donation request?",
-        //     positiveText: "YES",
-        //     positiveBackgroundColor: "#27ae60",
-        //     positiveTextColor: "#ffffff",
-        //     negativeText: "No, go back!",
-        //     negativeBackgroundColor: "#e74c3c",
-        //     negativeTextColor: "#f1c40f",
-        //     theme: "dark",
-        //     onPositive: async () => {
-        //         const result = await PrivateApi.removeBloodDonationReqest(id);
-        //         if (result.success) {
-        //             this.goBackAndRefresh();
-        //         }
-        //     },
-        //     onNegative: () => {
-        //     }
-        // })
+        AlertView.Show({
+            title: "Want to remove blood request?",
+            message: "Are you sure you want to remove blood donation request?",
+            positiveText: "YES",
+            positiveBackgroundColor: "#27ae60",
+            positiveTextColor: "#ffffff",
+            negativeText: "No, go back!",
+            negativeBackgroundColor: "#e74c3c",
+            negativeTextColor: "#f1c40f",
+            theme: "dark",
+            onPositive: async () => {
+                const result = await PrivateApi.removeBloodDonationReqest(id);
+                if (result.success) {
+                    this.goBackAndRefresh();
+                }
+            },
+            onNegative: () => {
+            }
+        })
     }
 
     goBackAndRefresh = () => {
