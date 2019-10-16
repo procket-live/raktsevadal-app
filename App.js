@@ -66,9 +66,7 @@ class App extends PureComponent {
     )
   }
 }
-console.log('codePush', codePush);
-export default codePush({
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
-  installMode: codePush.InstallMode.IMMEDIATE,
-  mandatoryInstallMode: codePush.InstallMode.IMMEDIATE,
-})(App);
+
+const codepushApp = codePush(App);
+codePush.sync({ installMode: codePush.InstallMode.IMMEDIATE });
+export default codepushApp;

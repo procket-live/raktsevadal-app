@@ -9,7 +9,8 @@
     "preinstall": "chmod 755 postinstall.sh",
     "postinstall": "./postinstall.sh",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/",
-    "apk": "npm run bundle && cd android && ./gradlew assembleRelease && cd app/build/outputs/apk && open ."
+    "apk": "npm run bundle && cd android && ./gradlew assembleRelease && cd app/build/outputs/apk && open .",
+    "codepush": "appcenter codepush release-react -a Rakt-Sevadal/Android-App android -d Production --mandatory"
   },
   "dependencies": {
     "@mauron85/react-native-background-geolocation": "0.6.1",
