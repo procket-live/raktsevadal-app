@@ -63,7 +63,6 @@ class LoginScene extends PureComponent {
             this.setState({ loading: false });
             if (result.success) {
                 this.setState({ otpSent: true, step: this.state.step + 1 })
-                this.receiveOTP();
             }
         } else {
             if (!this.isCorrectOTP()) {

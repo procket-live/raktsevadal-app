@@ -59,6 +59,25 @@ class ResolveAppScene extends Component {
             }
         }
 
+        this.getInitialLink();
+    }
+
+    getInitialLink = async () => {
+        const link = await firebase.links().getInitialLink();
+        if (link) {
+            if (link.includes('bloodRequest')) {
+                const parts = link.split('/');
+                const id = parts[4];
+
+                APP.REDIRECT_TO = {
+                    route: 'BloodRequest',
+                    payload: {
+                        id
+                    }
+                }
+            }
+        }
+
         this.init()
     }
 
