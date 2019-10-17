@@ -3,6 +3,12 @@ import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { connect } from 'react-redux';
 import RNSmsRetriever from 'react-native-sms-retriever-api';
+import TRUECALLER, {
+    TRUECALLER_EVENT,
+    TRUECALLER_CONSENT_MODE,
+    TRUECALLER_CONSENT_TITLE,
+    TRUECALLER_FOOTER_TYPE
+} from 'react-native-truecaller-sdk'
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -33,6 +39,34 @@ class LoginScene extends PureComponent {
 
     componentDidMount = () => {
         this.detectOTP();
+        TRUECALLER.initializeClient(
+            TRUECALLER_CONSENT_MODE.Popup,
+            TRUECALLER_CONSENT_TITLE.Register,
+            TRUECALLER_FOOTER_TYPE.Skip
+        )
+
+        TRUECALLER.isUsable(result => {
+            if (result === true)
+                TRUECALLER.requestTrueProfile()
+        });
+
+        TRUECALLER.on(TRUECALLER_EVENT.TrueProfileResponse, profile => {
+            this.gotTruecallerProfile(profile);
+        });
+    }
+
+    gotTruecallerProfile = async (profile) => {
+        const mobile = AccessNestedObject(profile, 'phoneNumber');
+        this.setState({ mobile: `+91 ${mobile.substring(3)}`, loading: true });
+        const result = await PublicApi.truecallerLogin(profile);
+        if (result.success) {
+            const token = result.token;
+            this.props.setAuthTokenAction(token);
+            APP.TOKEN = token;
+            this.fetchUserObject();
+        } else {
+            this.setState({ loading: false });
+        }
     }
 
     componentWillUnmout() {

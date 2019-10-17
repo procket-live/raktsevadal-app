@@ -3,4 +3,5 @@
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
     <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true" translatable="false">GNgsjOIXvmCTLjd7kLdrpnojDSUyxlkngh1ll</string>
+    <string name="truecaller_appkey">Geaxhb5c2340f0b3e44d498a72a63205e733b</string>
 </resources>

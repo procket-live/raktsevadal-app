@@ -65,6 +65,9 @@
         <meta-data android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
 
+        <meta-data android:name="com.truecaller.android.sdk.PartnerKey" android:value="@string/truecaller_appkey"/>
+
+
         <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

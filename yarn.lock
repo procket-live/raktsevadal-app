@@ -5890,6 +5890,11 @@ react-native-tab-view@^2.9.0:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.10.0.tgz#5e249e5650502010013449ffd4e5edc18a95364b"
   integrity sha512-qgexVz5eO4yaFjdkmn/sURXgVvaBo6pZD/q1eoca96SbPVbaH3WzVhF3bRUfeTHwZkXwznFTpS3JURqIFU8vQA==
 
+react-native-truecaller-sdk@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-truecaller-sdk/-/react-native-truecaller-sdk-1.0.3.tgz#831d72ec5c202d7a344088f2ed1da8bc3b7a0997"
+  integrity sha512-mDfHULVUEY5D5K6HlIMueJK6a4/ENo4IJwWEE4o5ojz+oaDLQ7wWzJrBJOUCeddMPiU/zHiaCxeiA1oQxNc/6A==
+
 react-native-vector-icons@6.6.0:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-6.6.0.tgz#66cf004918eb05d90778d64bd42077c1800d481b"

@@ -1,6 +1,7 @@
 export const USER = 'user';
 export const GENERATE_OTP = `${USER}/generateOTP`;
 export const VERIFY_OTP = `${USER}/verifyOTP`;
+export const TRUECALLER_LOGIN = `${USER}/truecaller`;
 export const FIND_USER = `${USER}/find`;
 
 export const BLOOD_REQUIREMENT = 'bloodGroupRequirement';

@@ -52,6 +52,7 @@
     "react-native-share": "2.0.0",
     "react-native-sms-retriever-api": "^1.0.3",
     "react-native-splash-screen": "3.2.0",
+    "react-native-truecaller-sdk": "^1.0.3",
     "react-native-webview": "^7.4.1",
     "react-navigation": "4.0.1",
     "react-navigation-stack": "1.5.3",
