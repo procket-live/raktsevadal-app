@@ -1,32 +1,18 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import NetworkState from 'react-native-network-state'
-import LottieView from 'lottie-react-native';
+import firebase from 'react-native-firebase';
+
 import {
     View,
-    Text,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 import Geocoder from 'react-native-geocoder';
 
 import { resetToScreen } from '../../services/navigation.service';
 import APP from '../../constants/app.constant';
+import { AccessNestedObject } from '../../utils/common.util';
 
-var NY = {
-    lat: 12.995466299999999,
-    lng: 77.7009697
-};
-
-Geocoder.fallbackToGoogle('');
+Geocoder.fallbackToGoogle('AIzaSyCF472Z-XkxbQTeTmbfnZkNIKp7mnA-2cA');
 
 class ResolveAppScene extends Component {
     init = () => {
@@ -52,10 +38,32 @@ class ResolveAppScene extends Component {
         SplashScreen.hide();
     }
 
-    componentDidMount = async () => {
-        setTimeout(() => {
-            this.init()
-        }, 100);
+    getInitialNotification = async () => {
+        const notificationOpen = await firebase.notifications().getInitialNotification();
+        if (notificationOpen) {
+            const data = notificationOpen.notification.data;
+
+            if (AccessNestedObject(data, 'blood_donation_request_id')) {
+                APP.REDIRECT_TO = {
+                    route: 'BloodRequest',
+                    payload: {
+                        id: AccessNestedObject(data, 'blood_donation_request_id')
+                    }
+                }
+            }
+
+            if (AccessNestedObject(data, 'show_notification_scene')) {
+                APP.REDIRECT_TO = {
+                    tab: 'Notification'
+                }
+            }
+        }
+
+        this.init()
+    }
+
+    componentDidMount = () => {
+        this.getInitialNotification();
     }
 
     render() {

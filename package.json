@@ -10,7 +10,7 @@
     "postinstall": "./postinstall.sh",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/",
     "apk": "npm run bundle && cd android && ./gradlew assembleRelease && cd app/build/outputs/apk && open .",
-    "codepush": "appcenter codepush release-react -a Rakt-Sevadal/Android-App android -d Production --mandatory"
+    "codepush": "appcenter codepush release-react -a Rakt-Sevadal/Android-App -d Production --mandatory"
   },
   "dependencies": {
     "@mauron85/react-native-background-geolocation": "0.6.1",
@@ -50,6 +50,7 @@
     "react-native-screens": "2.0.0-alpha.3",
     "react-native-scrollable-tab-view": "^0.10.0",
     "react-native-share": "2.0.0",
+    "react-native-sms-retriever-api": "^1.0.3",
     "react-native-splash-screen": "3.2.0",
     "react-native-webview": "^7.4.1",
     "react-navigation": "4.0.1",

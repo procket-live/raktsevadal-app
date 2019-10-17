@@ -9,14 +9,13 @@ import {
     PlaceholderLine,
     Fade,
 } from "rn-placeholder";
-import { AccessNestedObject, DistanceBetweenLatLng, ShareOnWhatsapp, AmIDoner } from '../../utils/common.util';
+import { AccessNestedObject } from '../../utils/common.util';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MapMarkerIcon, WhatsAppIcon } from '../../config/image.config';
 import { navigate } from '../../services/navigation.service';
 
 const WIDTH_20 = widthPercentageToDP('17');
 
-const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude, userId, callback }) => {
+const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
     if (loading) {
         return (
             <View style={styles.container} >
@@ -33,11 +32,10 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude,
         )
     }
 
-    const doners = AccessNestedObject(bloodDonationRequest, 'doners', []);
     return (
         <TouchableOpacity
             onPress={() => {
-                navigate('BloodRequest', { bloodRequest: bloodDonationRequest, callback })
+                navigate('BloodRequest', { bloodRequest: bloodDonationRequest })
             }}
             style={styles.container}
         >
@@ -67,7 +65,7 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, latitude, longitude,
             <View style={{ flexDirection: 'row', padding: 2, paddingRight: 5, alignItems: 'center', justifyContent: 'flex-end' }} >
                 <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
                     {
-                        (AmIDoner(userId, doners)) ?
+                        AccessNestedObject(bloodDonationRequest, 'amIDoner', false) ?
                             <View style={{ height: 20, padding: 5, backgroundColor: GREEN, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
                                 <Text style={{ fontSize: 16, color: ON_PRIMARY }} >Accepted</Text>
                             </View> : null

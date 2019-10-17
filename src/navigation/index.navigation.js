@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
+import RNSmsRetriever from 'react-native-sms-retriever-api';
 
 import ResolveAppScene from '../scenes/resolve-app-scene/resolve-app.scene';
 import ResolveLocationScene from '../scenes/resolve-location-scene/resolve-location.scene';

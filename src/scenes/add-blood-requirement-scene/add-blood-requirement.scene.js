@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
 import Button from '../../components/button-component/button.component';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import NotifyService from '../../services/notify.service';
 import { navigate, navigatePop } from '../../services/navigation.service';
 import DateTimePickerComponent from '../../components/date-time-picker-component/date-time-picker.component';
@@ -15,9 +14,10 @@ import TextInputComponent from '../../components/text-input-component/text-input
 import GenderPickerComponent from '../../components/gender-picker-component/gender-picker.component';
 import BloodGroupSelectComponent from '../../components/blood-group-select-component/blood-group-select.component';
 import PrivateApi from '../../api/api.private';
-import { DISPLAY_DATE_FORMAT, BLOOD_DONATION_MINIMUM_AGE, BLOOD_DONATION_MAXIMUM_AGE } from '../../constants/app.constant';
+import { DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
 import SelectAddressComponent from '../../components/select-address-component/select-address.component';
 import { AccessNestedObject, IsCorrectMobileNumber } from '../../utils/common.util';
+import { fetchMyRequest } from '../../action/myRequest.action';
 
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
@@ -158,10 +158,7 @@ class AddBloodRequirementScene extends PureComponent {
                 duration: 40000
             });
 
-            const callback = this.props.navigation.getParam('callback');
-            if (callback && typeof callback == 'function') {
-                callback();
-            }
+            this.props.fetchMyRequest();
         }
         this.setState({ loading: false })
     }
@@ -201,6 +198,7 @@ class AddBloodRequirementScene extends PureComponent {
                     <TextInputComponent
                         value={this.state.patientAge}
                         placeholder="Patient Age"
+                        keyboardType="phone-pad"
                         onChangeText={(patientAge) => {
                             this.setState({ patientAge: String(patientAge) });
                         }}
@@ -248,6 +246,7 @@ class AddBloodRequirementScene extends PureComponent {
                     <TextInputComponent
                         value={this.state.contactPersonMobile}
                         placeholder="Contact person mobile number"
+                        keyboardType="phone-pad"
                         onChangeText={(contactPersonMobile) => {
                             this.setState({ contactPersonMobile });
                         }}
@@ -437,4 +436,4 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-export default connect(mapStateToProps, {})(AddBloodRequirementScene);
+export default connect(mapStateToProps, { fetchMyRequest })(AddBloodRequirementScene);

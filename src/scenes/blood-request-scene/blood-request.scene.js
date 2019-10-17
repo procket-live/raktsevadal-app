@@ -4,7 +4,13 @@ import getDirections from 'react-native-google-maps-directions'
 import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
 import RNBottomActionSheet from 'react-native-bottom-action-sheet';
 import moment from 'moment';
+import {
+    Placeholder,
+    PlaceholderLine,
+    Fade,
+} from "rn-placeholder";
 import { connect } from 'react-redux';
+
 import { GREY_3, GREY_2, PRIMARY_COLOR, ON_PRIMARY, GREY_1, GREEN } from '../../constants/color.constant';
 import { AccessNestedObject, AmIDoner, Call, ShareOnWhatsapp } from '../../utils/common.util';
 import { DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
@@ -14,13 +20,33 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import PrivateApi from '../../api/api.private';
 import { navigatePop, navigate } from '../../services/navigation.service';
 import { WhatsAppIcon } from '../../config/image.config';
+import { fetchNearbyRequest } from '../../action/nearbyRequest.action';
+import { fetchMyRequest } from '../../action/myRequest.action';
 
 let AlertView = RNBottomActionSheet.AlertView;
 class BloodRequestScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            bloodRequest: {},
+            loading: true,
+        }
+    }
 
+    componentDidMount = async () => {
+        const id = this.props.navigation.getParam('id');
+        const bloodRequest = this.props.navigation.getParam('bloodRequest')
+
+        if (bloodRequest) {
+            this.setState({ bloodRequest, loading: false });
+        }
+
+        if (id) {
+            const result = await PrivateApi.getBloodRequirement(id);
+            console.log('result', result)
+            if (result.success) {
+                this.setState({ bloodRequest: result.response, loading: false });
+            }
         }
     }
 
@@ -51,17 +77,18 @@ class BloodRequestScene extends PureComponent {
     }
 
     acceptBloodDonationRequest = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         const id = AccessNestedObject(bloodRequest, '_id');
 
         const result = PrivateApi.acceptBloodDonationRequest(id);
         if (result.success) {
-            this.goBackAndRefresh();
+            navigatePop();
+            this.props.fetchNearbyRequest();
         }
     }
 
     RenderBottomButton = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         const doners = AccessNestedObject(bloodRequest, 'doners', []);
         const userId = AccessNestedObject(this.props, 'user._id')
         const createdBy = AccessNestedObject(bloodRequest, 'created_by');
@@ -85,7 +112,7 @@ class BloodRequestScene extends PureComponent {
     }
 
     amICreator = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         const userId = AccessNestedObject(this.props, 'user._id')
         const createdBy = AccessNestedObject(bloodRequest, 'created_by');
 
@@ -93,12 +120,12 @@ class BloodRequestScene extends PureComponent {
     }
 
     viewAllDoners = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         navigate('DonersTabs', { bloodRequest });
     }
 
     iGotBlood = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         const id = AccessNestedObject(bloodRequest, '_id');
 
         AlertView.Show({
@@ -114,7 +141,8 @@ class BloodRequestScene extends PureComponent {
             onPositive: async () => {
                 const result = await PrivateApi.gotBlood(id);
                 if (result.success) {
-                    this.goBackAndRefresh();
+                    navigatePop();
+                    this.props.fetchMyRequest();
                 }
             },
             onNegative: () => {
@@ -123,7 +151,7 @@ class BloodRequestScene extends PureComponent {
     }
 
     removeRequest = () => {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest } = this.state;
         const id = AccessNestedObject(bloodRequest, '_id');
 
         AlertView.Show({
@@ -139,7 +167,8 @@ class BloodRequestScene extends PureComponent {
             onPositive: async () => {
                 const result = await PrivateApi.removeBloodDonationReqest(id);
                 if (result.success) {
-                    this.goBackAndRefresh();
+                    navigatePop();
+                    this.props.fetchMyRequest();
                 }
             },
             onNegative: () => {
@@ -147,17 +176,29 @@ class BloodRequestScene extends PureComponent {
         })
     }
 
-    goBackAndRefresh = () => {
-        alert('refresh')
-        const callback = this.props.navigation.getParam('callback');
-        navigatePop();
-        if (callback && typeof callback == 'function') {
-            callback();
-        }
+    RenderLoadingPlaceholedr = () => {
+        return (
+            <View style={[styles.container, { padding: 10 }]} >
+                <Placeholder
+                    Animation={Fade}
+                >
+                    <PlaceholderLine style={{ height: 100, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine style={{ height: 50, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine style={{ height: 50, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine width={100} />
+                    <PlaceholderLine width={100} />
+                    <PlaceholderLine style={{ height: 100, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine style={{ height: 50, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine style={{ height: 50, marginBottom: 20 }} width={100} />
+                    <PlaceholderLine width={100} />
+                    <PlaceholderLine width={100} />
+                </Placeholder>
+            </View>
+        )
     }
 
     render() {
-        const bloodRequest = this.props.navigation.getParam('bloodRequest');
+        const { bloodRequest, loading } = this.state;
         const latitude = AccessNestedObject(bloodRequest, 'hospital_location.coordinates.0');
         const longitude = AccessNestedObject(bloodRequest, 'hospital_location.coordinates.1');
         const hospitalName = AccessNestedObject(bloodRequest, 'hospital_name');
@@ -165,6 +206,10 @@ class BloodRequestScene extends PureComponent {
         const contactNumber = AccessNestedObject(bloodRequest, 'contact_person_mobile');
         const doners = AccessNestedObject(bloodRequest, 'doners', []);
         const userId = AccessNestedObject(this.props, 'user._id')
+
+        if (loading) {
+            return <this.RenderLoadingPlaceholedr />
+        }
 
         return (
             <View style={styles.container} >
@@ -332,4 +377,4 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(BloodRequestScene);
+export default connect(mapStateToProps, { fetchMyRequest, fetchNearbyRequest })(BloodRequestScene);

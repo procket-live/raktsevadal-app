@@ -18,6 +18,10 @@ class PrivateApi {
         return Get({ url: `${BLOOD_REQUIREMENT}?${query}` });
     }
 
+    static getBloodRequirement = (id) => {
+        return Get({ url: `${BLOOD_REQUIREMENT}/${id}` });
+    }
+
     static acceptBloodDonationRequest = (id) => {
         return Post({ url: `${ACCEPT_BLOOD_REQUIREMENT}/${id}` });
     }

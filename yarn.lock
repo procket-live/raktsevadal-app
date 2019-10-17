@@ -5875,6 +5875,11 @@ react-native-share@2.0.0:
   resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-2.0.0.tgz#4543a746013e0d8fa9f765fb8937007cfbcffcf7"
   integrity sha512-J8Xl3mq0L9KDFtSYtKsQDAnZWw/niZIpAD1PRiNfZFHo44Rc+oS2bEIhskNnoQXKEgBNdPzCl/DenMXYAHXRYg==
 
+react-native-sms-retriever-api@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-sms-retriever-api/-/react-native-sms-retriever-api-1.0.3.tgz#493eba059ea6898877947a28c33be33280a73ffc"
+  integrity sha512-r9bdcI14sspUcueOO5JA4SKLlFY+fYSeIseEaNfTQA83ECXjUNT7w31fKMHHf/jSQ2JDikEIteArUdC4SXv8sA==
+
 react-native-splash-screen@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"

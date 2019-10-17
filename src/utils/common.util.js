@@ -1,7 +1,6 @@
 import Share from 'react-native-share';
 import { Linking } from 'react-native';
 import DONATION_MAP from '../constants/donation.constant';
-import NotifyService from '../services/notify.service';
 import { PLAYSTORE } from '../constants/app.constant';
 
 /*
@@ -69,8 +68,8 @@ export function ShareOnWhatsapp(bloodDonationRequirement) {
     const contactNumber = AccessNestedObject(bloodDonationRequirement, 'contact_person_mobile');
 
     const options = {
-        url: `http://www.raktsevadal.com/blood-requirement/${bloodDonationRequirement._id}`,
-        message: `${patientName}, age ${age} requires ${units} unit(s) of ${bloodGroup} in ${hospitalName}. Hospital address is ${hospitalAddress}. \n \n Doners from blood group ${canDonate} \n \n \n to contact click below. \n \n Contact Person Name: ${contactPersonName} \n Contact Number: ${contactNumber}`
+        url: `https://raktsevadal.page.link/?link=https://www.raktsevadal.com/bloodRequest/${bloodDonationRequirement._id}&apn=com.raktsevadal`,
+        message: `${patientName}, age ${age} requires ${units} unit(s) of ${bloodGroup} blood in ${hospitalName}. Hospital address is ${hospitalAddress}. \n \n Doners from blood group ${canDonate} can donate him/her. \n \n Contact Person Name: ${contactPersonName} \n Contact Number: ${contactNumber} \n\n\n To donate click below`
     }
 
     Share.open(options)
@@ -80,7 +79,7 @@ export function ShareApp() {
     const options = {
         title: "Rakt Sevadal",
         url: PLAYSTORE,
-        message: 'Download rakt sevadal to find blood doners in your locality and donate blood to needy.'
+        message: 'Download Raktsevadal to find blood doners in your locality and donate blood to needy.'
     }
 
     Share.open(options)

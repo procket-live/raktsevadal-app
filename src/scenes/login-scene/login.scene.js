@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { connect } from 'react-redux';
+import RNSmsRetriever from 'react-native-sms-retriever-api';
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -16,6 +17,7 @@ import APP from '../../constants/app.constant';
 import { setAuthTokenAction, setUserAction } from '../../action/user.action';
 import { IsCorrectMobileNumber, AccessNestedObject } from '../../utils/common.util';
 import PrivateApi from '../../api/api.private';
+
 class LoginScene extends PureComponent {
     constructor(props) {
         super(props);
@@ -27,6 +29,22 @@ class LoginScene extends PureComponent {
             loading: false,
             showSuccessMessage: false
         }
+    }
+
+    componentDidMount = () => {
+        this.detectOTP();
+    }
+
+    componentWillUnmout() {
+        RNSmsRetriever.removeListener();
+    }
+
+    detectOTP = async () => {
+        await RNSmsRetriever.getOtp();
+        RNSmsRetriever.addListener(({ message }) => {
+            const otp = message.match(/\d/g).join("").substring(0, 6);
+            this.setState({ otp }, this.proceed);
+        })
     }
 
     proceed = async () => {
@@ -45,6 +63,7 @@ class LoginScene extends PureComponent {
             this.setState({ loading: false });
             if (result.success) {
                 this.setState({ otpSent: true, step: this.state.step + 1 })
+                this.receiveOTP();
             }
         } else {
             if (!this.isCorrectOTP()) {
@@ -68,7 +87,7 @@ class LoginScene extends PureComponent {
         if (result.success) {
             this.props.setUserAction(AccessNestedObject(result, 'response', {}))
         }
-        
+
         this.setState({ loading: false });
         setTimeout(this.showSuccessMessage, 100);
     }
