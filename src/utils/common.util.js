@@ -100,3 +100,18 @@ export function AmIDoner(userId, doners = []) {
 export function Call(mobile) {
     Linking.openURL(`tel:${mobile}`)
 }
+
+/**
+ * Function to generate random string of [a-z]
+ * @param  {string} length
+ */
+export function GenerateRandomString(length) {
+    let text = "";
+    const possible = "abcdefghijklmnopqrstuvwxyz";
+    length = length || 0;
+
+    for (var i = 0; i < length; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}

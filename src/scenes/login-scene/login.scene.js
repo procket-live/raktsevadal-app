@@ -56,9 +56,9 @@ class LoginScene extends PureComponent {
     }
 
     gotTruecallerProfile = async (profile) => {
-        const mobile = AccessNestedObject(profile, 'phoneNumber');
-        this.setState({ mobile: `+91 ${mobile.substring(3)}`, loading: true });
-        const result = await PublicApi.truecallerLogin(profile);
+        const mobile = AccessNestedObject(profile, 'phoneNumber').substring(3);
+        this.setState({ mobile: `+91 ${mobile}`, loading: true });
+        const result = await PublicApi.truecallerLogin(profile, mobile);
         if (result.success) {
             const token = result.token;
             this.props.setAuthTokenAction(token);

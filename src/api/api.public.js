@@ -12,8 +12,8 @@ class PublicApi {
         return Post({ url: VERIFY_OTP, body: { mobile, otp } });
     }
 
-    static truecallerLogin = (profile) => {
-        return Post({ url: TRUECALLER_LOGIN, body: { profile } })
+    static truecallerLogin = (profile, mobile) => {
+        return Post({ url: TRUECALLER_LOGIN, body: { profile, mobile } })
     }
 }
 

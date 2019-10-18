@@ -16,7 +16,7 @@ import { AccessNestedObject, AmIDoner, Call, ShareOnWhatsapp } from '../../utils
 import { DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import WideButton from '../../components/wide-button-component/wide-button.component';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import PrivateApi from '../../api/api.private';
 import { navigatePop, navigate } from '../../services/navigation.service';
 import { WhatsAppIcon } from '../../config/image.config';
@@ -30,6 +30,7 @@ class BloodRequestScene extends PureComponent {
         this.state = {
             bloodRequest: {},
             loading: true,
+            processing: false
         }
     }
 
@@ -76,11 +77,11 @@ class BloodRequestScene extends PureComponent {
         })
     }
 
-    acceptBloodDonationRequest = () => {
+    acceptBloodDonationRequest = async () => {
         const { bloodRequest } = this.state;
         const id = AccessNestedObject(bloodRequest, '_id');
 
-        const result = PrivateApi.acceptBloodDonationRequest(id);
+        const result = await PrivateApi.acceptBloodDonationRequest(id);
         if (result.success) {
             navigatePop();
             this.props.fetchNearbyRequest();
@@ -197,8 +198,118 @@ class BloodRequestScene extends PureComponent {
         )
     }
 
+    RenderImage = ({ item }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => navigate('FullScreen', { image: item })}
+            >
+                <Image
+                    style={styles.image}
+                    source={{
+                        uri: item,
+                    }}
+                />
+            </TouchableOpacity>
+        )
+    }
+
+    RenderDocuments = (documents) => {
+        return (
+            <View style={{ borderTopWidth: 1, borderColor: GREY_1, padding: 10 }} >
+                <Text style={{ fontSize: 18, color: GREY_2 }} >Documents</Text>
+                <FlatList
+                    renderItem={this.RenderImage}
+                    data={documents}
+                    style={{ marginTop: 5, marginBottom: 5 }}
+                    horizontal
+                />
+            </View>
+        )
+    }
+
+    RenderRequestDeleted = () => {
+        const { bloodRequest } = this.state;
+
+        return (
+            <View style={styles.container} >
+                <ScrollView style={{ flex: 1 }} >
+                    <View style={{ height: 120, padding: 10, flexDirection: 'row' }} >
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                            <View style={styles.bloodGroupContainer} >
+                                <Text style={styles.bloodGroupText} >
+                                    {AccessNestedObject(bloodRequest, 'blood_group')}
+                                </Text>
+                            </View>
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                <Text style={styles.kmsText} >{AccessNestedObject(bloodRequest, 'blood_unit')} Units</Text>
+                            </View>
+                        </View>
+                        <View style={{ flex: 2.5, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 20, color: GREY_2 }} >
+                                Patient: {AccessNestedObject(bloodRequest, 'patient_name')}
+                            </Text>
+                            <Text style={{ fontSize: 18, color: GREY_3 }} >
+                                Gender: {AccessNestedObject(bloodRequest, 'patient_gender')}
+                            </Text>
+                            <Text style={{ fontSize: 18, color: GREY_3 }} >
+                                Age: {AccessNestedObject(bloodRequest, 'patient_age')}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', height: 50, padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 18, color: PRIMARY_COLOR }} >Blood Requirement has been removed by lister.</Text>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+        )
+    }
+
+    RenderRequestFulfiled = () => {
+        const { bloodRequest } = this.state;
+
+        return (
+            <View style={styles.container} >
+                <ScrollView style={{ flex: 1 }} >
+                    <View style={{ height: 120, padding: 10, flexDirection: 'row' }} >
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                            <View style={styles.bloodGroupContainer} >
+                                <Text style={styles.bloodGroupText} >
+                                    {AccessNestedObject(bloodRequest, 'blood_group')}
+                                </Text>
+                            </View>
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                <Text style={styles.kmsText} >{AccessNestedObject(bloodRequest, 'blood_unit')} Units</Text>
+                            </View>
+                        </View>
+                        <View style={{ flex: 2.5, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 20, color: GREY_2 }} >
+                                Patient: {AccessNestedObject(bloodRequest, 'patient_name')}
+                            </Text>
+                            <Text style={{ fontSize: 18, color: GREY_3 }} >
+                                Gender: {AccessNestedObject(bloodRequest, 'patient_gender')}
+                            </Text>
+                            <Text style={{ fontSize: 18, color: GREY_3 }} >
+                                Age: {AccessNestedObject(bloodRequest, 'patient_age')}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', height: 50, padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 18, color: GREEN }} >Blood Requirement has been fulfiled.</Text>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+        )
+    }
+
     render() {
         const { bloodRequest, loading } = this.state;
+        const active = AccessNestedObject(bloodRequest, 'active', true);
+        const fulfiled = AccessNestedObject(bloodRequest, 'fulfiled', false);
+
         const latitude = AccessNestedObject(bloodRequest, 'hospital_location.coordinates.0');
         const longitude = AccessNestedObject(bloodRequest, 'hospital_location.coordinates.1');
         const hospitalName = AccessNestedObject(bloodRequest, 'hospital_name');
@@ -206,9 +317,18 @@ class BloodRequestScene extends PureComponent {
         const contactNumber = AccessNestedObject(bloodRequest, 'contact_person_mobile');
         const doners = AccessNestedObject(bloodRequest, 'doners', []);
         const userId = AccessNestedObject(this.props, 'user._id')
+        const documents = AccessNestedObject(bloodRequest, 'documents');
 
         if (loading) {
             return <this.RenderLoadingPlaceholedr />
+        }
+
+        if (!active && !fulfiled) {
+            return <this.RenderRequestDeleted />
+        }
+
+        if (!active && fulfiled) {
+            return <this.RenderRequestFulfiled />
         }
 
         return (
@@ -265,6 +385,10 @@ class BloodRequestScene extends PureComponent {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    {
+                        Array.isArray(documents) && documents.length ?
+                            this.RenderDocuments(documents) : null
+                    }
                     {
                         this.amICreator() ?
                             <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
@@ -371,6 +495,11 @@ const styles = StyleSheet.create({
         fontSize: 26,
         color: ON_PRIMARY
     },
+    image: {
+        width: 100,
+        height: 100,
+        resizeMode: 'contain',
+    }
 })
 
 const mapStateToProps = state => ({

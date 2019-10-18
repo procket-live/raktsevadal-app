@@ -5718,13 +5718,6 @@ react-native-bottom-action-sheet@^1.0.3:
   dependencies:
     react-native-vector-icons "6.6.0"
 
-react-native-camera@3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.4.0.tgz#1591acdb76d626b9630299fe5dd9d3d77c4e58e5"
-  integrity sha512-EFaixLtQsd3Kjs2AnxPx4Qb1mNSlZRZBVoxXDUdWcSdCEE3CSvdeonTb3vWAT3ZlGMi1RTOggtBpI4StMtFNjw==
-  dependencies:
-    prop-types "^15.6.2"
-
 react-native-code-push@^5.7.0:
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-5.7.0.tgz#38667c1ba5a5e1a6dd1b4271468c6ef6284b3ca4"
@@ -5784,6 +5777,16 @@ react-native-image-crop-picker@^0.25.0:
   version "0.25.3"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.25.3.tgz#46ee28b4a0a187240e388bd28a44cf8c274caec6"
   integrity sha512-jQ416WXEiEQ3w057QOYU++8/mDqYb2A/AGZY/NwR5eKda/z8a4wncWKj7oF9KBAHNKE1TmPrl9Rm0GZ0Jrzp6A==
+
+react-native-image-resizer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-resizer/-/react-native-image-resizer-1.0.1.tgz#e9eeb7f81596ffc490f822897952b046c07ee95c"
+  integrity sha512-upBF/9TIs4twg19dSkSaDW/MzMpNbysEXtPuapu3GqvOuGIYHKQ30v6httDn7rIb6uCcNIWL1BwZJM2cDt/C9Q==
+
+react-native-image-zoom@^0.32.0:
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-zoom/-/react-native-image-zoom-0.32.0.tgz#633f0b796d6303e8a7ef99133733c53dd5a7a81c"
+  integrity sha1-Yz8LeW1jA+in75kTNzPFPdWnqBw=
 
 react-native-localize@^1.1.4:
   version "1.2.1"

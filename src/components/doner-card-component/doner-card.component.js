@@ -13,10 +13,11 @@ import {
 import { AccessNestedObject, Call } from '../../utils/common.util';
 import { DISPLAY_DATE_TIME_FORMAT } from '../../constants/app.constant';
 import PrivateApi from '../../api/api.private';
+import NotifyService from '../../services/notify.service';
 
 const WIDTH = widthPercentageToDP('12');
 
-const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, requestBloodDonation }) => {
+const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, requestBloodDonation, acceptedAt, sentDoners }) => {
     if (loading) {
         return (
             <View style={styles.container} >
@@ -33,12 +34,16 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
     }
 
     const [sent, setSent] = useState(false);
+    const [localLoading, setLocalLoading] = useState(false);
 
     const id = AccessNestedObject(user, '_id');
     const name = AccessNestedObject(user, 'name');
     const mobile = AccessNestedObject(user, 'mobile');
     const bloodGroup = AccessNestedObject(user, 'blood_group');
-    const acceptedAt = AccessNestedObject(this.props, 'acceptedAt');
+
+    if (sentDoners && sentDoners.includes(id)) {
+        setSent(true);
+    }
 
     return (
         <View
@@ -80,11 +85,21 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
                     {
                         showRequestButton ?
                             <Button
+                                loading={localLoading}
+                                disabled={sent}
                                 text={sent ? "Sent" : "Request"}
-                                onPress={() => {
+                                onPress={async () => {
                                     if (!sent) {
-                                        requestBloodDonation(id)
+                                        setLocalLoading(true);
+                                        await requestBloodDonation(id)
+                                        setLocalLoading(false);
                                         setSent(true)
+                                        NotifyService.notify({
+                                            title: 'Blood donation request sent to doner.',
+                                            message: `Request sent to ${name}. You will be notified once he/she accepts blood donation request.`,
+                                            duration: 3000,
+                                            type: 'success'
+                                        })
                                     }
                                 }}
                             />

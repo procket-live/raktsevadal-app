@@ -3,15 +3,14 @@ import { Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import RNSmsRetriever from 'react-native-sms-retriever-api';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import ResolveAppScene from '../scenes/resolve-app-scene/resolve-app.scene';
 import ResolveLocationScene from '../scenes/resolve-location-scene/resolve-location.scene';
 import LoginScene from '../scenes/login-scene/login.scene';
 import OnBoardingScene from '../scenes/onboarding-scene/onboarding.scene';
 import UpdateUserDetailScene from '../scenes/update-user-detail-scene/update-user-detail.scene';
 import { PRIMARY_COLOR, GREY_1, ON_PRIMARY, GREY_2 } from '../constants/color.constant';
-import { HomeIcon, DropIcon, BloodDonationIcon, NotificationIcon, ManUserIcon, InfoIcon } from '../config/image.config';
+import { HomeIcon, InfoIcon } from '../config/image.config';
 
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
@@ -23,6 +22,7 @@ import TermsAndConditionScene from '../scenes/terms-and-condition-scene/terms-an
 import AboutUsScene from '../scenes/about-us-scene/about-us.scene';
 import NotificationScene from '../scenes/notification-scene/notification.scene';
 import NotificationIconComponent from '../components/notification-icon-component/notification-icon.component';
+import FullScreen from '../scenes/full-screen-scene/full-screen.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
@@ -37,7 +37,7 @@ const RootTabs = createBottomTabNavigator(
         backBehavior: 'initialRoute',
         lazy: true,
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+            tabBarIcon: ({ focused }) => {
                 const { routeName } = navigation.state;
                 let icon;
                 switch (routeName) {
@@ -72,8 +72,6 @@ const RootTabs = createBottomTabNavigator(
                 paddingBottom: 5,
                 height: 60,
                 backgroundColor: ON_PRIMARY,
-                // borderTopWidth: 1,
-                // borderTopColor: CLAY,r
                 elevation: 0,
             }
         },
@@ -83,14 +81,14 @@ const RootTabs = createBottomTabNavigator(
 
 const RootNavigator = createStackNavigator(
     {
-        Root: {
-            screen: RootTabs,
+        Empty: {
+            screen: () => <></>,
             navigationOptions: {
-                header: null,
+                header: null
             }
         },
-        ResolveApp: {
-            screen: ResolveAppScene,
+        Root: {
+            screen: RootTabs,
             navigationOptions: {
                 header: null,
             }
@@ -184,11 +182,43 @@ const RootNavigator = createStackNavigator(
                 },
                 title: "About us"
             }
+        },
+        FullScreen: {
+            screen: FullScreen,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Medical document"
+            }
         }
     },
     {
-        initialRouteName: 'ResolveApp',
+        initialRouteName: 'Empty',
     }
 )
 
 export default createAppContainer(RootNavigator);
+
+const persistenceKey = "persistenceKey"
+const persistNavigationState = async (navState) => {
+    try {
+        await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
+    } catch (err) {
+        // handle the error according to your needs
+    }
+}
+
+const loadNavigationState = async () => {
+    const jsonString = await AsyncStorage.getItem(persistenceKey)
+    return JSON.parse(jsonString)
+}
+
+export function getPersistenceFunctions() {
+    return __DEV__ ? {
+        persistNavigationState,
+        loadNavigationState,
+    } : undefined;
+}

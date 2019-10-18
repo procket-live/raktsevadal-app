@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -16,8 +17,10 @@ import BloodGroupSelectComponent from '../../components/blood-group-select-compo
 import PrivateApi from '../../api/api.private';
 import { DISPLAY_DATE_FORMAT } from '../../constants/app.constant';
 import SelectAddressComponent from '../../components/select-address-component/select-address.component';
-import { AccessNestedObject, IsCorrectMobileNumber } from '../../utils/common.util';
+import { AccessNestedObject, IsCorrectMobileNumber, GenerateRandomString } from '../../utils/common.util';
 import { fetchMyRequest } from '../../action/myRequest.action';
+import UploadDocumentComponent from '../../components/upload-document-component/upload-document.component';
+import firebase from 'react-native-firebase';
 
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
@@ -104,16 +107,62 @@ class AddBloodRequirementScene extends PureComponent {
     proceed4 = async () => {
         const { contactPersonMobile } = this.state;
 
-        // if (!IsCorrectMobileNumber(contactPersonMobile)) {
-        //     NotifyService.notify({
-        //         title: '',
-        //         message: 'Please enter correct mobile number',
-        //         type: 'warning'
-        //     })
-        //     return;
-        // }
+        if (!IsCorrectMobileNumber(`+91${contactPersonMobile}`)) {
+            NotifyService.notify({
+                title: '',
+                message: 'Please enter correct mobile number',
+                type: 'warning'
+            })
+            return;
+        }
 
-        this.final();
+        this.setState({ step: 5 });
+    }
+
+    proceed5 = () => {
+        const { documents } = this.state;
+
+        if (!documents.length) {
+            this.final()
+            return;
+        }
+
+        this.setState({ loading: true })
+        documents.forEach((file, index) => {
+            firebase
+                .storage()
+                .ref(`/documents/${GenerateRandomString(6)}`)
+                .putFile(file.path)
+                .then(({ downloadURL }) => {
+                    this.state.documents[index]['downloadURL'] = downloadURL;
+                    this.checkIfAllUploaded();
+                })
+                .catch(() => {
+                    this.setState({ loading: false })
+                    NotifyService.notify({
+                        title: 'Upload failed',
+                        message: 'Image Upload issue, Please try again.',
+                        type: 'error'
+                    })
+                })
+        })
+
+    }
+
+    checkIfAllUploaded = () => {
+        const { documents } = this.state;
+        let allUploaded = true;
+
+        documents.forEach((item) => {
+            if (!item.downloadURL) {
+                allUploaded = false;
+            }
+        })
+
+        if (allUploaded) {
+            this.setState({ loading: false })
+            this.final();
+        }
     }
 
     final = async () => {
@@ -128,9 +177,11 @@ class AddBloodRequirementScene extends PureComponent {
             contactPersonMobile,
             bloodGroup,
             bloodUnit,
-            requiredTill
+            requiredTill,
+            documents
         } = this.state;
 
+        const documentLinks = documents.map((item) => item.downloadURL);
         const body = {
             blood_group: bloodGroup,
             blood_unit: bloodUnit,
@@ -142,13 +193,14 @@ class AddBloodRequirementScene extends PureComponent {
             hospital_location_latitude: hospitalLocation.latitude,
             hospital_location_longitude: hospitalLocation.longitude,
             required_till: moment(requiredTill, DISPLAY_DATE_FORMAT).toDate(),
-            documents: [],
+            documents: documentLinks,
             contact_person_name: contactPersonName,
             contact_person_mobile: contactPersonMobile
         };
 
         this.setState({ loading: true })
         const result = await PrivateApi.addBloodRequirement(body);
+        console.log('result', result)
         if (result.success) {
             navigatePop();
             NotifyService.notify({
@@ -174,6 +226,34 @@ class AddBloodRequirementScene extends PureComponent {
                 longitude
             }
         })
+    }
+
+    gotDocuments = (files) => {
+        this.setState({ documents: files })
+    }
+
+    RenderDocumentUpload = () => {
+        return (
+            <React.Fragment>
+                <View style={{ marginTop: 10, marginBottom: 5 }} >
+                    <Text style={styles.lightSmall} >Medical documents upload</Text>
+                </View>
+                <View style={{ marginTop: 2, marginBottom: 5 }} >
+                    <Text style={styles.bigBold} ></Text>
+                </View>
+                <UploadDocumentComponent
+                    disabled={this.state.loading}
+                    callback={this.gotDocuments}
+                />
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30, marginBottom: 10 }} >
+                    <Button
+                        loading={this.state.loading}
+                        text={translate('proceed')}
+                        onPress={this.proceed5}
+                    />
+                </View>
+            </React.Fragment>
+        )
     }
 
     RenderPatientDetails = () => {
@@ -384,13 +464,14 @@ class AddBloodRequirementScene extends PureComponent {
                 >
 
                     <StepsIndicator
-                        steps={4}
+                        steps={5}
                         currentStep={this.state.step}
                     />
                     {this.state.step == 1 ? this.RenderPatientDetails() : null}
                     {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
                     {this.state.step == 3 ? this.RenderHospitalDetails() : null}
                     {this.state.step == 4 ? this.RenderContactPersonName() : null}
+                    {this.state.step == 5 ? this.RenderDocumentUpload() : null}
                 </ScrollView>
             </View>
         )

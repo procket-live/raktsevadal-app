@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import firebase from 'react-native-firebase';
-
-import {
-    View,
-} from 'react-native';
 import Geocoder from 'react-native-geocoder';
 
 import { resetToScreen } from '../../services/navigation.service';
@@ -17,6 +13,7 @@ Geocoder.fallbackToGoogle('AIzaSyCF472Z-XkxbQTeTmbfnZkNIKp7mnA-2cA');
 class ResolveAppScene extends Component {
     init = () => {
         const { user, isFirstTime } = this.props;
+        const userId = AccessNestedObject(user, '_id');
 
         if (isFirstTime) {
             resetToScreen('OnBoarding')
@@ -27,12 +24,18 @@ class ResolveAppScene extends Component {
         if (user == null) {
             resetToScreen('Login')
         } else {
-            APP.TOKEN = user.token;
             if (user.name == null) {
                 resetToScreen('UpdateUserDetail')
             } else {
                 resetToScreen('ResolveLocation');
             }
+        }
+
+        if (userId) {
+            const analytics = firebase.analytics();
+            analytics.logEvent('APP_OPEN');
+            analytics.setUserId(userId);
+            analytics.setUserProperty('name', AccessNestedObject(user, 'name'));
         }
 
         SplashScreen.hide();
@@ -87,7 +90,8 @@ class ResolveAppScene extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }} />
+            <>
+            </>
         )
     }
 }

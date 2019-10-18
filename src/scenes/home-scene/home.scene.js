@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Image, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import LottieView from 'lottie-react-native';
+import firebase from 'react-native-firebase';
+
 import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY, PRIMARY_COLOR } from '../../constants/color.constant';
 import { AccessNestedObject } from '../../utils/common.util';
 import { navigate } from '../../services/navigation.service';
@@ -149,6 +151,7 @@ class HomeScene extends PureComponent {
     }
 
     openBloodRequirement = () => {
+        firebase.analytics().logEvent('NEED_BLOOD')
         navigate('AddBloodRequirement');
     }
 

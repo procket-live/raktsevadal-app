@@ -34,7 +34,8 @@ class DonersTabsScene extends PureComponent {
             acceptedDoners: [1, 2, 3],
             nearbyDoners: [1, 2, 3],
             acceptedDonersLoading: true,
-            nearbyDonersLoading: true
+            nearbyDonersLoading: true,
+            sentDoners: []
         }
     }
 
@@ -53,7 +54,9 @@ class DonersTabsScene extends PureComponent {
     fetchAcceptedDoners = async (id) => {
         const result = await PrivateApi.getBloodDonationRequestDoners(id);
         if (result.success) {
-            this.setState({ acceptedDoners: result.response });
+            const acceptedDoners = AccessNestedObject(result, 'response', []);
+            const sentDoners = acceptedDoners.map(item => item._id);
+            this.setState({ acceptedDoners, sentDoners });
         }
 
         this.setState({ acceptedDonersLoading: false });
@@ -108,6 +111,7 @@ class DonersTabsScene extends PureComponent {
                     showRequestButton
                     request={this.request}
                     data={this.state.nearbyDoners}
+                    sentDoners={this.state.sentDoners}
                     loading={this.state.nearbyDonersLoading}
                     tabLabel="Nearby Doners"
                 />

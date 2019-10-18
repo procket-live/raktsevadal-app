@@ -14,12 +14,15 @@ import { PersistGate } from 'redux-persist/integration/react';
 import * as RNLocalize from "react-native-localize";
 import { useScreens } from 'react-native-screens';
 import codePush from "react-native-code-push";
+import firebase from 'react-native-firebase';
+import SplashScreen from 'react-native-splash-screen';
 
-import RootNavigation from './src/navigation/index.navigation';
+import RootNavigation, { getPersistenceFunctions } from './src/navigation/index.navigation';
 import { setTopLevelNavigator } from './src/services/navigation.service';
 import NotifyService from './src/services/notify.service';
 import store, { persistor } from './src/store/index.store';
 import { setI18nConfig } from './src/services/translation.service';
+import AppResolve from './src/scenes/resolve-app-scene/resolve-app.scene';
 
 useScreens();
 class App extends PureComponent {
@@ -29,7 +32,7 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('global.HermesInternal', global.HermesInternal);
+    firebase.analytics().setAnalyticsCollectionEnabled(true);
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
     GlobalFont.applyGlobal('Noway')
   }
@@ -53,10 +56,12 @@ class App extends PureComponent {
             loading={null}
             persistor={persistor}
           >
+            <AppResolve />
             <RootNavigation
               ref={navigatorRef => {
                 setTopLevelNavigator(navigatorRef);
               }}
+              {...getPersistenceFunctions()}
             />
           </PersistGate>
         </ReduxProvider>
