@@ -34,7 +34,7 @@ const RootTabs = createBottomTabNavigator(
         Info: { screen: InfoScene },
     },
     {
-        initialRouteName: 'Camp',
+        initialRouteName: 'Home',
         order: ['Home', 'Camp', 'Notification', 'Info'],
         backBehavior: 'initialRoute',
         lazy: true,
