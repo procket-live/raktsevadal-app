@@ -10,11 +10,17 @@ import { logoutUserAction } from '../../action/user.action';
 import { navigate, navigatePop } from '../../services/navigation.service';
 
 const InfoScene = ({ user, logout }) => {
+    const profileImage = AccessNestedObject(user, 'profile_image');
+    const source = profileImage ? { uri: profileImage } : UserIcon();
+
     return (
         <View style={styles.container} >
             <View style={{ height: 140, padding: 10, borderBottomWidth: 1, borderBottomColor: GREY_2, flexDirection: 'row' }} >
                 <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    <Image source={UserIcon()} style={{ width: 80, height: 80 }} />
+                    <Image
+                        source={source}
+                        style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 80 }}
+                    />
                 </View>
                 <View style={{ flex: 2, alignItems: 'flex-start' }} >
                     <Text style={{ fontSize: 20, color: GREY_2 }} >

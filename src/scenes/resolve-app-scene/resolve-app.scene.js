@@ -8,7 +8,7 @@ import { resetToScreen } from '../../services/navigation.service';
 import APP from '../../constants/app.constant';
 import { AccessNestedObject } from '../../utils/common.util';
 
-Geocoder.fallbackToGoogle('AIzaSyCF472Z-XkxbQTeTmbfnZkNIKp7mnA-2cA');
+Geocoder.fallbackToGoogle(APP.GOOGLE_KEY);
 
 class ResolveAppScene extends Component {
     init = () => {

@@ -11,3 +11,5 @@ export const GOT_BLOOD = `${BLOOD_REQUIREMENT}/got-blood`;
 
 export const NOTIFICATION = 'notification';
 export const REQUEST = `${NOTIFICATION}/request`;
+
+export const CAMP = 'camp';

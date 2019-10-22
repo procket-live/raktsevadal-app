@@ -9,5 +9,6 @@ module.exports = {
     BLOOD_DONATION_MAXIMUM_AGE: '60',
     REDIRECT_TO: {
         route: '', tab: '', payload: {}
-    }
+    },
+    GOOGLE_KEY: 'AIzaSyCF472Z-XkxbQTeTmbfnZkNIKp7mnA-2cA',
 }

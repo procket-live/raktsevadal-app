@@ -49,3 +49,11 @@ export const WhatsAppIcon = () => {
 export const LogoIcon = () => {
     return require('../assets/image/logo.png');
 }
+
+export const EditIcon = () => {
+    return require('../assets/image/edit.png');
+}
+
+export const HospitalIcon = () => {
+    return require('../assets/image/hospital.png');
+}

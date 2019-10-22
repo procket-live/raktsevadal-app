@@ -10,7 +10,7 @@ import LoginScene from '../scenes/login-scene/login.scene';
 import OnBoardingScene from '../scenes/onboarding-scene/onboarding.scene';
 import UpdateUserDetailScene from '../scenes/update-user-detail-scene/update-user-detail.scene';
 import { PRIMARY_COLOR, GREY_1, ON_PRIMARY, GREY_2 } from '../constants/color.constant';
-import { HomeIcon, InfoIcon } from '../config/image.config';
+import { HomeIcon, InfoIcon, HospitalIcon } from '../config/image.config';
 
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
@@ -23,17 +23,19 @@ import AboutUsScene from '../scenes/about-us-scene/about-us.scene';
 import NotificationScene from '../scenes/notification-scene/notification.scene';
 import NotificationIconComponent from '../components/notification-icon-component/notification-icon.component';
 import FullScreen from '../scenes/full-screen-scene/full-screen.scene';
+import CampScene from '../scenes/camp-scene/camp.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
     {
         Home: { screen: HomeScene },
+        Camp: { screen: CampScene },
         Notification: { screen: NotificationScene },
         Info: { screen: InfoScene },
     },
     {
-        initialRouteName: 'Home',
-        order: ['Home', 'Notification', 'Info'],
+        initialRouteName: 'Camp',
+        order: ['Home', 'Camp', 'Notification', 'Info'],
         backBehavior: 'initialRoute',
         lazy: true,
         defaultNavigationOptions: ({ navigation }) => ({
@@ -43,6 +45,9 @@ const RootTabs = createBottomTabNavigator(
                 switch (routeName) {
                     case 'Home':
                         icon = HomeIcon;
+                        break;
+                    case 'Camp':
+                        icon = HospitalIcon
                         break;
                     case 'Notification':
                         return (

@@ -5,6 +5,7 @@ import notificationSaga from './notification.saga';
 import myRequestSaga from './myRequest.saga';
 import nearbyRequestSaga from './nearbyRequest.saga';
 import rehydrateSaga from './onRehydrate.saga';
+import nearbyCampSaga from './nearbyCamp.saga';
 
 export default function* rootSaga() {
     yield all([
@@ -13,5 +14,6 @@ export default function* rootSaga() {
         myRequestSaga(),
         nearbyRequestSaga(),
         rehydrateSaga(),
+        nearbyCampSaga(),
     ])
 }

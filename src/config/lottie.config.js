@@ -22,11 +22,16 @@ function NoNotificationLottie() {
     return require('../assets/lottie/no-notifications.json');
 }
 
+function EmptyStateLottie() {
+    return require('../assets/lottie/empty-state.json');
+}
+
 export {
     ProgressBarLottie,
     HeartEmptyFullLottie,
     BloodDropLottie,
     BloodBottleLottie,
     AmazingTickLottie,
-    NoNotificationLottie
+    NoNotificationLottie,
+    EmptyStateLottie
 }
