@@ -15,8 +15,6 @@ import { DISPLAY_DATE_TIME_FORMAT } from '../../constants/app.constant';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { navigatePop, navigate } from '../../services/navigation.service';
 
-const WIDTH = widthPercentageToDP('12');
-
 const NotificatonCard = ({ notification, loading }) => {
     if (loading) {
         return (
@@ -45,14 +43,14 @@ const NotificatonCard = ({ notification, loading }) => {
             style={styles.container}
         >
             <View style={{ flex: 1, flexDirection: 'row' }} >
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }} >
                     <View style={styles.bloodGroupContainer} >
                         <Text style={styles.bloodGroupText} >
                             {bloodGroup}
                         </Text>
                     </View>
                 </View>
-                <View style={{ flex: 3, paddingLeft: 10 }} >
+                <View style={{ flex: 5, paddingLeft: 10 }} >
                     <Text style={styles.patientNameText} >
                         {message}
                     </Text>
@@ -61,10 +59,9 @@ const NotificatonCard = ({ notification, loading }) => {
 
             <View style={{ flexDirection: 'row', padding: 2, paddingRight: 5, alignItems: 'center', justifyContent: 'flex-end' }} >
                 <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    <Text style={{ fontSize: 16, color: GREY_1 }} >When</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
-                    <Text style={{ fontSize: 16, color: GREY_2 }} >{moment(createdAt).fromNow()}</Text>
+                    <Text style={{ fontSize: 14, color: GREY_2 }} >{moment(createdAt).fromNow()}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -76,20 +73,19 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP('95'),
         padding: 10,
         margin: 10,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: GREY_1
+        borderColor: GREY_1,
+        backgroundColor: ON_PRIMARY
     },
     bloodGroupContainer: {
-        width: WIDTH,
-        height: WIDTH,
-        borderRadius: WIDTH / 2,
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
         backgroundColor: PRIMARY_COLOR,
         alignItems: 'center',
         justifyContent: 'center'
     },
     bloodGroupText: {
-        fontSize: 22,
+        fontSize: 18,
         color: ON_PRIMARY
     },
     kmsText: {
@@ -97,8 +93,9 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR
     },
     patientNameText: {
-        fontSize: 16,
-        color: TEXT_COLOR
+        fontSize: 14,
+        color: TEXT_COLOR,
+        textAlign: 'justify'
     },
     locationText: {
         fontSize: 14,

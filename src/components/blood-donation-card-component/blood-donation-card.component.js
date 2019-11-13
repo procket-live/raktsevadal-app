@@ -13,7 +13,7 @@ import { AccessNestedObject } from '../../utils/common.util';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { navigate } from '../../services/navigation.service';
 
-const WIDTH_20 = widthPercentageToDP('17');
+const WIDTH_20 = widthPercentageToDP('12');
 
 const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
     if (loading) {
@@ -48,6 +48,16 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
                     </View>
 
                     <Text style={styles.kmsText} >{AccessNestedObject(bloodDonationRequest, 'blood_unit')} Units</Text>
+                    <View style={{ flexDirection: 'row', padding: 2, paddingRight: 5, alignItems: 'center', justifyContent: 'flex-end' }} >
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                            {
+                                AccessNestedObject(bloodDonationRequest, 'amIDoner', false) ?
+                                    <View style={{ height: 17, padding: 5, backgroundColor: GREEN, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
+                                        <Text style={{ fontSize: 14, color: ON_PRIMARY }} >Accepted</Text>
+                                    </View> : null
+                            }
+                        </View>
+                    </View>
                 </View>
                 <View style={{ flex: 3, paddingLeft: 10 }} >
                     <Text style={styles.patientNameText} >
@@ -61,17 +71,6 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
                     </Text>
                 </View>
             </View>
-
-            <View style={{ flexDirection: 'row', padding: 2, paddingRight: 5, alignItems: 'center', justifyContent: 'flex-end' }} >
-                <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    {
-                        AccessNestedObject(bloodDonationRequest, 'amIDoner', false) ?
-                            <View style={{ height: 20, padding: 5, backgroundColor: GREEN, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
-                                <Text style={{ fontSize: 16, color: ON_PRIMARY }} >Accepted</Text>
-                            </View> : null
-                    }
-                </View>
-            </View>
         </TouchableOpacity>
     )
 }
@@ -79,11 +78,9 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
 const styles = StyleSheet.create({
     container: {
         width: widthPercentageToDP('95'),
-        padding: 10,
-        margin: 10,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: GREY_1
+        padding: 5,
+        margin: 5,
+        backgroundColor: ON_PRIMARY
     },
     bloodGroupContainer: {
         width: WIDTH_20,
@@ -94,11 +91,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     bloodGroupText: {
-        fontSize: 26,
+        fontSize: 18,
         color: ON_PRIMARY
     },
     kmsText: {
-        fontSize: 14,
+        fontSize: 12,
         color: TEXT_COLOR
     },
     patientNameText: {

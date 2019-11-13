@@ -11,7 +11,7 @@ import reducer from '../reducer/index.reducer';
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['user', 'isFirstTime', 'myRequest', 'nearbyCamp'],
+    whitelist: ['user', 'isFirstTime', 'myRequest', 'nearbyCamp', 'notification'],
     blacklist: [],
 };
 const persistedReducer = persistReducer(persistConfig, reducer);

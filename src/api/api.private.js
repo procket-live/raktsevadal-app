@@ -1,5 +1,5 @@
 import { Put, Get, Post, Delete } from "../services/http.service"
-import { USER, BLOOD_REQUIREMENT, ACCEPT_BLOOD_REQUIREMENT, BLOOD_REQUIREMENT_DONERS, GOT_BLOOD, FIND_USER, NOTIFICATION, REQUEST, CAMP } from "../constants/api.constant"
+import { USER, BLOOD_REQUIREMENT, ACCEPT_BLOOD_REQUIREMENT, BLOOD_REQUIREMENT_DONERS, GOT_BLOOD, FIND_USER, NOTIFICATION, REQUEST, CAMP, JOIN_CAMP } from "../constants/api.constant"
 
 class PrivateApi {
     static updateUser = (body) => {
@@ -52,6 +52,10 @@ class PrivateApi {
 
     static getAllCamps = () => {
         return Get({ url: CAMP });
+    }
+
+    static joinCamp = (id) => {
+        return Post({ url: JOIN_CAMP, body: { id } })
     }
 }
 

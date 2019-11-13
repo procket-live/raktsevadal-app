@@ -1314,12 +1314,12 @@ appcenter-analytics@^2.4.0:
   dependencies:
     appcenter "2.4.0"
 
-appcenter-crashes@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/appcenter-crashes/-/appcenter-crashes-2.4.0.tgz#95d1e4f8c50b760411d211061f2e323c57c2a09d"
-  integrity sha512-B1GCIzn4Kf5c0+P7iSwqzW5CnaOQifMV2s6yz4GapC8bOA2xVdrX8SfJjiKV48F1ZpHCURxa7P1XvAvApx5NJg==
+appcenter-crashes@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/appcenter-crashes/-/appcenter-crashes-2.5.0.tgz#2627c738c9cdbbce54c0db2bf10a0508eff66759"
+  integrity sha512-VrlRtawpb44utMQnnxLMWihNVer7i17f5CCtDEiyHktYSXoP8vEl3tWqAUOQLpVGD93cSDNQGJDtnKcu9PRE5A==
   dependencies:
-    appcenter "2.4.0"
+    appcenter "2.5.0"
 
 appcenter-link-scripts@2.4.0:
   version "2.4.0"
@@ -1333,12 +1333,31 @@ appcenter-link-scripts@2.4.0:
     which "1.2.11"
     xcode "2.0.0"
 
-appcenter@2.4.0, appcenter@^2.4.0:
+appcenter-link-scripts@2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/appcenter-link-scripts/-/appcenter-link-scripts-2.5.0.tgz#b1d53c56c7ba5d0c6fccdca35c4f5e603400d237"
+  integrity sha512-LJZVPKKFNLf7R8Sr8wXkMJp/oIImbnwULkWggAGg2/1bZ96LItDvkl6MjNjlctM+3kqel21Yw3SfU2oEOvvm+w==
+  dependencies:
+    debug "4.1.1"
+    glob "5.0.15"
+    mkdirp "0.5.1"
+    plist "3.0.1"
+    which "1.2.11"
+    xcode "2.0.0"
+
+appcenter@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/appcenter/-/appcenter-2.4.0.tgz#9e8737d2edbecbec139e20402bc85670900d84fa"
   integrity sha512-BV9/b9lH8mkg4O6NMXRFZ2PzTTt8GXnIWTSOZRTJBJxUOm4XgsguQ/yfdWckZeUTwsnA8u4aE0C/pKzNaw9d3A==
   dependencies:
     appcenter-link-scripts "2.4.0"
+
+appcenter@2.5.0, appcenter@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/appcenter/-/appcenter-2.5.0.tgz#b0cb424eee698324d159b62d468172163d026cb9"
+  integrity sha512-d79MJPUGM0to4fFCowBYCXAA5ayRGMvyACJikzeZfAsmI+Fkd17EyiD7hCP+sFwyWfy+/W9mwlngLiwPYzD+Ww==
+  dependencies:
+    appcenter-link-scripts "2.5.0"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -2153,17 +2172,17 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
+debug@4.1.1, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
+  dependencies:
+    ms "^2.1.1"
+
 debug@^3.0.0, debug@^3.1.0, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
-  dependencies:
-    ms "^2.1.1"
-
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
-  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
 
@@ -4370,6 +4389,11 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
+lodash.truncate@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
+  integrity sha1-WjUNoLERO4N+z//VgSy+WNbq4ZM=
+
 lodash.unescape@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
@@ -4380,7 +4404,7 @@ lodash.wrap@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.wrap/-/lodash.wrap-4.1.1.tgz#9c3770947a821ec6978a93571e1a6179afcd7fc8"
   integrity sha1-nDdwlHqCHsaXipNXHhphea/Nf8g=
 
-lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.5, lodash@^4.3.0:
+lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -4408,23 +4432,18 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-lottie-ios@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.0.3.tgz#8b1d6463a04fe59509a55ec8cc5feea7f40f4cf3"
-  integrity sha512-p7dx7bq+1yUX3qA9Xof7Lpa2Gfopi6bPtMfFdv9Qi6iKVSkg0FwJXc7fD2AiiW8trHVFhHgjj2ELTZrZF6uu1A==
+lottie-ios@^3.1.3:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.1.5.tgz#29cb2f1726d8add00d017059c7095f2cee4015c0"
+  integrity sha512-jQmVwleirjLpyHp0hp05I9k7MJ/RJPWLZwqHWkm8JwiCi2og9bZ+TV5/uBPWUvXT6R4PDtLEtN5UrRCcph0urw==
 
-lottie-ios@^3.0.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.1.3.tgz#dfa18a3a7e66e5d4a6665bf0a2392d143d15661a"
-  integrity sha512-FKSx9l5Ekwm1Wt/ncoCwvsq8NAb1nylzMFlxrHixLYNBtO2eCQet+vwQag+74Nc/E9Lp3DKkBUCyBfz+zjtmAw==
-
-lottie-react-native@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-3.1.0.tgz#8be401ac7cc7d9e41aa4948a47ddc307887c09e1"
-  integrity sha512-8AYKHT7+vyV/dt38Z7tRyMAnX4nvNRcRBXtDw0+IXAtvyoFk4ethDnI3AtDD9m3o/vNKqeHuO6YsojGAIVQMcg==
+lottie-react-native@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-3.2.1.tgz#0b2b13b03a2cda9ece8474b9cf633d0fbe78d82b"
+  integrity sha512-dmOySV+qgFrQszCY+7uOZR0XkgbP2FXgCWJZ2h39GqlxJZRHD2uCmXoT+WxaBGw83Gk/2KfIQ1MQMFL8UqC2bw==
   dependencies:
     invariant "^2.2.2"
-    lottie-ios "^3.0.3"
+    lottie-ios "^3.1.3"
     prop-types "^15.5.10"
     react-native-safe-modules "^1.0.0"
 
@@ -5736,12 +5755,24 @@ react-native-code-push@^5.7.0:
     semver "^5.6.0"
     xcode "1.0.0"
 
+react-native-double-tap@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-double-tap/-/react-native-double-tap-1.0.1.tgz#d4235a77e594ca83665fd96049f0bdf8266e4754"
+  integrity sha512-tDhQv9IJnH4a5tPTQVBzvwcDo9+6a1Xz1JiFbqfORk9fkBnopx+1T2ZdTIUAvgxuUgdbwIRWnSzE3IIkmkeKFw==
+
 react-native-dropdownalert@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-native-dropdownalert/-/react-native-dropdownalert-4.2.0.tgz#b7f418b6954058b0c822d8b49e87fa86ccbb6f1a"
   integrity sha512-zz2W2t6UN6C/CM/z7VTEuvOTDQad8b5KBBL4YDpkdJKI9HOgLsTs0eIkZsXW2woEyp8Bj0SGpovSmf3SX756lg==
   dependencies:
     prop-types "15.5.10"
+
+react-native-fab@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-fab/-/react-native-fab-1.0.9.tgz#6f8c8982c55c4aa8e4d5b7fe55e08dc7ca4deb31"
+  integrity sha512-/wIFBPbkc3toZre4H4G4XMAAjIJ639k7S8EVQ7+8RHwVk7qc2H5Go4PaU5Z6o9D2vsmDs+Q7kWaqRAk9Ryh4ew==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-firebase@^5.5.6:
   version "5.5.6"
@@ -5788,11 +5819,6 @@ react-native-image-resizer@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-image-resizer/-/react-native-image-resizer-1.0.1.tgz#e9eeb7f81596ffc490f822897952b046c07ee95c"
   integrity sha512-upBF/9TIs4twg19dSkSaDW/MzMpNbysEXtPuapu3GqvOuGIYHKQ30v6httDn7rIb6uCcNIWL1BwZJM2cDt/C9Q==
 
-react-native-image-zoom@^0.32.0:
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/react-native-image-zoom/-/react-native-image-zoom-0.32.0.tgz#633f0b796d6303e8a7ef99133733c53dd5a7a81c"
-  integrity sha1-Yz8LeW1jA+in75kTNzPFPdWnqBw=
-
 react-native-localize@^1.1.4:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.2.1.tgz#7c68a9275117942763439bf570828f05fb5bbdc7"
@@ -5830,6 +5856,14 @@ react-native-onboarding-swiper@^1.1.0:
   integrity sha512-hU3DkRlo5pR4A8mAdvwWULZrnZx6rfNiQsdwP7cLHZNGRIYBBX09CxVgI9NYDf0iiEWDGfZQzqNeUk1uSbpSEg==
   dependencies:
     tinycolor2 "^1.4.1"
+
+react-native-ratings@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
+  integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==
+  dependencies:
+    lodash "^4.17.4"
+    prop-types "^15.5.10"
 
 react-native-raw-bottom-sheet@^2.0.5:
   version "2.0.5"
@@ -5966,6 +6000,11 @@ react-native@0.61.2:
     scheduler "0.15.0"
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
+
+react-navigation-drawer@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.3.3.tgz#d7e607d5e10f2b3c40ab7dc9720228ce3f888a0f"
+  integrity sha512-d/rA8Slqv7HoMfONKVDBQUrRF7YQH796Gzal/KOhaY4VOwUUqIwfxMRJ3WrsdL2OkDPixtkXJE2Fz6KAj658uA==
 
 react-navigation-stack@1.5.3:
   version "1.5.3"

@@ -1,18 +1,22 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Text, Image, FlatList, RefreshControl } from 'react-native';
+import { View, StyleSheet, Text, Image, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import LottieView from 'lottie-react-native';
 import firebase from 'react-native-firebase';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Slider from 'react-native-slider';
+import ScrollTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import debounce from 'lodash.debounce';
+import FAB from 'react-native-fab'
+import Geocoder from 'react-native-geocoder';
+import truncate from 'lodash.truncate';
 
-import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY, PRIMARY_COLOR } from '../../constants/color.constant';
+import { TEXT_COLOR, GREY_1, GREY_2, ON_PRIMARY, PRIMARY_COLOR, GREY_3, GREY_BG } from '../../constants/color.constant';
 import { AccessNestedObject } from '../../utils/common.util';
-import { navigate } from '../../services/navigation.service';
+import { navigate, openDrawer } from '../../services/navigation.service';
 import BloodDonationCard from '../../components/blood-donation-card-component/blood-donation-card.component';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
-import { UserIcon, BloodDropIcon, EditIcon } from '../../config/image.config';
+import { UserIcon, BloodDropIcon, EditIcon, FunnelIcon, MenuIcon, MapMarkerIcon } from '../../config/image.config';
 import { HeartEmptyFullLottie } from '../../config/lottie.config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { fetchNotifications } from '../../action/notification.action';
@@ -21,23 +25,68 @@ import { fetchNearbyRequest } from '../../action/nearbyRequest.action';
 import { fetchNearbyCamp } from '../../action/nearbyCamp.action';
 import APP from '../../constants/app.constant';
 import DONATION_MAP from '../../constants/donation.constant';
+import CampScene from '../camp-scene/camp.scene';
+import { setUserAction } from '../../action/user.action';
+
+const TAB_BAR_DEFAULT_STYLES = {
+    tabBarPosition: 'top',
+    prerenderingSiblingsNumber: 0,
+    tabBarUnderlineStyle: {
+        backgroundColor: PRIMARY_COLOR
+    },
+    tabBarBackgroundColor: ON_PRIMARY,
+    tabBarActiveTextColor: PRIMARY_COLOR,
+    tabBarInactiveTextColor: '#fff',
+    tabBarTextStyle: {
+        color: GREY_3,
+        fontSize: 16
+    },
+    style: {
+        borderWidth: 0,
+    },
+    backgroundColor: ON_PRIMARY,
+    renderTabBar: () => <ScrollableTabBar />,
+};
 
 class HomeScene extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             range: 50,
+            address: null
         }
 
         this.applyFilterDebounce = debounce(this.rangeFilterClose, 1000, {
             'leading': false,
             'trailing': true
         });
+
+        const myBloodGroup = AccessNestedObject(props, 'user.blood_group');
+        this.iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`, '');
     }
 
     componentDidMount = async () => {
         this.fetchData();
         this.handleRedirect();
+        this.fetchCurrentAddress();
+    }
+
+    fetchCurrentAddress = () => {
+        const [latitude, longitude] = AccessNestedObject(this.props.user, 'latest_location.coordinates', []);
+
+        Geocoder.geocodePosition({ lat: latitude, lng: longitude }).then((addresses) => {
+            if (!addresses.length) {
+                NotifyService.notify({
+                    title: 'Error !',
+                    message: 'Unable to get address',
+                    type: 'error',
+                });
+            }
+
+            const locality = AccessNestedObject(addresses, '0', {});
+            const address = `${locality.subLocality}, ${locality.locality}`;
+            this.props.setUserAction({ address });
+        })
     }
 
     getICanDonateBloodGroup = () => {
@@ -82,122 +131,162 @@ class HomeScene extends PureComponent {
         )
     }
 
-    RenderListHeader = () => {
-        const user = AccessNestedObject(this.props, 'user', {});
-        const profileImage = AccessNestedObject(user, 'profile_image');
-        const source = profileImage ? { uri: profileImage } : UserIcon();
-        const tintColor = profileImage ? null : ON_PRIMARY;
-
+    RenderEmptyList2 = () => {
         return (
-            <>
-                <View
-                    style={{ width: widthPercentageToDP(100), marginBottom: 30 }}
-                >
-                    <View
-                        style={styles.arc}
+            <View style={styles.emptyListContainer} >
+                <View style={{ width: widthPercentageToDP(90), height: widthPercentageToDP(50) }} >
+                    <LottieView
+                        autoPlay
+                        loop={false}
+                        source={HeartEmptyFullLottie()}
                     />
-                    <View style={styles.topContainer} >
-                        <View style={styles.profileImageContainer} >
-                            <Image
-                                source={source}
-                                defaultSource={UserIcon()}
-                                style={styles.profileImage}
-                                tintColor={tintColor}
-                            />
-                        </View>
-                        <View style={{ flex: 2, alignItems: 'flex-end' }} >
-                            <Text style={[styles.h2, { color: ON_PRIMARY }]} >
-                                {AccessNestedObject(user, 'name')}
-                            </Text>
-                        </View>
-                    </View>
-                    <View
-                        style={{ zIndex: 4 }}
-                    >
-                        <TouchableOpacity
-                            onPress={this.openBloodRequirement}
-                            style={styles.needBlood} >
-                            <View style={{ flexDirection: 'row' }} >
-                                <Image
-                                    source={BloodDropIcon()}
-                                    style={styles.icon}
-                                />
-                                <Text style={[styles.h3, { color: PRIMARY_COLOR, marginLeft: 7 }]} >
-                                    Need Blood
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View >
-                <this.RenderMyBloodRequirements />
-            </>
-        )
-    }
-
-    RenderMyBloodRequirements = () => {
-        const { myRequests } = this.props;
-
-        const length = myRequests.length;
-        if (!length) {
-            return <View style={{ marginBottom: 10 }} />;
-        }
-
-        return (
-            <View style={styles.mybloodReqContainer}>
+                </View>
                 <Text style={styles.h2} >
-                    My Blood Requirements ({length})
+                    You have no blood requirement
                 </Text>
-                <FlatList
-                    contentContainerStyle={{ alignItems: 'center' }}
-                    renderItem={(props) => {
-                        props.hideHeader = true;
-                        return this.RenderItem(props);
-                    }}
-                    data={myRequests}
-                    horizontal
-                />
             </View>
         )
     }
 
-    RenderItem = ({ item, index, hideHeader }) => {
+
+    RenderListHeader = () => {
+        const address = AccessNestedObject(this.props, 'user.address');
+
+        return (
+            <>
+                <View
+                    style={{ width: widthPercentageToDP(100), backgroundColor: ON_PRIMARY }}
+                >
+                    <View style={styles.topContainer} >
+                        <View style={styles.profileImageContainer} >
+                            <TouchableOpacity
+                                onPress={openDrawer}
+                            >
+                                <Image
+                                    source={MenuIcon()}
+                                    style={styles.profileImage}
+                                    tintColor={TEXT_COLOR}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 2, alignItems: 'flex-end' }} >
+                            {
+                                address ?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} >
+                                        <Image
+                                            source={MapMarkerIcon()}
+                                            style={{ width: 15, height: 15, resizeMode: 'contain', marginRight: 5 }}
+                                        />
+                                        <Text style={[styles.h4, { color: PRIMARY_COLOR }]} >
+                                            {truncate(address, { length: 40 })}
+                                        </Text>
+                                    </View>
+                                    :
+                                    <ActivityIndicator size="small" color={PRIMARY_COLOR} />
+                            }
+                        </View>
+                    </View>
+                </View >
+                <this.RenderBloodRequirementTabs />
+            </>
+        )
+    }
+
+    RenderBloodRequirementTabs = () => {
+        return (
+            <ScrollTabView
+                {...TAB_BAR_DEFAULT_STYLES}
+            >
+                <this.RenderNearbyRequirements tabLabel="Requests" />
+                <this.RenderMyBloodRequirements tabLabel="My Requests" />
+                <CampScene tabLabel="Camp" />
+            </ScrollTabView>
+        )
+    }
+
+    RenderNearbyRequirements = () => {
+        return (
+            <>
+                <this.RenderFilterSlab />
+                <FlatList
+                    style={{ backgroundColor: GREY_BG }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.props.nearbyRequestLoading}
+                            onRefresh={this.fetchData}
+                        />
+                    }
+                    contentContainerStyle={{ alignItems: 'center' }}
+                    renderItem={this.RenderItem}
+                    data={[...this.props.nearbyRequests, ...this.props.nearbyRequests, ...this.props.nearbyRequests, ...this.props.nearbyRequests]}
+                    ListEmptyComponent={this.RenderEmptyList}
+                />
+                <FAB
+                    buttonColor={PRIMARY_COLOR}
+                    iconTextColor="#FFFFFF"
+                    onClickAction={() => this.RangeFilter.open()}
+                    visible
+                    iconTextComponent={
+                        <View style={{ width: 20, height: 20 }} >
+                            <Image
+                                tintColor={ON_PRIMARY}
+                                style={{ width: 20, height: 20, resizeMode: 'contain' }} source={FunnelIcon()}
+                            />
+                        </View>
+                    }
+                />
+            </>
+        )
+    }
+
+    RenderFilterSlab = () => {
+        return (
+            <View style={{ flexDirection: 'row', width: widthPercentageToDP(100), height: 40, alignItems: 'center', justifyContent: 'flex-start', padding: 3, backgroundColor: PRIMARY_COLOR }} >
+                <this.Tag keyName="Range" value={` ${this.state.range}Kms `} />
+                <this.Tag keyName="Blood Group" value={` ${this.iCanDonate} `} />
+            </View>
+        )
+    }
+
+    Tag = ({ keyName, value }) => {
+        return (
+            <View style={{ flexDirection: 'row', marginRight: 5 }} >
+                <Text style={{ fontSize: 14, color: ON_PRIMARY }} >
+                    {keyName}:
+                    </Text>
+                <View style={{ marginLeft: 5, borderRadius: 4, borderWidth: 1, borderColor: ON_PRIMARY }}>
+                    <Text style={{ fontSize: 14, color: ON_PRIMARY }} >
+                        {value}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    RenderMyBloodRequirements = () => {
+        return (
+            <FlatList
+                style={{ backgroundColor: GREY_BG }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.props.nearbyRequestLoading}
+                        onRefresh={this.fetchData}
+                    />
+                }
+                contentContainerStyle={{ alignItems: 'center' }}
+                renderItem={this.RenderItem}
+                data={this.props.myRequests}
+                ListEmptyComponent={this.RenderEmptyList2}
+            />
+        )
+    }
+
+    RenderItem = (props) => {
         const { nearbyRequestLoading } = this.props;
-        const bloodGroups = this.getICanDonateBloodGroup();
-
-        if (index + 1 == 1 && !hideHeader) {
-            return (
-                <>
-                    <View style={styles.nearbyTextContainer}>
-                        <Text style={styles.h2} >
-                            Nearby Requestes
-                        </Text>
-                    </View>
-                    <View style={styles.filterContainer} >
-
-                        <TouchableOpacity
-                            onPress={() => this.RangeFilter.open()}
-                            style={{ flexDirection: 'row', padding: 5, height: 35, borderRadius: 20, backgroundColor: PRIMARY_COLOR, alignItems: 'center', justifyContent: 'center', marginRight: 5 }}
-                        >
-                            <Text style={{ fontSize: 14, color: ON_PRIMARY, paddingRight: 5, paddingLeft: 5 }} >Range: {this.state.range}Kms</Text>
-                            <Image tintColor={ON_PRIMARY} source={EditIcon()} style={{ width: 15, height: 15, resizeMode: 'contain', marginRight: 5, marginLeft: 5 }} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            style={{ flexDirection: 'row', padding: 5, height: 35, borderRadius: 20, backgroundColor: PRIMARY_COLOR, alignItems: 'center', justifyContent: 'center', marginRight: 5 }}
-                        >
-                            <Text style={{ fontSize: 14, color: ON_PRIMARY, paddingRight: 5, paddingLeft: 5 }} >Blood Group: {(bloodGroups || []).join(', ')}</Text>
-                            {/* <Image tintColor={ON_PRIMARY} source={EditIcon()} style={{ width: 15, height: 15, resizeMode: 'contain', marginRight: 5, marginLeft: 5 }} /> */}
-                        </TouchableOpacity>
-
-                    </View>
-                </>
-            )
-        }
 
         return (
             <BloodDonationCard
-                bloodDonationRequest={item}
+                bloodDonationRequest={props.item}
                 loading={nearbyRequestLoading}
             />
         );
@@ -226,7 +315,7 @@ class HomeScene extends PureComponent {
                 justifyContent: 'center',
             }} >
                 <Text style={{ fontSize: 20, color: PRIMARY_COLOR, marginBottom: 15 }} >
-                    Distance Range:
+                    Distance Range: ({this.state.range} Kms)
                 </Text>
                 <Slider
                     style={{ width: widthPercentageToDP(80) }}
@@ -235,7 +324,7 @@ class HomeScene extends PureComponent {
                     thumbTouchSize={{ width: 50, height: 50 }}
                     animateTransitions={true}
                     minimumValue={50}
-                    maximumValue={5000}
+                    maximumValue={500}
                     step={50}
                     value={this.state.range}
                     onValueChange={(range) => this.setState({ range }, this.applyFilterDebounce)}
@@ -263,20 +352,7 @@ class HomeScene extends PureComponent {
     render() {
         return (
             <View style={styles.container}>
-                <FlatList
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.props.nearbyRequestLoading}
-                            onRefresh={this.fetchData}
-                        />
-                    }
-                    contentContainerStyle={{ alignItems: 'center' }}
-                    ListHeaderComponent={this.RenderListHeader}
-                    renderItem={this.RenderItem}
-                    data={this.props.nearbyRequests}
-                    ListEmptyComponent={this.RenderEmptyList}
-                    stickyHeaderIndices={[1]}
-                />
+                <this.RenderListHeader />
                 <RBSheet
                     ref={ref => {
                         this.RangeFilter = ref;
@@ -333,7 +409,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         resizeMode: 'contain',
-        borderRadius: 100,
     },
     icon: {
         width: 25,
@@ -347,6 +422,10 @@ const styles = StyleSheet.create({
     h3: {
         fontSize: 18,
         color: GREY_2
+    },
+    h4: {
+        fontSize: 16,
+        color: PRIMARY_COLOR
     },
     nearbyTextContainer: {
         justifyContent: 'center',
@@ -409,4 +488,4 @@ const mapStateToProps = state => ({
     nearbyRequestLoading: state.nearbyRequest.loading
 });
 
-export default connect(mapStateToProps, { fetchNotifications, fetchMyRequest, fetchNearbyRequest, fetchNearbyCamp })(HomeScene);
+export default connect(mapStateToProps, { fetchNotifications, fetchMyRequest, fetchNearbyRequest, fetchNearbyCamp, setUserAction })(HomeScene);

@@ -1,16 +1,17 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import AsyncStorage from '@react-native-community/async-storage';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import ResolveLocationScene from '../scenes/resolve-location-scene/resolve-location.scene';
 import LoginScene from '../scenes/login-scene/login.scene';
 import OnBoardingScene from '../scenes/onboarding-scene/onboarding.scene';
 import UpdateUserDetailScene from '../scenes/update-user-detail-scene/update-user-detail.scene';
 import { PRIMARY_COLOR, GREY_1, ON_PRIMARY, GREY_2 } from '../constants/color.constant';
-import { HomeIcon, InfoIcon, HospitalIcon } from '../config/image.config';
+import { HomeIcon, InfoIcon, HospitalIcon, SettingsIcon, UserIcon, NewsFeedIcon, BellIcon, AddIcon, GearIcon } from '../config/image.config';
 
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
@@ -24,18 +25,23 @@ import NotificationScene from '../scenes/notification-scene/notification.scene';
 import NotificationIconComponent from '../components/notification-icon-component/notification-icon.component';
 import FullScreen from '../scenes/full-screen-scene/full-screen.scene';
 import CampScene from '../scenes/camp-scene/camp.scene';
+import ProfileScene from '../scenes/profile-scene/profile.scene';
+import SideDrawerComponent from '../components/side-drawer-component/side-drawer.component';
+import NewsFeed from '../scenes/newsfeed-scene/newsfeed.scene';
+import CampDescriptionScene from '../scenes/camp-description-scene/camp-description.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
     {
         Home: { screen: HomeScene },
-        Camp: { screen: CampScene },
+        Newsfeed: { screen: NewsFeed },
+        Add: { screen: AddBloodRequirementScene },
         Notification: { screen: NotificationScene },
-        Info: { screen: InfoScene },
+        Profile: { screen: ProfileScene }
     },
     {
-        initialRouteName: 'Home',
-        order: ['Home', 'Camp', 'Notification', 'Info'],
+        initialRouteName: 'Profile',
+        order: ['Home', 'Newsfeed', 'Add', 'Notification', 'Profile'],
         backBehavior: 'initialRoute',
         lazy: true,
         defaultNavigationOptions: ({ navigation }) => ({
@@ -46,24 +52,28 @@ const RootTabs = createBottomTabNavigator(
                     case 'Home':
                         icon = HomeIcon;
                         break;
-                    case 'Camp':
-                        icon = HospitalIcon
-                        break;
                     case 'Notification':
                         return (
                             <NotificationIconComponent focused={focused} />
                         )
-                    case 'Info':
-                        icon = InfoIcon;
+                    case 'Newsfeed':
+                        icon = NewsFeedIcon;
+                        break;
+                    case 'Profile':
+                        icon = UserIcon;
+                        break;
+                    case 'Add':
+                        icon = AddIcon;
                         break;
                 }
 
                 return (
-                    <Image
-                        style={{ width: 25, height: 25, resizeMode: 'contain' }}
-                        source={icon()}
-                        tintColor={focused ? PRIMARY_COLOR : GREY_2}
-                    />
+                    <View style={focused ? { borderBottomWidth: 2, paddingBottom: 2, borderBottomColor: PRIMARY_COLOR, marginBottom: -4 } : null} >
+                        <Image
+                            style={{ width: 25, height: 25, resizeMode: 'contain' }}
+                            source={icon()}
+                        />
+                    </View>
                 );
             },
         }),
@@ -198,6 +208,17 @@ const RootNavigator = createStackNavigator(
                 },
                 title: "Medical document"
             }
+        },
+        CampDescription: {
+            screen: CampDescriptionScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Blood Campaign"
+            }
         }
     },
     {
@@ -205,9 +226,28 @@ const RootNavigator = createStackNavigator(
     }
 )
 
-export default createAppContainer(RootNavigator);
+const DrawerNavigator = createDrawerNavigator({
+    MyActivity: {
+        screen: RootNavigator,
+        navigationOptions: {
+            drawerLabel: 'My Activity'
+        }
+    },
+    Volunteer: ProfileScene,
+    Language: ProfileScene,
+    'Aboutus': ProfileScene,
+    'TNC': ProfileScene,
+    'ShareApp': ProfileScene,
+    'Logout': ProfileScene
+}, {
+    initialRouteName: 'MyActivity',
+    contentComponent: SideDrawerComponent,
+    drawerType: 'slide',
+});
 
-const persistenceKey = "persistenceKey"
+export default createAppContainer(DrawerNavigator);
+
+const persistenceKey = "to3eodddddol"
 const persistNavigationState = async (navState) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))

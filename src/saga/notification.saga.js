@@ -9,7 +9,7 @@ function* notification() {
     const result = yield call(PrivateApi.getNotifications);
     yield put(setNotificationLoading(false))
     if (result.success) {
-        const notifications = AccessNestedObject(result, 'response', []);
+        const notifications = AccessNestedObject(result, 'response', []).reverse();
         yield put(setNotifications(notifications));
     }
 }

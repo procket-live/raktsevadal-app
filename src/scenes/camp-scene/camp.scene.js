@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { EmptyStateLottie } from '../../config/lottie.config';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
-import { GREY_1 } from '../../constants/color.constant';
+import { GREY_1, ON_PRIMARY, GREY_BG } from '../../constants/color.constant';
 import BloodDonationCampComponent from '../../components/blood-donation-camp-component/blood-donation-camp.component';
 import { fetchNearbyCamp } from '../../action/nearbyCamp.action';
 
@@ -52,7 +52,7 @@ class CampScene extends PureComponent {
     render() {
         return (
             <FlatList
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: GREY_BG }}
                 contentContainerStyle={{ alignItems: 'center' }}
                 refreshControl={
                     <RefreshControl

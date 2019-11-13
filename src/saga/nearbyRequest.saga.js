@@ -26,7 +26,6 @@ function* myRequest(action) {
         not_created_by: userId,
         range
     }
-    console.log('params', params);
 
     const query = JSONToQuery(params);
     const result = yield call(PrivateApi.fetchBloodRequirements, query);
@@ -44,8 +43,6 @@ function* myRequest(action) {
                 return item;
             })
             .sort((a, b) => (a.distance > b.distance) ? 1 : -1)
-
-        list = list.length ? [1, ...list] : [];
 
         yield put(setNearbyRequest(list))
     }

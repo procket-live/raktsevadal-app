@@ -57,3 +57,59 @@ export const EditIcon = () => {
 export const HospitalIcon = () => {
     return require('../assets/image/hospital.png');
 }
+
+export const SettingsIcon = () => {
+    return require('../assets/image/settings.png');
+}
+
+export const NewIcon = () => {
+    return require('../assets/image/new.png');
+}
+
+export const NewsFeedIcon = () => {
+    return require('../assets/image/newsfeed.png');
+}
+
+export const BellIcon = () => {
+    return require('../assets/image/bell.png');
+}
+
+export const VerifyIcon = () => {
+    return require('../assets/image/verify.png');
+}
+
+export const ShieldIcon = () => {
+    return require('../assets/image/shield.png');
+}
+
+export const AddIcon = () => {
+    return require('../assets/image/add.png');
+}
+
+export const FunnelIcon = () => {
+    return require('../assets/image/funnel.png');
+}
+
+export const MenuIcon = () => {
+    return require('../assets/image/menu.png');
+}
+
+export const GearIcon = () => {
+    return require('../assets/image/gear.png');
+}
+
+export const HeartIcon = () => {
+    return require('../assets/image/like.png');
+}
+
+export const HeartFillIcon = () => {
+    return require('../assets/image/like-fill.png');
+}
+
+export const ShareIcon = () => {
+    return require('../assets/image/share.png');
+}
+
+export const MapIcon = () => {
+    return require('../assets/image/map.png');
+}

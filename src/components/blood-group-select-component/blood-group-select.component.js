@@ -19,6 +19,21 @@ class BloodGroupSelectComponent extends PureComponent {
         )
     }
 
+    RenderWiderCricle = (text) => {
+        return (
+            <TouchableOpacity
+                onPress={() => this.props.onSelect(text)}
+                style={(this.props.value == text) ? styles.selectedWideCircle : styles.wideCircle}
+            >
+                <Text
+                    style={(this.props.value == text) ? styles.selectedCircleText : styles.circleText}
+                >
+                    {text}
+                </Text>
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container} >
@@ -32,26 +47,28 @@ class BloodGroupSelectComponent extends PureComponent {
                     <View style={styles.grid} >
                         {this.RenderCircle('B+')}
                     </View>
-                </View>
-                <View style={styles.subContainer} >
                     <View style={styles.grid} >
                         {this.RenderCircle('B-')}
                     </View>
+                </View>
+                <View style={styles.subContainer} >
                     <View style={styles.grid} >
                         {this.RenderCircle('O+')}
                     </View>
                     <View style={styles.grid} >
                         {this.RenderCircle('O-')}
                     </View>
-                </View>
-                <View style={styles.subContainer} >
                     <View style={styles.grid} >
                         {this.RenderCircle('AB+')}
                     </View>
                     <View style={styles.grid} >
                         {this.RenderCircle('AB-')}
                     </View>
-                    <View style={styles.grid} />
+                </View>
+                <View style={styles.subContainer} >
+                    <View style={styles.grid} >
+                        {this.RenderWiderCricle('Bombay Blood Group')}
+                    </View>
                 </View>
             </View>
         )
@@ -61,7 +78,7 @@ class BloodGroupSelectComponent extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         width: wp('95%'),
-        height: 240,
+        height: 230,
     },
     subContainer: {
         flex: 1,
@@ -75,8 +92,8 @@ const styles = StyleSheet.create({
     circle: {
         borderWidth: 3,
         borderColor: PRIMARY_COLOR,
-        width: 60,
-        height: 60,
+        width: 45,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30
@@ -87,8 +104,8 @@ const styles = StyleSheet.create({
     },
     selectedCircle: {
         backgroundColor: PRIMARY_COLOR,
-        width: 60,
-        height: 60,
+        width: 45,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30
@@ -96,7 +113,26 @@ const styles = StyleSheet.create({
     selectedCircleText: {
         fontSize: 20,
         color: ON_PRIMARY
-    }
+    },
+    wideCircle: {
+        borderWidth: 3,
+        borderColor: PRIMARY_COLOR,
+        height: 45,
+        paddingLeft: 10,
+        paddingRight: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30
+    },
+    selectedWideCircle: {
+        backgroundColor: PRIMARY_COLOR,
+        height: 45,
+        paddingLeft: 10,
+        paddingRight: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30
+    },
 })
 
 export default BloodGroupSelectComponent;

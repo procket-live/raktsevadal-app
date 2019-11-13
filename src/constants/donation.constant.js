@@ -30,5 +30,9 @@ module.exports = {
     'AB-': {
         donate: ['AB-', 'AB+'],
         receive: ['AB-', 'A-', 'B-', 'O-']
+    },
+    'Bombay Blood Group': {
+        donate: ['Bombay Blood Group'],
+        receive: ['Bombay Blood Group']
     }
 } 

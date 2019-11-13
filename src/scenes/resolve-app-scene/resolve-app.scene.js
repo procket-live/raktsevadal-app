@@ -27,7 +27,7 @@ class ResolveAppScene extends Component {
             if (user.name == null) {
                 resetToScreen('UpdateUserDetail')
             } else {
-                resetToScreen('ResolveLocation');
+                resetToScreen('Root');
             }
         }
 

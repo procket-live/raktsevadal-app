@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
-import { GREY_1, GREY_2, GREY_3 } from '../../constants/color.constant';
-import { ArrowRightIcon, UserIcon } from '../../config/image.config';
+import { GREY_1, GREY_2, GREY_3, ON_PRIMARY, TEXT_COLOR } from '../../constants/color.constant';
+import { ArrowRightIcon, UserIcon, NewIcon } from '../../config/image.config';
 import { connect } from 'react-redux';
 import { AccessNestedObject, ShareApp } from '../../utils/common.util';
 import moment from 'moment';
@@ -15,60 +15,27 @@ const InfoScene = ({ user, logout }) => {
 
     return (
         <View style={styles.container} >
-            <View style={{ height: 140, padding: 10, borderBottomWidth: 1, borderBottomColor: GREY_2, flexDirection: 'row' }} >
-                <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    <Image
-                        source={source}
-                        style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 80 }}
-                    />
-                </View>
-                <View style={{ flex: 2, alignItems: 'flex-start' }} >
-                    <Text style={{ fontSize: 20, color: GREY_2 }} >
-                        {AccessNestedObject(user, 'name')}
-                    </Text>
-                    <Text style={{ fontSize: 18, color: GREY_3 }} >
-                        Blood Group: {AccessNestedObject(user, 'blood_group')}
-                    </Text>
-                    <Text style={{ fontSize: 18, color: GREY_3 }} >
-                        Gender: {AccessNestedObject(user, 'gender')}
-                    </Text>
-                    <Text style={{ fontSize: 18, color: GREY_3 }} >
-                        Date of birth: {moment(AccessNestedObject(user, 'dob')).format(DISPLAY_DATE_FORMAT)}
-                    </Text>
-                    <Text style={{ fontSize: 18, color: GREY_3 }} >
-                        Mobile: {AccessNestedObject(user, 'mobile')}
-                    </Text>
-                </View>
-            </View>
-            <TouchableOpacity
-                onPress={() => {
-                    navigate('UpdateUserDetail', {
-                        callback: () => {
-                            navigatePop();
-                        }
-                    })
-                }}
-                style={styles.menuItem}
-            >
+            <TouchableOpacity style={styles.menuItem} >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
-                </View>
-                <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
-                    <Text style={styles.text} >
-                        Edit Profile
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.menuItem} >
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
                         Language / भाषा
                     </Text>
                 </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} >
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
+                </View>
+                <View style={{ flex: 6, alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row' }} >
+                    <Text style={styles.text} >
+                        Join as Volunteer
+                    </Text>
+                    <Image source={NewIcon()} style={{ width: 25, height: 25, resizeMode: 'contain', marginLeft: 10 }} />
+                </View>
+            </TouchableOpacity>
             <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
@@ -76,7 +43,7 @@ const InfoScene = ({ user, logout }) => {
                 }}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
@@ -91,7 +58,7 @@ const InfoScene = ({ user, logout }) => {
                 style={styles.menuItem}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
@@ -104,7 +71,7 @@ const InfoScene = ({ user, logout }) => {
                 style={styles.menuItem}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
@@ -117,7 +84,7 @@ const InfoScene = ({ user, logout }) => {
                 style={styles.menuItem}
             >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={ArrowRightIcon()} style={styles.icon} />
+                    <Image source={ArrowRightIcon()} style={styles.icon} tintColor={TEXT_COLOR} />
                 </View>
                 <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'center' }} >
                     <Text style={styles.text} >
@@ -131,7 +98,8 @@ const InfoScene = ({ user, logout }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: ON_PRIMARY
     },
     menuItem: {
         height: 50,
@@ -147,7 +115,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        color: GREY_2
+        color: GREY_1
     }
 })
 

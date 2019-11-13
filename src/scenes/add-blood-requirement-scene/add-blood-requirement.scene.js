@@ -21,6 +21,8 @@ import { AccessNestedObject, IsCorrectMobileNumber, GenerateRandomString } from 
 import { fetchMyRequest } from '../../action/myRequest.action';
 import UploadDocumentComponent from '../../components/upload-document-component/upload-document.component';
 import firebase from 'react-native-firebase';
+import { ON_PRIMARY, GREY_1, GREY_2, GREY_3, TEXT_COLOR } from '../../constants/color.constant';
+import Header from '../../components/header-component/header.component';
 
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
@@ -408,6 +410,7 @@ class AddBloodRequirementScene extends PureComponent {
                 </View>
                 <View style={{ marginTop: 35, marginBottom: 5 }} >
                     <DateTimePickerComponent
+                        mode="datetime"
                         value={this.state.requiredTill}
                         placeholder="Blood required till"
                         format={DISPLAY_DATE_FORMAT}
@@ -457,23 +460,26 @@ class AddBloodRequirementScene extends PureComponent {
         }
 
         return (
-            <View style={{ flex: 1 }}>
-                <ScrollView
-                    style={{ flex: 1 }}
-                    contentContainerStyle={styles.container}
-                >
+            <>
+                <Header title="Add blood requirement" />
+                <View style={{ flex: 1, backgroundColor: ON_PRIMARY }}>
+                    <ScrollView
+                        style={{ flex: 1 }}
+                        contentContainerStyle={styles.container}
+                    >
 
-                    <StepsIndicator
-                        steps={5}
-                        currentStep={this.state.step}
-                    />
-                    {this.state.step == 1 ? this.RenderPatientDetails() : null}
-                    {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
-                    {this.state.step == 3 ? this.RenderHospitalDetails() : null}
-                    {this.state.step == 4 ? this.RenderContactPersonName() : null}
-                    {this.state.step == 5 ? this.RenderDocumentUpload() : null}
-                </ScrollView>
-            </View>
+                        <StepsIndicator
+                            steps={5}
+                            currentStep={this.state.step}
+                        />
+                        {this.state.step == 1 ? this.RenderPatientDetails() : null}
+                        {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
+                        {this.state.step == 3 ? this.RenderHospitalDetails() : null}
+                        {this.state.step == 4 ? this.RenderContactPersonName() : null}
+                        {this.state.step == 5 ? this.RenderDocumentUpload() : null}
+                    </ScrollView>
+                </View>
+            </>
         )
     }
 }
@@ -501,7 +507,7 @@ const styles = StyleSheet.create({
     },
     bigBold: {
         fontSize: 28,
-        color: '#34495e'
+        color: TEXT_COLOR
     },
     input: {
         width: 320,

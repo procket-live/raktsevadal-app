@@ -4,7 +4,7 @@ import { resetToScreen } from '../services/navigation.service';
 
 function* logoutUser() {
     yield put({ type: CLEAR_USER });
-    resetToScreen('Empty');
+    resetToScreen('Login');
 }
 
 export default function* () {

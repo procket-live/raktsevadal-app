@@ -47,6 +47,7 @@ class DateTimePickerComponent extends PureComponent {
                         </Text>
                 }
                 <DateTimePicker
+                    mode={this.props.mode || "date"}
                     isVisible={this.state.isDateTimePickerVisible}
                     onConfirm={this.handleDatePicked}
                     onCancel={this.hideDateTimePicker}

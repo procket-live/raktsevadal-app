@@ -28,3 +28,7 @@ export function resetToScreen(screen) {
     });
     _navigator.dispatch(resetAction);
 }
+
+export function openDrawer() {
+    _navigator && _navigator._navigation.openDrawer();
+}

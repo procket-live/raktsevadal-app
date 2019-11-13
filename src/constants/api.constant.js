@@ -13,3 +13,4 @@ export const NOTIFICATION = 'notification';
 export const REQUEST = `${NOTIFICATION}/request`;
 
 export const CAMP = 'camp';
+export const JOIN_CAMP = `${CAMP}/join`

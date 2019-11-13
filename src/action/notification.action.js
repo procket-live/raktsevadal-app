@@ -1,4 +1,4 @@
-import { FETCH_NOTIFICATION, SET_NOTIFICATION, SET_NOTIFICATION_LOADING } from "../constants/redux.constant";
+import { FETCH_NOTIFICATION, SET_NOTIFICATION, SET_NOTIFICATION_LOADING, SET_NOTIFICATION_SEEN_COUNT } from "../constants/redux.constant";
 
 export const fetchNotifications = () => ({
     type: FETCH_NOTIFICATION
@@ -11,5 +11,10 @@ export const setNotifications = (payload) => ({
 
 export const setNotificationLoading = (payload) => ({
     type: SET_NOTIFICATION_LOADING,
+    payload
+})
+
+export const setNotificationSeenCount = (payload) => ({
+    type: SET_NOTIFICATION_SEEN_COUNT,
     payload
 })

@@ -7,18 +7,22 @@ import PrivateApi from '../../api/api.private';
 import { NoNotificationLottie } from '../../config/lottie.config';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
 import NotificatonCard from '../../components/notification-card-component/notification-card.component';
-import { fetchNotifications } from '../../action/notification.action';
+import { fetchNotifications, setNotificationSeenCount } from '../../action/notification.action';
+import { AccessNestedObject } from '../../utils/common.util';
+import { ON_PRIMARY, GREY_BG } from '../../constants/color.constant';
+import Header from '../../components/header-component/header.component';
 
 class NotificationScene extends PureComponent {
     componentDidMount = () => {
         this.fetchNotification();
+        this.props.setNotificationSeenCount(AccessNestedObject(this.props, 'notifications', []).length);
     }
 
     onRefresh = () => {
         this.fetchNotification();
     }
 
-    fetchNotification = async () => {
+    fetchNotification = () => {
         this.props.fetchNotifications();
     }
 
@@ -47,18 +51,21 @@ class NotificationScene extends PureComponent {
 
     render() {
         return (
-            <FlatList
-                style={{ flex: 1 }}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.props.loading}
-                        onRefresh={this.onRefresh}
-                    />
-                }
-                data={this.props.notifications}
-                renderItem={this.RenderItem}
-                ListEmptyComponent={this.RendeEmptyList}
-            />
+            <>
+                <Header title="Notifications" />
+                <FlatList
+                    style={{ flex: 1, backgroundColor: GREY_BG }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.props.loading}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    data={this.props.notifications}
+                    renderItem={this.RenderItem}
+                    ListEmptyComponent={this.RendeEmptyList}
+                />
+            </>
         )
     }
 }
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     loading: state.notification.loading,
-    notifications: state.notification.notifications
+    notifications: state.notification.notifications,
 })
 
-export default connect(mapStateToProps, { fetchNotifications })(NotificationScene);
+export default connect(mapStateToProps, { fetchNotifications, setNotificationSeenCount })(NotificationScene);
