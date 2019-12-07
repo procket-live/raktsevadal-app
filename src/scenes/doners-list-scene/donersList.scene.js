@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { FlatList, View, Text } from 'react-native';
 import DonerCardComponent from '../../components/doner-card-component/doner-card.component';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
-import { GREY_1 } from '../../constants/color.constant';
+import { GREY_1, GREY_BG } from '../../constants/color.constant';
 
 class DonersListScene extends PureComponent {
     renderCard = ({ item }) => {
@@ -37,7 +37,7 @@ class DonersListScene extends PureComponent {
     render() {
         return (
             <FlatList
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: GREY_BG }}
                 data={this.props.data}
                 renderItem={this.renderCard}
                 ListEmptyComponent={this.EmptyList}

@@ -1,5 +1,6 @@
 module.exports = {
     BASE_URL: 'https://raktsevadal-backend.herokuapp.com',
+    // BASE_URL: 'http://192.168.43.195:3001',
     PRIVACY_POLICY: 'https://rakt-sevadal.flycricket.io/privacy.html',
     PLAYSTORE: 'https://play.google.com/store/apps/details?id=com.raktsevadal&hl=en_IN',
     DISPLAY_DATE_FORMAT: 'DD MMM YYYY',

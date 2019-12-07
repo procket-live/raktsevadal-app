@@ -23,6 +23,7 @@ import UploadDocumentComponent from '../../components/upload-document-component/
 import firebase from 'react-native-firebase';
 import { ON_PRIMARY, GREY_1, GREY_2, GREY_3, TEXT_COLOR } from '../../constants/color.constant';
 import Header from '../../components/header-component/header.component';
+import { setUserAction } from '../../action/user.action';
 
 class AddBloodRequirementScene extends PureComponent {
     constructor(props) {
@@ -211,7 +212,7 @@ class AddBloodRequirementScene extends PureComponent {
                 type: 'success',
                 duration: 40000
             });
-
+            this.props.setUserAction({ request: AccessNestedObject(this.props, 'user.request', 0) })
             this.props.fetchMyRequest();
         }
         this.setState({ loading: false })
@@ -523,4 +524,4 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-export default connect(mapStateToProps, { fetchMyRequest })(AddBloodRequirementScene);
+export default connect(mapStateToProps, { fetchMyRequest, setUserAction })(AddBloodRequirementScene);

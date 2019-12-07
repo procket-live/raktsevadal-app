@@ -7,6 +7,8 @@ import Geocoder from 'react-native-geocoder';
 import { resetToScreen } from '../../services/navigation.service';
 import APP from '../../constants/app.constant';
 import { AccessNestedObject } from '../../utils/common.util';
+import PrivateApi from '../../api/api.private';
+import { setUserAction } from '../../action/user.action';
 
 Geocoder.fallbackToGoogle(APP.GOOGLE_KEY);
 
@@ -24,11 +26,8 @@ class ResolveAppScene extends Component {
         if (user == null) {
             resetToScreen('Login')
         } else {
-            if (user.name == null) {
-                resetToScreen('UpdateUserDetail')
-            } else {
-                resetToScreen('Root');
-            }
+            user.name == null ? resetToScreen('UpdateUserDetail') : resetToScreen('ResolveLocation');
+            this.syncUser(user.token);
         }
 
         if (userId) {
@@ -39,6 +38,14 @@ class ResolveAppScene extends Component {
         }
 
         SplashScreen.hide();
+    }
+
+    syncUser = async (token) => {
+        const result = await PrivateApi.getUser();
+        if (result.success) {
+            const user = AccessNestedObject(result, 'response', {});
+            this.props.setUserAction(Object.assign(user, { token }));
+        }
     }
 
     getInitialNotification = async () => {
@@ -79,6 +86,18 @@ class ResolveAppScene extends Component {
                     }
                 }
             }
+
+            // if (link.includes('user')) {
+            //     const parts = link.split('/');
+            //     const id = parts[4];
+
+            //     APP.REDIRECT_TO = {
+            //         route: 'User',
+            //         payload: {
+            //             id
+            //         }
+            //     }
+            // }
         }
 
         this.init()
@@ -101,4 +120,4 @@ const mapStateToProps = state => ({
     isFirstTime: state.isFirstTime
 });
 
-export default connect(mapStateToProps)(ResolveAppScene);
+export default connect(mapStateToProps, { setUserAction })(ResolveAppScene);

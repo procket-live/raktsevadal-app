@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { UserIcon } from '../../config/image.config';
-import { PRIMARY_COLOR, ON_PRIMARY, GREY_3, GREY_2, GREY_1, TEXT_COLOR } from '../../constants/color.constant';
+import { PRIMARY_COLOR, ON_PRIMARY, GREY_3, GREY_2, GREY_1, TEXT_COLOR, GREY_BG } from '../../constants/color.constant';
 import { AccessNestedObject } from '../../utils/common.util';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -16,13 +16,6 @@ const SideDrawerComponent = props => {
     const address = AccessNestedObject(user, 'address');
     const items = AccessNestedObject(props, 'items');
     const activeItem = AccessNestedObject(props, 'activeItemKey');
-    console.log('props', props)
-
-    const menu = [
-        {
-
-        }
-    ]
 
     return (
         <ScrollView style={styles.container} >
@@ -34,7 +27,9 @@ const SideDrawerComponent = props => {
             {
                 items.map((item) => (
                     <TouchableOpacity
-                        onPress={item.onItemPress}
+                        onPress={(event) => {
+                            console.log('ket', event.nativeEvent)
+                        }}
                         style={item.key == activeItem ? styles.itemContainerSelected : styles.itemContainer}
                     >
                         <Text style={styles.text3} >{item.routeName}</Text>
@@ -85,7 +80,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5,
-        backgroundColor: GREY_1
+        backgroundColor: GREY_BG
     }
 })
 

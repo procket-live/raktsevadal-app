@@ -425,17 +425,19 @@ class BloodRequestScene extends PureComponent {
                         <View style={{ height: 30, alignItems: 'flex-start', justifyContent: 'center' }} >
                             <Text style={{ fontSize: 18, color: PRIMARY_COLOR }} >Contact Person</Text>
                         </View>
-                        <Text style={{ fontSize: 20, color: GREY_2 }} >
+                        <Text style={{ fontSize: 16, color: GREY_2 }} >
                             Name: {contactPerson}
                         </Text>
-                        <Text style={{ fontSize: 20, color: GREY_2, marginBottom: 5 }} >
+                        <Text style={{ fontSize: 16, color: GREY_2, marginBottom: 5 }} >
                             Mobile: {contactNumber}
                         </Text>
-                        <WideButton
-                            mode="outline"
-                            text={'Call'}
-                            onPress={() => Call(contactNumber)}
-                        />
+                        <View style={{ paddingTop: 10, paddingBottom: 10 }} >
+                            <WideButton
+                                mode="outline"
+                                text={'Call'}
+                                onPress={() => Call(contactNumber)}
+                            />
+                        </View>
                     </View>
                     <View style={{ padding: 10, borderTopWidth: 1, borderColor: GREY_1 }} >
                         <View style={{ height: 30, alignItems: 'flex-start', justifyContent: 'center' }} >

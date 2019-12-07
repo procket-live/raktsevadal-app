@@ -113,3 +113,7 @@ export const ShareIcon = () => {
 export const MapIcon = () => {
     return require('../assets/image/map.png');
 }
+
+export const PencilIcon = () => {
+    return require('../assets/image/pencil.png');
+}

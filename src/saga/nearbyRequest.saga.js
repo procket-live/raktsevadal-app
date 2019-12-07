@@ -15,12 +15,15 @@ function* myRequest(action) {
     const userId = AccessNestedObject(user, '_id');
     const myBloodGroup = AccessNestedObject(user, 'blood_group');
     const iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`, '').map((bg) => bg.replace('+', 'p').replace('-', 'n')).join(',');
+    const paramBloodGroups = AccessNestedObject(action, 'bloodGropus', []).map((bg) => bg.replace('+', 'p').replace('-', 'n')).join(',');
+    const bloodGropus = (paramBloodGroups && paramBloodGroups.length) ? paramBloodGroups : iCanDonate;
+
     const range = AccessNestedObject(action, 'range');
     const latitude = AccessNestedObject(user, 'latest_location.coordinates.0', 0.0)
     const longitude = AccessNestedObject(user, 'latest_location.coordinates.1', 0.0)
 
     const params = {
-        blood_group: iCanDonate,
+        blood_group: bloodGropus,
         latitude,
         longitude,
         not_created_by: userId,

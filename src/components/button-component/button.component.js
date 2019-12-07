@@ -26,10 +26,11 @@ function Button({ text, onPress = () => { }, disabled, loading }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 120,
+        minWidth: 120,
         height: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingStart: 15,
+        paddingEnd: 15,
+        justifyContent: 'center'
     },
     disabled: {
         backgroundColor: GREY_1
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: ON_PRIMARY,
-        fontSize: 16,
+        fontSize: 14,
     }
 })
 

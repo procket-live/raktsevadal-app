@@ -10,12 +10,12 @@ import {
     PlaceholderLine,
     Fade,
 } from "rn-placeholder";
-import { AccessNestedObject, Call } from '../../utils/common.util';
+import { AccessNestedObject, Call, DisplayBloodGroup } from '../../utils/common.util';
 import { DISPLAY_DATE_TIME_FORMAT } from '../../constants/app.constant';
 import PrivateApi from '../../api/api.private';
 import NotifyService from '../../services/notify.service';
 
-const WIDTH = widthPercentageToDP('12');
+const WIDTH = widthPercentageToDP('10');
 
 const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, requestBloodDonation, acceptedAt, sentDoners }) => {
     if (loading) {
@@ -40,6 +40,7 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
     const name = AccessNestedObject(user, 'name');
     const mobile = AccessNestedObject(user, 'mobile');
     const bloodGroup = AccessNestedObject(user, 'blood_group');
+    const lastBloodDonation = AccessNestedObject(user, 'last_blood_donation');
 
     if (sentDoners && sentDoners.includes(id)) {
         setSent(true);
@@ -53,7 +54,7 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <View style={styles.bloodGroupContainer} >
                         <Text style={styles.bloodGroupText} >
-                            {bloodGroup}
+                            {DisplayBloodGroup(bloodGroup)}
                         </Text>
                     </View>
                 </View>
@@ -61,6 +62,12 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
                     <Text style={styles.patientNameText} >
                         Name: {name}
                     </Text>
+                    {
+                        lastBloodDonation ?
+                            <Text style={styles.patientNameText} >
+                                Last blood donation: {lastBloodDonation}
+                            </Text> : null
+                    }
                     {
                         !showRequestButton ?
                             <Text style={styles.hospitalNameText} >
@@ -87,7 +94,7 @@ const DonerCardComponent = ({ user, loading, showCallButton, showRequestButton, 
                             <Button
                                 loading={localLoading}
                                 disabled={sent}
-                                text={sent ? "Sent" : "Request"}
+                                text={sent ? "Sent" : "REQUEST DONATION"}
                                 onPress={async () => {
                                     if (!sent) {
                                         setLocalLoading(true);
@@ -118,7 +125,8 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: GREY_1
+        borderColor: GREY_1,
+        backgroundColor: ON_PRIMARY
     },
     bloodGroupContainer: {
         width: WIDTH,
@@ -129,7 +137,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     bloodGroupText: {
-        fontSize: 22,
+        fontSize: 18,
         color: ON_PRIMARY
     },
     kmsText: {
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR
     },
     patientNameText: {
-        fontSize: 16,
+        fontSize: 14,
         color: TEXT_COLOR
     },
     locationText: {

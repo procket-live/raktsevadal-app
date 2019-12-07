@@ -9,7 +9,7 @@ import {
     PlaceholderLine,
     Fade,
 } from "rn-placeholder";
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, DisplayBloodGroup } from '../../utils/common.util';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { navigate } from '../../services/navigation.service';
 
@@ -43,7 +43,7 @@ const BloodDonationCard = ({ bloodDonationRequest, loading, amIDoner }) => {
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
                     <View style={styles.bloodGroupContainer} >
                         <Text style={styles.bloodGroupText} >
-                            {AccessNestedObject(bloodDonationRequest, 'blood_group')}
+                            {DisplayBloodGroup(AccessNestedObject(bloodDonationRequest, 'blood_group'))}
                         </Text>
                     </View>
 

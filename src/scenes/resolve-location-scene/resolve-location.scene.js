@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import LocationService from '../../services/location.service';
 import { resetToScreen } from '../../services/navigation.service';
 import PrivateApi from '../../api/api.private';
-import { setUserAction } from '../../action/user.action';
+import { setUserAction, logoutUserAction } from '../../action/user.action';
 import WideButton from '../../components/wide-button-component/wide-button.component';
 import { AccessNestedObject } from '../../utils/common.util';
 
@@ -76,8 +76,12 @@ class ResolveLocaitonScreen extends Component {
         };
         const firebaseToken = await firebase.messaging().getToken();
 
-        PrivateApi.updateUser({ latest_location: latestLocation, firebase_token: firebaseToken });
         this.setCurrentLocation(latestLocation, firebaseToken)
+        const result = await PrivateApi.updateUser({ latest_location: latestLocation, firebase_token: firebaseToken });
+        console.log('resultresult',result)
+        if (!result.success && result.response == 'Auth failed') {
+            this.props.logoutUserAction();
+        }
     }
 
     setCurrentLocation = async (latestLocation, firebaseToken) => {
@@ -167,4 +171,4 @@ const styles = {
     }
 };
 
-export default connect(null, { setUserAction })(ResolveLocaitonScreen);
+export default connect(null, { setUserAction, logoutUserAction })(ResolveLocaitonScreen);

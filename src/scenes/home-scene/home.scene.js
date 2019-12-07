@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Text, Image, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, Image, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import LottieView from 'lottie-react-native';
 import firebase from 'react-native-firebase';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Slider from 'react-native-slider';
 import ScrollTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
-import debounce from 'lodash.debounce';
 import FAB from 'react-native-fab'
 import Geocoder from 'react-native-geocoder';
 import truncate from 'lodash.truncate';
@@ -16,9 +15,8 @@ import { AccessNestedObject } from '../../utils/common.util';
 import { navigate, openDrawer } from '../../services/navigation.service';
 import BloodDonationCard from '../../components/blood-donation-card-component/blood-donation-card.component';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
-import { UserIcon, BloodDropIcon, EditIcon, FunnelIcon, MenuIcon, MapMarkerIcon } from '../../config/image.config';
+import { FunnelIcon, MenuIcon, MapMarkerIcon } from '../../config/image.config';
 import { HeartEmptyFullLottie } from '../../config/lottie.config';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { fetchNotifications } from '../../action/notification.action';
 import { fetchMyRequest } from '../../action/myRequest.action';
 import { fetchNearbyRequest } from '../../action/nearbyRequest.action';
@@ -27,6 +25,7 @@ import APP from '../../constants/app.constant';
 import DONATION_MAP from '../../constants/donation.constant';
 import CampScene from '../camp-scene/camp.scene';
 import { setUserAction } from '../../action/user.action';
+import Button from '../../components/button-component/button.component';
 
 const TAB_BAR_DEFAULT_STYLES = {
     tabBarPosition: 'top',
@@ -51,18 +50,14 @@ const TAB_BAR_DEFAULT_STYLES = {
 class HomeScene extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            range: 50,
-            address: null
-        }
-
-        this.applyFilterDebounce = debounce(this.rangeFilterClose, 1000, {
-            'leading': false,
-            'trailing': true
-        });
 
         const myBloodGroup = AccessNestedObject(props, 'user.blood_group');
         this.iCanDonate = AccessNestedObject(DONATION_MAP, `${myBloodGroup}.donate`, '');
+
+        this.state = {
+            range: 50,
+            selectedBg: [...this.iCanDonate]
+        }
     }
 
     componentDidMount = async () => {
@@ -104,8 +99,8 @@ class HomeScene extends PureComponent {
         }
     }
 
-    rangeFilterClose = () => {
-        this.props.fetchNearbyRequest(this.state.range);
+    filterClose = () => {
+        this.props.fetchNearbyRequest(this.state.range, this.state.selectedBg);
     }
 
     fetchData = () => {
@@ -159,7 +154,7 @@ class HomeScene extends PureComponent {
                 >
                     <View style={styles.topContainer} >
                         <View style={styles.profileImageContainer} >
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={openDrawer}
                             >
                                 <Image
@@ -167,7 +162,7 @@ class HomeScene extends PureComponent {
                                     style={styles.profileImage}
                                     tintColor={TEXT_COLOR}
                                 />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <View style={{ flex: 2, alignItems: 'flex-end' }} >
                             {
@@ -218,7 +213,7 @@ class HomeScene extends PureComponent {
                     }
                     contentContainerStyle={{ alignItems: 'center' }}
                     renderItem={this.RenderItem}
-                    data={[...this.props.nearbyRequests, ...this.props.nearbyRequests, ...this.props.nearbyRequests, ...this.props.nearbyRequests]}
+                    data={this.props.nearbyRequests}
                     ListEmptyComponent={this.RenderEmptyList}
                 />
                 <FAB
@@ -243,7 +238,7 @@ class HomeScene extends PureComponent {
         return (
             <View style={{ flexDirection: 'row', width: widthPercentageToDP(100), height: 40, alignItems: 'center', justifyContent: 'flex-start', padding: 3, backgroundColor: PRIMARY_COLOR }} >
                 <this.Tag keyName="Range" value={` ${this.state.range}Kms `} />
-                <this.Tag keyName="Blood Group" value={` ${this.iCanDonate} `} />
+                <this.Tag keyName="Blood Group" value={` ${this.state.selectedBg} `} />
             </View>
         )
     }
@@ -305,39 +300,101 @@ class HomeScene extends PureComponent {
         });
     };
 
-
-    RangeFilterComponent = () => {
+    ButtonTag = ({ selected, onPress, value }) => {
         return (
-            <View style={{
-                marginLeft: 5,
-                marginRight: 5,
-                alignItems: 'stretch',
-                justifyContent: 'center',
-            }} >
-                <Text style={{ fontSize: 20, color: PRIMARY_COLOR, marginBottom: 15 }} >
-                    Distance Range: ({this.state.range} Kms)
-                </Text>
-                <Slider
-                    style={{ width: widthPercentageToDP(80) }}
-                    thumbTintColor={PRIMARY_COLOR}
-                    minimumTrackTintColor={PRIMARY_COLOR}
-                    thumbTouchSize={{ width: 50, height: 50 }}
-                    animateTransitions={true}
-                    minimumValue={50}
-                    maximumValue={500}
-                    step={50}
-                    value={this.state.range}
-                    onValueChange={(range) => this.setState({ range }, this.applyFilterDebounce)}
-                />
-                <View style={{ width: widthPercentageToDP(80), flexDirection: 'row' }} >
-                    <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
-                        <Text>50Kms</Text>
+            <TouchableOpacity
+                onPress={onPress}
+                style={{ marginRight: 5, height: 20, padding: 5, paddingLeft: 15, paddingRight: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? PRIMARY_COLOR : ON_PRIMARY, borderWidth: selected ? 0 : 1, borderColor: PRIMARY_COLOR }}
+            >
+                <Text style={{ fontSize: 16, color: selected ? ON_PRIMARY : PRIMARY_COLOR }} >{value}</Text>
+            </TouchableOpacity>
+        )
+    }
+
+
+    RenderFilter = () => {
+        const allGroups = Object.keys(DONATION_MAP);
+
+        return (
+            <>
+                <View style={{
+                    marginLeft: 5,
+                    marginRight: 5,
+                    marginBottom: 20,
+                    justifyContent: 'center',
+                }} >
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text style={{ fontSize: 16, color: PRIMARY_COLOR, marginBottom: 15 }} >
+                                Blood Groups
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
+                            <TouchableOpacity style={{ borderWidth: 1, borderColor: PRIMARY_COLOR, padding: 5, borderRadius: 5 }} onPress={() => { this.setState({ selectedBg: [...this.iCanDonate] }); }} >
+                                <Text style={{ fontSize: 14, color: PRIMARY_COLOR }} >RESET</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
-                        <Text>500Kms</Text>
+
+                    <FlatList
+                        style={{ width: widthPercentageToDP(90), paddingTop: 10, paddingBottom: 10, flexDirection: 'row' }}
+                        horizontal
+                        data={allGroups}
+                        renderItem={({ item }) => {
+                            const selected = this.state.selectedBg.includes(item);
+                            return (
+                                <this.ButtonTag
+                                    value={item}
+                                    onPress={() => {
+                                        if (selected) {
+                                            const index = this.state.selectedBg.indexOf(item);
+                                            if (this.state.selectedBg.length != 1) {
+                                                this.state.selectedBg.splice(index, 1);
+                                            }
+                                        } else {
+                                            this.state.selectedBg.push(item);
+                                        }
+                                        this.forceUpdate()
+                                    }}
+                                    selected={selected}
+                                />
+                            )
+                        }}
+                    />
+                </View>
+                <View style={{
+                    marginLeft: 5,
+                    marginRight: 5,
+                    justifyContent: 'center',
+                }} >
+                    <Text style={{ fontSize: 16, color: PRIMARY_COLOR, marginBottom: 15 }} >
+                        Distance Range: (Within {this.state.range} Kms)
+                </Text>
+                    <Slider
+                        style={{ width: widthPercentageToDP(90) }}
+                        thumbTintColor={PRIMARY_COLOR}
+                        minimumTrackTintColor={PRIMARY_COLOR}
+                        thumbTouchSize={{ width: 50, height: 50 }}
+                        animateTransitions={true}
+                        minimumValue={1}
+                        maximumValue={3500}
+                        step={50}
+                        value={this.state.range}
+                        onValueChange={(range) => this.setState({ range })}
+                    />
+                    <View style={{ width: widthPercentageToDP(90), flexDirection: 'row' }} >
+                        <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }} >
+                            <Text>1 Kms</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
+                            <Text>3500 Kms</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+                <View style={{ alignItems: 'flex-end', justifyContent: 'center', marginTop: 20 }}>
+                    <Button text="Apply Filter" onPress={() => this.RangeFilter.close && this.RangeFilter.close()} />
+                </View>
+            </>
         )
     }
 
@@ -354,35 +411,21 @@ class HomeScene extends PureComponent {
             <View style={styles.container}>
                 <this.RenderListHeader />
                 <RBSheet
+
                     ref={ref => {
                         this.RangeFilter = ref;
                     }}
-                    height={150}
+                    height={280}
                     duration={250}
                     customStyles={{
                         container: {
+                            padding: 10,
                             justifyContent: "center",
-                            alignItems: "center"
                         }
                     }}
+                    onClose={this.filterClose}
                 >
-                    <this.RangeFilterComponent />
-                </RBSheet>
-                <RBSheet
-                    ref={ref => {
-                        this.BloodGroupFilter = ref;
-                    }}
-                    height={300}
-                    onClose={this.rangeFilterClose}
-                    duration={250}
-                    customStyles={{
-                        container: {
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }
-                    }}
-                >
-                    <this.BloodGroupFilterComponent />
+                    <this.RenderFilter />
                 </RBSheet>
             </View>
         )

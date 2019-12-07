@@ -23,6 +23,7 @@ import APP from '../../constants/app.constant';
 import { setAuthTokenAction, setUserAction } from '../../action/user.action';
 import { IsCorrectMobileNumber, AccessNestedObject } from '../../utils/common.util';
 import PrivateApi from '../../api/api.private';
+import { SuccessLottie } from '../../config/lottie.config';
 
 class LoginScene extends PureComponent {
     constructor(props) {
@@ -111,12 +112,15 @@ class LoginScene extends PureComponent {
                 this.props.setAuthTokenAction(token);
                 APP.TOKEN = token;
                 this.fetchUserObject();
+            } else {
+                this.setState({ loading: false });
             }
         }
     }
 
     fetchUserObject = async () => {
         const result = await PrivateApi.getUser();
+        console.log('user result', result)
         if (result.success) {
             this.props.setUserAction(AccessNestedObject(result, 'response', {}))
         }
@@ -242,7 +246,7 @@ class LoginScene extends PureComponent {
                         }}
                         onAnimationFinish={this.successAnimationEnd}
                         loop={false}
-                        source={require('../../assets/lottie/success.json')}
+                        source={SuccessLottie()}
                     />
                 </View>
                 <View style={{ marginTop: 5, marginBottom: 5 }} >

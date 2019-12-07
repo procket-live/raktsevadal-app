@@ -46,7 +46,6 @@ function ApiCall({ url, method, headers, body, resolve = defaultResolve, reject 
     if (body) { // if body is attached
         postDict.body = body;
     }   
-    console.log('url',url)
 
     return axios({
         url,

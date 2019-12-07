@@ -6,10 +6,11 @@ import { MenuIcon } from '../../config/image.config';
 import { openDrawer } from '../../services/navigation.service';
 
 const Header = props => {
+    const RenderRight = props.renderRight;
     return (
         <View style={styles.container} >
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={openDrawer}
                 >
                     <Image
@@ -17,11 +18,17 @@ const Header = props => {
                         style={styles.icon}
                         tintColor={ON_PRIMARY}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <View style={{ flex: 5, alignItems: 'flex-start', justifyContent: 'center' }} >
                 <Text style={styles.text}>{props.title}</Text>
             </View>
+            {
+                RenderRight ?
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                        <RenderRight />
+                    </View> : null
+            }
         </View>
     )
 }

@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, Image, ImageBackground } from 'react-native';
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 
 import StepsIndicator from '../../components/steps-indicator-component/steps-indicator.component';
 import { translate } from '../../services/translation.service';
@@ -17,21 +18,24 @@ import GenderPickerComponent from '../../components/gender-picker-component/gend
 import BloodGroupSelectComponent from '../../components/blood-group-select-component/blood-group-select.component';
 import PrivateApi from '../../api/api.private';
 import { setUserAction } from '../../action/user.action';
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, GenerateRandomString } from '../../utils/common.util';
+import { PRIMARY_COLOR, PRIMARY_LIGHT_COLOR, ON_PRIMARY, GREY_1 } from '../../constants/color.constant';
+import { GetImage } from '../../utils/image.util';
+import { SuccessLottie } from '../../config/lottie.config';
 
 class UpdateUserDetailScene extends PureComponent {
     constructor(props) {
         super(props);
         const user = AccessNestedObject(this.props, 'user', {});
         this.state = {
-            step: 1,
+            step: 3,
             name: user.name,
             dob: user.dob,
             gender: user.gender,
             bloodGroup: user.blood_group,
             location: user.location,
             showSuccessMessage: false,
-            loading: false
+            loading: false,
         }
     }
 
@@ -48,7 +52,7 @@ class UpdateUserDetailScene extends PureComponent {
             callback();
             return;
         }
-        
+
         navigate('ResolveLocation');
     }
 
@@ -69,11 +73,19 @@ class UpdateUserDetailScene extends PureComponent {
             return false;
         }
 
+        this.setState({ step: 3 });
+    }
+
+    proceed3 = async () => {
+        const { profileImage } = this.state;
+        this.setState({ loading: true });
+        const result = await firebase.storage().ref(`/profile_image/${GenerateRandomString(6)}`).putFile(profileImage.path)
+        this.setState({ uploadedImage: result.downloadURL, loading: false });
         this.finish();
     }
 
     finish = async () => {
-        const { name, dob, bloodGroup, gender } = this.state;
+        const { name, dob, bloodGroup, gender, uploadedImage } = this.state;
 
         const body = {
             name,
@@ -81,6 +93,10 @@ class UpdateUserDetailScene extends PureComponent {
             dob,
             gender
         };
+
+        if (uploadedImage) {
+            body.profile_image = uploadedImage;
+        }
 
         this.setState({ loading: true })
         const result = await PrivateApi.updateUser(body);
@@ -172,28 +188,58 @@ class UpdateUserDetailScene extends PureComponent {
         )
     }
 
-    RenderLocationSelect = () => {
+    RenderProfileImageSelect = () => {
+        const { profileImage } = this.state;
+        const { user } = this.props;
+        const profilePic = AccessNestedObject(user, 'profile_image') || AccessNestedObject(profileImage, 'path');
+
+        console.log('profileImage', profilePic)
         return (
             <React.Fragment>
                 <View style={{ marginTop: 10, marginBottom: 5 }} >
-                    <Text style={styles.lightSmall} >{translate('let-us-locate-your')}</Text>
+                    <Text style={styles.lightSmall} >Add your</Text>
                 </View>
                 <View style={{ marginTop: 2, marginBottom: 5 }} >
-                    <Text style={styles.bigBold} >{translate('location')}</Text>
+                    <Text style={styles.bigBold} >Profile picture</Text>
                 </View>
-                <View style={{ marginTop: 35, marginBottom: 5 }} >
-                    <TextInputComponent
-                        value={this.state.location}
-                        placeholder="Current location"
-                        editable={false}
-                        actionName="Locate"
-                        action={() => { }}
-                    />
+                <View style={{ height: 200, alignItems: 'center', justifyContent: 'center' }} >
+                    {
+                        !profilePic ?
+                            <TouchableOpacity
+                                onPress={() => {
+                                    GetImage((image) => {
+                                        this.setState({ profileImage: image });
+                                    })
+                                }}
+                                style={[styles.profileImageContainer, { alignItems: 'center', justifyContent: 'center' }]}
+                            >
+                                <Text style={{ fontSize: 14, color: PRIMARY_COLOR }} >UPLOAD</Text>
+                            </TouchableOpacity>
+                            :
+                            <View style={styles.profileImageContainer} >
+                                <ImageBackground style={styles.profileImage} source={{ uri: profilePic }} >
+
+                                    <View
+                                        style={{ width: 130, height: 50, backgroundColor: 'rgba(192,192,192, 0.5)', top: 80, alignItems: 'center', justifyContent: 'center' }}
+                                    >
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                GetImage((image) => {
+                                                    this.setState({ profileImage: image });
+                                                })
+                                            }}
+                                        >
+                                            <Text style={{ fontSize: 16, color: ON_PRIMARY }} >CHANGE</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </ImageBackground>
+                            </View>
+                    }
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30, marginBottom: 10 }} >
                     <Button
                         loading={this.state.loading}
-                        text={translate('proceed')}
+                        text={'PROCEED'}
                         onPress={this.proceed3}
                     />
                 </View>
@@ -211,7 +257,7 @@ class UpdateUserDetailScene extends PureComponent {
                         }}
                         onAnimationFinish={this.successAnimationEnd}
                         loop={false}
-                        source={require('../../assets/lottie/success.json')}
+                        source={SuccessLottie()}
                     />
                 </View>
                 <View style={{ marginTop: 5, marginBottom: 5 }} >
@@ -234,11 +280,12 @@ class UpdateUserDetailScene extends PureComponent {
                 >
 
                     <StepsIndicator
-                        steps={2}
+                        steps={3}
                         currentStep={this.state.step}
                     />
                     {this.state.step == 1 ? this.RenderBasicDetail() : null}
                     {this.state.step == 2 ? this.RenderBloodGroupSelect() : null}
+                    {this.state.step == 3 ? this.RenderProfileImageSelect() : null}
                     {/* {this.state.step == 3 ? this.RenderLocationSelect() : null} */}
                 </ScrollView>
             </View>
@@ -278,6 +325,19 @@ const styles = StyleSheet.create({
         borderBottomColor: '#e74c3c',
         fontSize: 25,
         fontFamily: 'Noway'
+    },
+    profileImageContainer: {
+        width: 130,
+        height: 130,
+        borderRadius: 100,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: PRIMARY_COLOR
+    },
+    profileImage: {
+        width: 130,
+        height: 130,
+        resizeMode: 'cover'
     }
 })
 

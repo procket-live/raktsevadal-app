@@ -1,17 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Image, Text, ActivityIndicator } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import ScrollTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 
 import { GREY_1, GREY_2, GREY_3, GREEN, ON_PRIMARY, PRIMARY_COLOR, TEXT_COLOR, PRIMARY_LIGHT_COLOR, GREY_BG } from '../../constants/color.constant';
-import { UserIcon, VerifyIcon, HeartIcon, MapMarkerIcon } from '../../config/image.config';
+import { UserIcon, VerifyIcon, HeartIcon, MapMarkerIcon, ShareIcon, PencilIcon, HeartFillIcon } from '../../config/image.config';
 import { connect } from 'react-redux';
-import { AccessNestedObject } from '../../utils/common.util';
+import { AccessNestedObject, ShareUserProfile } from '../../utils/common.util';
 import { logoutUserAction } from '../../action/user.action';
 import Header from '../../components/header-component/header.component';
 import NewsfeedCard from '../../components/newsfeed-component/newsfeed.component';
-import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { ScrollView, FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
+import { navigate, navigatePop } from '../../services/navigation.service';
+import WideButton from '../../components/wide-button-component/wide-button.component';
+import PrivateApi from '../../api/api.private';
+import InfoScene from '../info-scene/info.scene';
 
 const TAB_BAR_DEFAULT_STYLES = {
     tabBarPosition: 'top',
@@ -33,86 +37,111 @@ const TAB_BAR_DEFAULT_STYLES = {
     renderTabBar: () => <ScrollableTabBar />,
 };
 
-const ProfileTopContent = ({ user }) => {
-    const profileImage = AccessNestedObject(user, 'profile_image');
+const ProfileTopContent = ({ myUser, loggedInUser }) => {
+    const profileImage = AccessNestedObject(myUser, 'profile_image');
     const source = profileImage ? { uri: profileImage } : UserIcon();
+    const rating = AccessNestedObject(myUser, 'rating');
+    const lastBloodDonation = AccessNestedObject(myUser, 'last_blood_donation');
 
     return (
         <>
             <View style={{ height: 80, flexDirection: 'row', padding: 10 }} >
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image
-                        source={source}
-                        style={styles.profileImage}
-                    />
+                    <View style={styles.profileImageContainer} >
+                        <Image
+                            source={source}
+                            style={styles.profileImage}
+                        />
+                    </View>
                     <Image
                         source={VerifyIcon()}
-                        style={[styles.icon, { marginLeft: 5, position: 'absolute', left: 50, top: 35 }]}
+                        style={[styles.icon, { marginLeft: 5, position: 'absolute', left: 30 + 45, top: 35, zIndex: 2 }]}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Text style={{ fontSize: 24, color: PRIMARY_COLOR }} >0</Text>
+                    <Text style={{ fontSize: 24, color: PRIMARY_COLOR }} >{AccessNestedObject(myUser, 'donate')}</Text>
                     <Text style={{ fontSize: 16, color: GREY_3 }} >Donated</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Text style={{ fontSize: 24, color: PRIMARY_COLOR }} >0</Text>
+                    <Text style={{ fontSize: 24, color: PRIMARY_COLOR }} >{AccessNestedObject(myUser, 'request')}</Text>
                     <Text style={{ fontSize: 16, color: GREY_3 }} >Requested</Text>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image source={HeartIcon()} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
-                    <Text style={{ fontSize: 16, color: GREY_3 }} >Save</Text>
-                </View>
+                {
+                    (myUser._id != AccessNestedObject(loggedInUser, '_id')) ?
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                            <Image source={HeartIcon()} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
+                            <Text style={{ fontSize: 16, color: GREY_3 }} >Save</Text>
+                        </View> : null
+                }
             </View>
             <View style={{ marginLeft: 5, marginRight: 5, height: 35, flexDirection: 'row', paddingLeft: 10, paddingRight: 10, alignItems: 'center', justifyContent: 'flex-end' }} >
                 <View style={{ marginLeft: 5, marginRight: 5, paddingLeft: 15, paddingRight: 15, height: 25, borderRadius: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: GREEN }} >
                     <Text style={{ fontSize: 14, color: ON_PRIMARY }} >VERIFIED DONER</Text>
                 </View>
                 <View style={{ paddingLeft: 15, paddingRight: 15, height: 25, borderRadius: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: PRIMARY_COLOR }} >
-                    <Text style={{ fontSize: 14, color: ON_PRIMARY }} >{user.blood_group} BLOOD DONER</Text>
+                    <Text style={{ fontSize: 14, color: ON_PRIMARY }} >{myUser.blood_group} BLOOD DONER</Text>
                 </View>
                 <View style={{ marginLeft: 5, marginRight: 5, paddingLeft: 15, paddingRight: 15, height: 25, borderRadius: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: PRIMARY_COLOR }} >
-                    <Text style={{ fontSize: 14, color: ON_PRIMARY }} >{user.gender.toUpperCase()}</Text>
+                    <Text style={{ fontSize: 14, color: ON_PRIMARY }} >{AccessNestedObject(myUser, 'gender', '').toUpperCase()}</Text>
                 </View>
             </View>
-            <View style={{ height: 40, flexDirection: 'row', paddingLeft: 10, paddingRight: 10 }} >
+            <View style={{ flexDirection: 'row', paddingLeft: 10, paddingRight: 10 }} >
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }} >
                     <Image
                         source={MapMarkerIcon()}
                         style={[styles.icon, { marginRight: 5 }]}
                     />
-                    <Text style={{ fontSize: 14, color: TEXT_COLOR }} >{user.address}</Text>
+                    <Text style={{ fontSize: 14, color: TEXT_COLOR }} >{myUser.address || 'Loading ...'}</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
                     <Rating
-                        count={3.5}
-                        isDisabled
-                        type='star'
-                        fractions={2}
                         ratingColor={PRIMARY_COLOR}
-                        ratingBackgroundColor={GREY_3}
+                        startingValue={rating || 4.5}
                         ratingCount={5}
+                        readonly
+                        type='star'
                         imageSize={15}
                         style={{ paddingVertical: 10 }}
                     />
                 </View>
             </View>
-            <View style={{ height: 25, flexDirection: 'row', paddingLeft: 10, paddingRight: 10, backgroundColor: PRIMARY_LIGHT_COLOR, alignItems: 'center', justifyContent: 'flex-start' }} >
-                <Text style={{ fontSize: 14, color: PRIMARY_COLOR }} >Last blood donation: {user.last_blood_donation || 'NOT AVAILABLE'}</Text>
+            <View style={{ flexDirection: 'row', paddingLeft: 10, paddingRight: 10 }} >
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }} >
+                    <Image
+                        source={HeartFillIcon()}
+                        style={[styles.icon, { marginRight: 5 }]}
+                    />
+                    <Text style={{ fontSize: 14, color: TEXT_COLOR }} >
+                        Last blood donation
+                    </Text>
+                </View>
+                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }} >
+                    <Text style={{ fontSize: 14, color: PRIMARY_COLOR, fontWeight: '500', fontFamily: 'Roboto' }} >{lastBloodDonation || 'NOT AVAILABLE'}</Text>
+                </View>
+            </View>
+            <View style={{ flexDirection: 'row', padding: 10 }} >
+                <WideButton
+                    mode="outline"
+                    text="Add Post"
+                    onPress={() => navigate('AddPost')}
+                />
             </View>
         </>
     )
 }
 
-const Timeline = list => {
+const Timeline = ({ posts, loading, loggedInUserId }) => {
     return (
         <>
             <FlatList
                 style={{ flex: 1, backgroundColor: GREY_BG }}
                 contentContainerStyle={{ alignItems: 'center', paddingBottom: 200 }}
-                data={[1, 2]}
+                data={posts}
                 renderItem={({ item }) => (
                     <NewsfeedCard
-                        camp={item}
+                        loggedInUserId={loggedInUserId}
+                        loading={loading}
+                        post={item}
                     />
                 )}
                 scrollEnabled={false}
@@ -121,25 +150,79 @@ const Timeline = list => {
     )
 }
 
-const ProfileScene = props => {
-    const user = props.user;
+function ProfileScene(props) {
+    const user = props.user || (props.loggedInUser) || {};
+    const [posts, setPost] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+    const loggedInUserId = AccessNestedObject(props, 'loggedInUser._id');
+
+    React.useEffect(() => {
+        if (Array.isArray(posts) && posts.length) {
+            return;
+        }
+
+        fetchPosts();
+    })
+
+    async function fetchPosts() {
+        setLoading(true);
+        const result = await PrivateApi.getAllPost();
+        setLoading(false);
+        if (result.success) {
+            setPost(result.response);
+        }
+    }
 
     return (
         <>
-            <Header title={user.name} />
+            <Header
+                title={user.name}
+                renderRight={() => {
+                    if (user._id == AccessNestedObject(props, 'loggedInUser._id')) {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => { navigate('UpdateUserDetail', { callback: () => navigatePop() }); }}
+                                style={{ padding: 5 }}
+                            >
+                                <Image
+                                    source={PencilIcon()}
+                                    style={{ width: 20, height: 20 }}
+                                    tintColor={ON_PRIMARY}
+                                />
+                            </TouchableOpacity>
+                        )
+                    }
+
+                    return (
+                        <TouchableOpacity
+                            onPress={() => ShareUserProfile(user)}
+                            style={{ padding: 5 }}
+                        >
+                            <Image
+                                source={ShareIcon()}
+                                style={{ width: 20, height: 20 }}
+                                tintColor={ON_PRIMARY}
+                            />
+                        </TouchableOpacity>
+                    )
+                }}
+            />
             <ScrollView
                 contentContainerStyle={{ height: heightPercentageToDP(200) }}
                 style={styles.container}
             >
-                <ProfileTopContent user={user} />
+                <ProfileTopContent myUser={user} loggedInUser={props.loggedInUser} />
                 <ScrollTabView
                     {...TAB_BAR_DEFAULT_STYLES}
                 >
                     <Timeline
+                        posts={posts || []}
+                        loading={loading}
+                        loggedInUserId={loggedInUserId}
                         tabLabel="Timeline"
                     />
-                    <Timeline
-                        tabLabel="Details"
+                    <InfoScene
+                        tabLabel="Settings"
                     />
                 </ScrollTabView>
             </ScrollView>
@@ -180,13 +263,18 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 45,
         height: 45,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
+    },
+    profileImageContainer: {
+        width: 45,
+        height: 45,
         borderRadius: 45,
+        overflow: 'hidden'
     }
 })
 
 const mapStateToProps = state => ({
-    user: state.user
+    loggedInUser: state.user
 });
 
 export default connect(mapStateToProps, { logout: logoutUserAction })(ProfileScene);

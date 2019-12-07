@@ -26,6 +26,14 @@ function EmptyStateLottie() {
     return require('../assets/lottie/empty-state.json');
 }
 
+function LikeLottie() {
+    return require('../assets/lottie/like.json');
+}
+
+function SuccessLottie() {
+    return require('../assets/lottie/success.json');
+}
+
 export {
     ProgressBarLottie,
     HeartEmptyFullLottie,
@@ -33,5 +41,7 @@ export {
     BloodBottleLottie,
     AmazingTickLottie,
     NoNotificationLottie,
-    EmptyStateLottie
+    EmptyStateLottie,
+    LikeLottie,
+    SuccessLottie,
 }

@@ -16,7 +16,6 @@ import { HomeIcon, InfoIcon, HospitalIcon, SettingsIcon, UserIcon, NewsFeedIcon,
 import HomeScene from '../scenes/home-scene/home.scene';
 import AddBloodRequirementScene from '../scenes/add-blood-requirement-scene/add-blood-requirement.scene';
 import ChooseLocationScene from '../scenes/choose-location-scene/choose-location.scene';
-import InfoScene from '../scenes/info-scene/info.scene';
 import BloodRequestScene from '../scenes/blood-request-scene/blood-request.scene';
 import DonersTabsScene from '../scenes/doners-tabs-scene/donersTabs.scene';
 import TermsAndConditionScene from '../scenes/terms-and-condition-scene/terms-and-condition.scene';
@@ -24,11 +23,11 @@ import AboutUsScene from '../scenes/about-us-scene/about-us.scene';
 import NotificationScene from '../scenes/notification-scene/notification.scene';
 import NotificationIconComponent from '../components/notification-icon-component/notification-icon.component';
 import FullScreen from '../scenes/full-screen-scene/full-screen.scene';
-import CampScene from '../scenes/camp-scene/camp.scene';
 import ProfileScene from '../scenes/profile-scene/profile.scene';
 import SideDrawerComponent from '../components/side-drawer-component/side-drawer.component';
 import NewsFeed from '../scenes/newsfeed-scene/newsfeed.scene';
 import CampDescriptionScene from '../scenes/camp-description-scene/camp-description.scene';
+import AddPostScene from '../scenes/add-post-scene/add-post.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
@@ -40,7 +39,7 @@ const RootTabs = createBottomTabNavigator(
         Profile: { screen: ProfileScene }
     },
     {
-        initialRouteName: 'Profile',
+        initialRouteName: 'Home',
         order: ['Home', 'Newsfeed', 'Add', 'Notification', 'Profile'],
         backBehavior: 'initialRoute',
         lazy: true,
@@ -219,35 +218,43 @@ const RootNavigator = createStackNavigator(
                 },
                 title: "Blood Campaign"
             }
+        },
+        AddPost: {
+            screen: AddPostScene,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                title: "Add post"
+            }
         }
     },
     {
-        initialRouteName: 'Empty',
+        initialRouteName: 'AddPost',
     }
 )
 
 const DrawerNavigator = createDrawerNavigator({
-    MyActivity: {
-        screen: RootNavigator,
-        navigationOptions: {
-            drawerLabel: 'My Activity'
-        }
+    'App Home': {
+        screen: RootNavigator
     },
-    Volunteer: ProfileScene,
-    Language: ProfileScene,
-    'Aboutus': ProfileScene,
-    'TNC': ProfileScene,
-    'ShareApp': ProfileScene,
-    'Logout': ProfileScene
+    // Volunteer: ProfileScene,
+    // // Language: ProfileScene,
+    // 'About us': AboutUsScene,
+    // 'TNC': TermsAndConditionScene,
+    // 'ShareApp': ,
+    // 'Logout': ProfileScene
 }, {
-    initialRouteName: 'MyActivity',
+    initialRouteName: 'App Home',
     contentComponent: SideDrawerComponent,
     drawerType: 'slide',
 });
 
-export default createAppContainer(DrawerNavigator);
+export default createAppContainer(RootNavigator);
 
-const persistenceKey = "to3eodddddol"
+const persistenceKey = "roooddddddddddto"
 const persistNavigationState = async (navState) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))

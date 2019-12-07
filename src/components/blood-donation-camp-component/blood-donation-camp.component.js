@@ -33,6 +33,7 @@ class BloodDonationCampComponent extends PureComponent {
         const address = AccessNestedObject(camp, 'address');
         const startDate = moment(AccessNestedObject(camp, 'start_date')).format(DISPLAY_DATE_FORMAT);
         const endTime = AccessNestedObject(camp, 'end_time')
+        const startTime = AccessNestedObject(camp, 'start_time')
         const latitude = AccessNestedObject(camp, 'location.coordinates.0');
         const longitude = AccessNestedObject(camp, 'location.coordinates.1');
 
@@ -43,7 +44,7 @@ class BloodDonationCampComponent extends PureComponent {
                 <ImageBackground style={styles.image} source={{ uri: camp.image_url }} >
                     <View style={{ alignItems: 'flex-start', padding: 10 }} >
                         <Text style={{ fontSize: 17, color: ON_PRIMARY, marginTop: 5, textAlign: 'left' }}>{campName}</Text>
-                        <Text style={{ fontSize: 14, color: ON_PRIMARY, marginTop: 5, textAlign: 'left' }}>{startDate}, from {startDate} to {endTime}</Text>
+                        <Text style={{ fontSize: 14, color: ON_PRIMARY, marginTop: 5, textAlign: 'left' }}>{startDate}, from {startTime} to {endTime}</Text>
                     </View>
                 </ImageBackground>
                 <View style={{ padding: 10, paddingTop: 0, flexDirection: 'row' }} >
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 180,
-        width: widthPercentageToDP(94),
+        width: widthPercentageToDP(95),
         resizeMode: 'cover',
         alignItems: 'flex-start',
         justifyContent: 'flex-end'

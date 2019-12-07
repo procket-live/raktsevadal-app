@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
-import { GREY_1, GREY_2, GREY_3, ON_PRIMARY, TEXT_COLOR } from '../../constants/color.constant';
+import { GREY_1, GREY_2, GREY_3, ON_PRIMARY, TEXT_COLOR, GREY_BG } from '../../constants/color.constant';
 import { ArrowRightIcon, UserIcon, NewIcon } from '../../config/image.config';
 import { connect } from 'react-redux';
 import { AccessNestedObject, ShareApp } from '../../utils/common.util';
@@ -99,14 +99,15 @@ const InfoScene = ({ user, logout }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: ON_PRIMARY
+        backgroundColor: GREY_BG
     },
     menuItem: {
         height: 50,
         borderBottomWidth: 1,
         borderBottomColor: GREY_1,
         padding: 5,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: ON_PRIMARY
     },
     icon: {
         width: 20,

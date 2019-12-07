@@ -75,6 +75,20 @@ export function ShareOnWhatsapp(bloodDonationRequirement) {
     Share.open(options)
 }
 
+export function ShareUserProfile(user) {
+    const id = AccessNestedObject(user, '_id');
+    const name = AccessNestedObject(user, 'name');
+    const bloodGroup = AccessNestedObject(user, 'blood_group');
+    const canDonate = DONATION_MAP[bloodGroup].receive;
+
+    const options = {
+        url: `https://raktsevadal.page.link/?link=https://www.raktsevadal.com/user/${id}&apn=com.raktsevadal`,
+        message: `RaktSevadal Sansathan \n ${name}, a ${bloodGroup} doner. He/She can donate ${canDonate}. \n \n Click below to know more`
+    }
+
+    Share.open(options)
+}
+
 export function ShareApp() {
     const options = {
         title: "Rakt Sevadal",
@@ -114,4 +128,16 @@ export function GenerateRandomString(length) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
+}
+
+export function DisplayBloodGroup(bloodGroup = '') {
+    if (!(bloodGroup && typeof bloodGroup == 'string')) {
+        return '';
+    }
+
+    if (bloodGroup.length <= 3) {
+        return bloodGroup;
+    }
+
+    return bloodGroup.match(/\b(\w)/g).join('');
 }

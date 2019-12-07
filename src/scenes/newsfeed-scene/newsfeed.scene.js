@@ -9,39 +9,53 @@ import { GREY_1, ON_PRIMARY, GREY_3, GREY_BG } from '../../constants/color.const
 import { fetchNearbyCamp } from '../../action/nearbyCamp.action';
 import NewsfeedCard from '../../components/newsfeed-component/newsfeed.component';
 import Header from '../../components/header-component/header.component';
+import PrivateApi from '../../api/api.private';
+import { AccessNestedObject } from '../../utils/common.util';
 
 class Newsfeed extends PureComponent {
-    RendeEmptyList = () => {
-        return (
-            <View style={styles.emptyListContainer} >
-                <View style={{ width: widthPercentageToDP(90), height: widthPercentageToDP(50), alignItems: 'center' }} >
-                    <LottieView
-                        autoPlay
-                        loop={false}
-                        source={EmptyStateLottie()}
-                    />
+    constructor(props) {
+        super(props);
+        this.state = {
+            list: [],
+            loading: false
+        }
+    }
 
-                </View>
-                <Text style={{ fontSize: 20, color: GREY_1 }} >
-                    No blood donation camp in your area
-                </Text>
-            </View>
-        )
+    componentDidMount = async () => {
+        this.setState({ loading: true });
+        const result = await PrivateApi.getAllPost(true);
+        this.setState({ loading: false });
+        if (result.success) {
+            this.setState({ list: result.response });
+        }
     }
 
     RenderItem = ({ item }) => {
+        const loggedInUserId = AccessNestedObject(this.props, 'loggedInUser._id');
+
         return (
             <NewsfeedCard
+                post={item}
                 loading={this.props.loading}
                 camp={item}
+                loggedInUserId={loggedInUserId}
             />
         )
     }
 
     render() {
+        const { list, loading } = this.state;
+
         return (
             <>
                 <Header title="Newsfeed" />
+                {
+                    loading ?
+                        <View style={{ flex: 1, alignItems: 'center', backgroundColor: GREY_BG }} >
+                            <NewsfeedCard loading={loading} />
+                            <NewsfeedCard loading={loading} />
+                        </View > : null
+                }
                 <FlatList
                     style={{ flex: 1, backgroundColor: GREY_BG }}
                     contentContainerStyle={{ alignItems: 'center' }}
@@ -51,9 +65,8 @@ class Newsfeed extends PureComponent {
                             onRefresh={this.onRefresh}
                         />
                     }
-                    data={[1, 2]}
+                    data={list}
                     renderItem={this.RenderItem}
-                    ListEmptyComponent={this.RendeEmptyList}
                 />
             </>
         )
@@ -71,7 +84,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     loading: state.nearbyCamp.loading,
-    camps: state.nearbyCamp.camps
+    camps: state.nearbyCamp.camps,
+    loggedInUser: state.user
 })
 
 export default connect(mapStateToProps, { fetchNearbyCamp })(Newsfeed);

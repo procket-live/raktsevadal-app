@@ -1,5 +1,5 @@
 export const PRIMARY_COLOR = '#c0392b';
-export const PRIMARY_LIGHT_COLOR = '#f0b8b1';
+export const PRIMARY_LIGHT_COLOR = '#fa9f96';
 export const GREY_1 = '#bdc3c7';
 export const GREY_2 = '#34495e';
 export const GREY_3 = '#95a5a6';
