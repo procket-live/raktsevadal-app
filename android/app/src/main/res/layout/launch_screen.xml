@@ -6,9 +6,12 @@
     android:layout_centerVertical="true"
     android:gravity="center_vertical|center_horizontal|center"
     android:background="@color/white">
-    <ImageView android:id="@+id/splashscreen_logo"
+
+    <ImageView
+        android:id="@+id/splashscreen_logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:background="#00D52F2F"
+        android:src="@mipmap/web_hi_res_512" />
 </LinearLayout>

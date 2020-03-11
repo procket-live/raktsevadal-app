@@ -28,7 +28,7 @@ class UpdateUserDetailScene extends PureComponent {
         super(props);
         const user = AccessNestedObject(this.props, 'user', {});
         this.state = {
-            step: 3,
+            step: 1,
             name: user.name,
             dob: user.dob,
             gender: user.gender,
@@ -78,6 +78,12 @@ class UpdateUserDetailScene extends PureComponent {
 
     proceed3 = async () => {
         const { profileImage } = this.state;
+
+        if (!profileImage) {
+            this.finish();
+            return;
+        }
+
         this.setState({ loading: true });
         const result = await firebase.storage().ref(`/profile_image/${GenerateRandomString(6)}`).putFile(profileImage.path)
         this.setState({ uploadedImage: result.downloadURL, loading: false });

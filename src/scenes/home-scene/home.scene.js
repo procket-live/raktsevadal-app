@@ -26,6 +26,7 @@ import DONATION_MAP from '../../constants/donation.constant';
 import CampScene from '../camp-scene/camp.scene';
 import { setUserAction } from '../../action/user.action';
 import Button from '../../components/button-component/button.component';
+import PrivateApi from '../../api/api.private';
 
 const TAB_BAR_DEFAULT_STYLES = {
     tabBarPosition: 'top',
@@ -81,6 +82,7 @@ class HomeScene extends PureComponent {
             const locality = AccessNestedObject(addresses, '0', {});
             const address = `${locality.subLocality}, ${locality.locality}`;
             this.props.setUserAction({ address });
+            PrivateApi.updateUser({ location_address: address });
         })
     }
 

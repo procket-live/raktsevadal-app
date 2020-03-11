@@ -78,7 +78,6 @@ class ResolveLocaitonScreen extends Component {
 
         this.setCurrentLocation(latestLocation, firebaseToken)
         const result = await PrivateApi.updateUser({ latest_location: latestLocation, firebase_token: firebaseToken });
-        console.log('resultresult',result)
         if (!result.success && result.response == 'Auth failed') {
             this.props.logoutUserAction();
         }

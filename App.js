@@ -26,50 +26,50 @@ import AppResolve from './src/scenes/resolve-app-scene/resolve-app.scene';
 
 useScreens();
 class App extends PureComponent {
-  constructor(props) {
-    super(props);
-    setI18nConfig(); // set initial config
-  }
+    constructor(props) {
+        super(props);
+        setI18nConfig(); // set initial config
+    }
 
-  componentDidMount() {
-    firebase.analytics().setAnalyticsCollectionEnabled(true);
-    RNLocalize.addEventListener('change', this.handleLocalizationChange);
-    GlobalFont.applyGlobal('Noway')
-  }
+    componentDidMount() {
+        firebase.analytics().setAnalyticsCollectionEnabled(true);
+        RNLocalize.addEventListener('change', this.handleLocalizationChange);
+        GlobalFont.applyGlobal('Noway')
+    }
 
-  componentWillUnmount() {
-    RNLocalize.removeEventListener('change', this.handleLocalizationChange);
-  }
+    componentWillUnmount() {
+        RNLocalize.removeEventListener('change', this.handleLocalizationChange);
+    }
 
-  handleLocalizationChange = () => {
-    setI18nConfig();
-    this.forceUpdate();
-  }
+    handleLocalizationChange = () => {
+        setI18nConfig();
+        this.forceUpdate();
+    }
 
-  render() {
-    return (
-      <Fragment>
-        <ReduxProvider
-          store={store}
-        >
-          <PersistGate
-            loading={null}
-            persistor={persistor}
-          >
-            <AppResolve />
-            <RootNavigation
-              ref={navigatorRef => {
-                setTopLevelNavigator(navigatorRef);
-              }}
-              {...getPersistenceFunctions()}
-            />
-          </PersistGate>
-        </ReduxProvider>
-        <DropdownAlert ref={ref => NotifyService.register(ref)} />
-      </Fragment>
+    render() {
+        return (
+            <Fragment>
+                <ReduxProvider
+                    store={store}
+                >
+                    <PersistGate
+                        loading={null}
+                        persistor={persistor}
+                    >
+                        <AppResolve />
+                        <RootNavigation
+                            ref={navigatorRef => {
+                                setTopLevelNavigator(navigatorRef);
+                            }}
+                            {...getPersistenceFunctions()}
+                        />
+                    </PersistGate>
+                </ReduxProvider>
+                <DropdownAlert ref={ref => NotifyService.register(ref)} />
+            </Fragment>
 
-    )
-  }
+        )
+    }
 }
 
 const codepushApp = codePush(App);

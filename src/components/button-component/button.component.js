@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
         height: 40,
         paddingStart: 15,
         paddingEnd: 15,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     disabled: {
         backgroundColor: GREY_1
