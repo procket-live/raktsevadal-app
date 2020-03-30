@@ -50,6 +50,7 @@ class ResolveAppScene extends Component {
 
     getInitialNotification = async () => {
         const notificationOpen = await firebase.notifications().getInitialNotification();
+
         if (notificationOpen) {
             const data = notificationOpen.notification.data;
 
