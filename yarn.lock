@@ -849,6 +849,15 @@
   dependencies:
     plist "^3.0.1"
 
+"@react-native-community/art@^1.1.2":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/art/-/art-1.2.0.tgz#386d95393f6042d9006f9d4bc6063fb898794460"
+  integrity sha512-a+ZcRGl/BzLa89yi33Mbn5SHavsEXqKUMdbfLf3U8MDLElndPqUetoJyGkv63+BcPO49UMWiQRP1YUz6/zfJ+A==
+  dependencies:
+    art "^0.10.3"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
+
 "@react-native-community/async-storage@1.6.1":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.6.1.tgz#19be07fc1d65c77bdeb20f46108ba12076aad1c5"
@@ -1445,7 +1454,7 @@ array-unique@^0.3.2:
   resolved "https://registry.yarnpkg.com/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
-art@^0.10.0:
+art@^0.10.0, art@^0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/art/-/art-0.10.3.tgz#b01d84a968ccce6208df55a733838c96caeeaea2"
   integrity sha512-HXwbdofRTiJT6qZX/FnchtldzJjS3vkLJxQilc3Xj+ma2MXjY4UAyQ0ls1XZYVnDvVIBiFZbC6QsvtW86TD6tQ==
@@ -5782,6 +5791,11 @@ react-native-firebase@^5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
+react-native-floating-action@^1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/react-native-floating-action/-/react-native-floating-action-1.20.0.tgz#65a975669e30b16900e095ec1a2448e4ce377869"
+  integrity sha512-FQi4HkfPBXIyb/cT300v54j1FChZ78K2QVlzY4TKlUDIimRmKJ9P5ie79NBvtKv9wTXXT6+Y0XVXFfOX4zuIwQ==
+
 react-native-geocoder@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/react-native-geocoder/-/react-native-geocoder-0.5.0.tgz#ff4b9c55d5768a4784eefccb411761c82e067579"
@@ -5856,6 +5870,14 @@ react-native-onboarding-swiper@^1.1.0:
   integrity sha512-hU3DkRlo5pR4A8mAdvwWULZrnZx6rfNiQsdwP7cLHZNGRIYBBX09CxVgI9NYDf0iiEWDGfZQzqNeUk1uSbpSEg==
   dependencies:
     tinycolor2 "^1.4.1"
+
+react-native-progress@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-4.1.0.tgz#38ec27153861580d59765fdc5b4024c328677f96"
+  integrity sha512-6aZgClVBLCMpixOE04iGicARQINKNi02z2uRqLG4RtxdOJPL3GkHoH82+TrnwFBMvs/5ImasSr9s8n4SML//cQ==
+  dependencies:
+    "@react-native-community/art" "^1.1.2"
+    prop-types "^15.7.2"
 
 react-native-ratings@^6.5.0:
   version "6.5.0"

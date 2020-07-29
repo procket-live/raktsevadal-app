@@ -35,31 +35,35 @@ function AddPost(props) {
     }
 
     async function uploadImage() {
-        const result = await firebase.storage().ref(`/post_images/${GenerateRandomString(6)}`).putFile(image.path)
-        setImageLink(result.downloadURL);
-        getAddress();
+        try {
+            const result = await firebase.storage().ref(`/post_images/${GenerateRandomString(6)}`).putFile(image.path)
+            const downloadUrl = result.downloadURL;
+            setImageLink(downloadUrl);
+            getAddress(downloadUrl);
+        } catch (err) {
+            console.log('errr', err);
+        }
     }
 
-    async function getAddress() {
+    async function getAddress(downloadUrl) {
         const [latitude, longitude] = props.coordinates;
         const result = await Geocoder.geocodePosition({ lat: latitude, lng: longitude });
         const locality = AccessNestedObject(result, '0', {});
         address = `${locality.subLocality}, ${locality.locality}`;
-        makeApiCall();
+        makeApiCall(downloadUrl);
     }
 
-    async function makeApiCall() {
+    async function makeApiCall(downloadUrl) {
         const [latitude, longitude] = props.coordinates;
         const params = {
             latitude,
             longitude,
-            image: imageLink,
+            image: downloadUrl,
             caption: caption,
             location_address: address
         };
-
         const result = await PrivateApi.createPost(params);
-        console.log('result',result)
+        console.log('result', result)
         setLoading(false);
         if (result.success) {
             navigatePop();

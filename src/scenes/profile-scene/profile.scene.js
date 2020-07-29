@@ -167,6 +167,7 @@ function ProfileScene(props) {
     async function fetchPosts() {
         setLoading(true);
         const result = await PrivateApi.getAllPost();
+        console.log('resultresultresult', result)
         setLoading(false);
         if (result.success) {
             setPost(result.response);

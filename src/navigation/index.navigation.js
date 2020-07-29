@@ -31,246 +31,246 @@ import AddPostScene from '../scenes/add-post-scene/add-post.scene';
 
 console.disableYellowBox = true;
 const RootTabs = createBottomTabNavigator(
-    {
-        Home: { screen: HomeScene },
-        Newsfeed: { screen: NewsFeed },
-        Add: { screen: AddBloodRequirementScene },
-        Notification: { screen: NotificationScene },
-        Profile: { screen: ProfileScene }
-    },
-    {
-        initialRouteName: 'Home',
-        order: ['Home', 'Newsfeed', 'Add', 'Notification', 'Profile'],
-        backBehavior: 'initialRoute',
-        lazy: true,
-        defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused }) => {
-                const { routeName } = navigation.state;
-                let icon;
-                switch (routeName) {
-                    case 'Home':
-                        icon = HomeIcon;
-                        break;
-                    case 'Notification':
-                        return (
-                            <NotificationIconComponent focused={focused} />
-                        )
-                    case 'Newsfeed':
-                        icon = NewsFeedIcon;
-                        break;
-                    case 'Profile':
-                        icon = UserIcon;
-                        break;
-                    case 'Add':
-                        icon = AddIcon;
-                        break;
-                }
+  {
+    Home: { screen: HomeScene },
+    Newsfeed: { screen: NewsFeed },
+    Add: { screen: AddBloodRequirementScene },
+    Notification: { screen: NotificationScene },
+    Profile: { screen: ProfileScene }
+  },
+  {
+    initialRouteName: 'Home',
+    order: ['Home', 'Newsfeed', 'Add', 'Notification', 'Profile'],
+    backBehavior: 'initialRoute',
+    lazy: true,
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused }) => {
+        const { routeName } = navigation.state;
+        let icon;
+        switch (routeName) {
+          case 'Home':
+            icon = HomeIcon;
+            break;
+          case 'Notification':
+            return (
+              <NotificationIconComponent focused={focused} />
+            )
+          case 'Newsfeed':
+            icon = NewsFeedIcon;
+            break;
+          case 'Profile':
+            icon = UserIcon;
+            break;
+          case 'Add':
+            icon = AddIcon;
+            break;
+        }
 
-                return (
-                    <View style={focused ? { borderBottomWidth: 2, paddingBottom: 2, borderBottomColor: PRIMARY_COLOR, marginBottom: -4 } : null} >
-                        <Image
-                            style={{ width: 25, height: 25, resizeMode: 'contain' }}
-                            source={icon()}
-                        />
-                    </View>
-                );
-            },
-        }),
-        tabBarOptions: {
-            activeTintColor: PRIMARY_COLOR,
-            inactiveTintColor: GREY_1,
-            allowFontScaling: false,
-            showLabel: false,
-            style: {
-                paddingTop: 5,
-                paddingBottom: 5,
-                height: 60,
-                backgroundColor: ON_PRIMARY,
-                elevation: 0,
-            }
-        },
-    }
+        return (
+          <View style={focused ? { borderBottomWidth: 2, paddingBottom: 2, borderBottomColor: PRIMARY_COLOR, marginBottom: -4 } : null} >
+            <Image
+              style={{ width: 25, height: 25, resizeMode: 'contain' }}
+              source={icon()}
+            />
+          </View>
+        );
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: PRIMARY_COLOR,
+      inactiveTintColor: GREY_1,
+      allowFontScaling: false,
+      showLabel: false,
+      style: {
+        paddingTop: 5,
+        paddingBottom: 5,
+        height: 60,
+        backgroundColor: ON_PRIMARY,
+        elevation: 0,
+      }
+    },
+  }
 );
 
 
 const RootNavigator = createStackNavigator(
-    {
-        Empty: {
-            screen: () => <></>,
-            navigationOptions: {
-                header: null
-            }
-        },
-        Root: {
-            screen: RootTabs,
-            navigationOptions: {
-                header: null,
-            }
-        },
-        Login: {
-            screen: LoginScene,
-            navigationOptions: {
-                header: null,
-            }
-        },
-        OnBoarding: {
-            screen: OnBoardingScene,
-            navigationOptions: {
-                header: null,
-            }
-        },
-        UpdateUserDetail: {
-            screen: UpdateUserDetailScene,
-            navigationOptions: {
-                header: null,
-            }
-        },
-        ResolveLocation: {
-            screen: ResolveLocationScene,
-            navigationOptions: {
-                header: null,
-            }
-        },
-        AddBloodRequirement: {
-            screen: AddBloodRequirementScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Add blood requirement"
-            }
-        },
-        ChooseLocationScene: {
-            screen: ChooseLocationScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Select location"
-            }
-        },
-        BloodRequest: {
-            screen: BloodRequestScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Blood Request"
-            }
-        },
-        DonersTabs: {
-            screen: DonersTabsScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Doners"
-            }
-        },
-        TermsAndCondition: {
-            screen: TermsAndConditionScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Terms and Conditions"
-            }
-        },
-        AboutUs: {
-            screen: AboutUsScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "About us"
-            }
-        },
-        FullScreen: {
-            screen: FullScreen,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Medical document"
-            }
-        },
-        CampDescription: {
-            screen: CampDescriptionScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Blood Campaign"
-            }
-        },
-        AddPost: {
-            screen: AddPostScene,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                title: "Add post"
-            }
-        }
+  {
+    Empty: {
+      screen: () => <></>,
+      navigationOptions: {
+        header: null
+      }
     },
-    {
-        initialRouteName: 'AddPost',
+    Root: {
+      screen: RootTabs,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    Login: {
+      screen: LoginScene,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    OnBoarding: {
+      screen: OnBoardingScene,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    UpdateUserDetail: {
+      screen: UpdateUserDetailScene,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    ResolveLocation: {
+      screen: ResolveLocationScene,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    AddBloodRequirement: {
+      screen: AddBloodRequirementScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Add blood requirement"
+      }
+    },
+    ChooseLocationScene: {
+      screen: ChooseLocationScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Select location"
+      }
+    },
+    BloodRequest: {
+      screen: BloodRequestScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Blood Request"
+      }
+    },
+    DonersTabs: {
+      screen: DonersTabsScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Doners"
+      }
+    },
+    TermsAndCondition: {
+      screen: TermsAndConditionScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Terms and Conditions"
+      }
+    },
+    AboutUs: {
+      screen: AboutUsScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "About us"
+      }
+    },
+    FullScreen: {
+      screen: FullScreen,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Medical document"
+      }
+    },
+    CampDescription: {
+      screen: CampDescriptionScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Blood Campaign"
+      }
+    },
+    AddPost: {
+      screen: AddPostScene,
+      navigationOptions: {
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        title: "Add post"
+      }
     }
+  },
+  {
+    initialRouteName: 'Empty',
+  }
 )
 
 const DrawerNavigator = createDrawerNavigator({
-    'App Home': {
-        screen: RootNavigator
-    },
-    // Volunteer: ProfileScene,
-    // // Language: ProfileScene,
-    // 'About us': AboutUsScene,
-    // 'TNC': TermsAndConditionScene,
-    // 'ShareApp': ,
-    // 'Logout': ProfileScene
+  'App Home': {
+    screen: RootNavigator
+  },
+  // Volunteer: ProfileScene,
+  // // Language: ProfileScene,
+  // 'About us': AboutUsScene,
+  // 'TNC': TermsAndConditionScene,
+  // 'ShareApp': ,
+  // 'Logout': ProfileScene
 }, {
-    initialRouteName: 'App Home',
-    contentComponent: SideDrawerComponent,
-    drawerType: 'slide',
+  initialRouteName: 'App Home',
+  contentComponent: SideDrawerComponent,
+  drawerType: 'slide',
 });
 
 export default createAppContainer(RootNavigator);
 
 const persistenceKey = "roooddddddddddto"
 const persistNavigationState = async (navState) => {
-    try {
-        await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
-    } catch (err) {
-        // handle the error according to your needs
-    }
+  try {
+    await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
+  } catch (err) {
+    // handle the error according to your needs
+  }
 }
 
 const loadNavigationState = async () => {
-    const jsonString = await AsyncStorage.getItem(persistenceKey)
-    return JSON.parse(jsonString)
+  const jsonString = await AsyncStorage.getItem(persistenceKey)
+  return JSON.parse(jsonString)
 }
 
 export function getPersistenceFunctions() {
-    return __DEV__ ? {
-        persistNavigationState,
-        loadNavigationState,
-    } : undefined;
+  return __DEV__ ? {
+    persistNavigationState,
+    loadNavigationState,
+  } : undefined;
 }

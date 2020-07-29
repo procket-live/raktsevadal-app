@@ -117,3 +117,19 @@ export const MapIcon = () => {
 export const PencilIcon = () => {
     return require('../assets/image/pencil.png');
 }
+
+export const BottleIcon = () => {
+    return require('../assets/image/accesory.png');
+}
+
+export const PhoneIcon = () => {
+    return require('../assets/image/phone.png');
+}
+
+export const CheckIcon = () => {
+    return require('../assets/image/check-mark.png');
+}
+
+export const CloseIcon = () => {
+    return require('../assets/image/close.png');
+}

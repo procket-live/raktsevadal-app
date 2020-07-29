@@ -19,3 +19,5 @@ export const POST = 'post';
 export const LIKE_POST = 'like';
 export const UNLIKE_POST = 'unlike';
 export const COMMENT_POST = 'comment';
+
+export const GET_APP_VERSION = 'getApp/latest';

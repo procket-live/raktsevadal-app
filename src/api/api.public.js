@@ -1,6 +1,6 @@
-import { Post } from "../services/http.service"
+import { Post, Get } from "../services/http.service"
 import {
-    GENERATE_OTP, VERIFY_OTP, TRUECALLER_LOGIN
+    GENERATE_OTP, VERIFY_OTP, TRUECALLER_LOGIN, GET_APP_VERSION
 } from "../constants/api.constant"
 
 class PublicApi {
@@ -14,6 +14,10 @@ class PublicApi {
 
     static truecallerLogin = (profile, mobile) => {
         return Post({ url: TRUECALLER_LOGIN, body: { profile, mobile } })
+    }
+
+    static getLatestVersion = () => {
+        return Get({ url: GET_APP_VERSION })
     }
 }
 
